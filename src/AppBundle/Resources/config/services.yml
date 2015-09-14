@@ -1,0 +1,6 @@
+services:
+    app.admin.site:
+        class: AppBundle\Admin\SiteAdmin
+        arguments: [~, AppBundle\Entity\Site, AppBundle:SiteAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Контент, label: Сайты}
