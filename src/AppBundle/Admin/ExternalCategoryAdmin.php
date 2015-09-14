@@ -58,6 +58,15 @@ class ExternalCategoryAdmin extends Admin
             ->add('parentId', null, array('label' => 'Родительский id'))
             ->add('version', null, array('label' => 'Версия'))
             ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
+            ->add('products', 'sonata_type_collection', array(
+                'required' => false,
+                'cascade_validation' => true,
+                'by_reference' => false,
+                'label' => 'Продукты',
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+            ))
         ;
     }
 

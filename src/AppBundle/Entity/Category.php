@@ -69,7 +69,6 @@ class Category
         return $this->name;
     }
 
-
     /**
      * Get id
      *
@@ -194,6 +193,7 @@ class Category
     {
         return $this->site;
     }
+
     /**
      * Constructor
      */

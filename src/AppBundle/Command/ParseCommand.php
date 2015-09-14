@@ -57,7 +57,7 @@ class ParseCommand extends ContainerAwareCommand
                 $em->flush();
 
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse categories');
-                $categoriesInfo = $crawler
+                $externalCategoriesInfo = $crawler
                     ->filterXPath('//categories/category')
                     ->each(function (Crawler $nodeCrawler) {
                         $resultArray['externalId'] = $nodeCrawler->attr('id');

@@ -22,18 +22,17 @@ class Product
     private $id;
 
     /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExternalCategory", inversedBy="products")
+     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
+     **/
+    private $category;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="externalId", type="string", length=255)
      */
     private $externalId;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="categoryId", type="string", length=255)
-     */
-    private $categoryId;
 
     /**
      * @var string
@@ -480,5 +479,28 @@ class Product
     public function getSeoKeywords()
     {
         return $this->seoKeywords;
+    }
+
+    /**
+     * Set category
+     *
+     * @param \AppBundle\Entity\ExternalCategory $category
+     * @return Product
+     */
+    public function setCategory(\AppBundle\Entity\ExternalCategory $category = null)
+    {
+        $this->category = $category;
+
+        return $this;
+    }
+
+    /**
+     * Get category
+     *
+     * @return \AppBundle\Entity\ExternalCategory 
+     */
+    public function getCategory()
+    {
+        return $this->category;
     }
 }
