@@ -16,3 +16,9 @@ services:
         arguments: [~, AppBundle\Entity\ExternalCategory, AppBundle:ExternalCategoryAdmin]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Контент, label: Категории магазинов}
+
+    app.admin.product:
+        class: AppBundle\Admin\ProductAdmin
+        arguments: [~, AppBundle\Entity\Product, AppBundle:ProductAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Контент, label: Продукты}
