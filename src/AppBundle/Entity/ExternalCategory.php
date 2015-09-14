@@ -29,17 +29,16 @@ class ExternalCategory
     private $externalId;
 
     /**
-     * @var integer
-     *
-     * @ORM\Column(name="internalParentId", type="integer", length=255)
-     */
-    private $internalParentId;
-
-    /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="externalCategories")
      * @ORM\JoinColumn(name="internalParentId", referencedColumnName="id")
      **/
     private $internalParentCategory;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Site", inversedBy="externalCategories")
+     * @ORM\JoinColumn(name="siteId", referencedColumnName="id")
+     **/
+    private $site;
 
     /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Product", mappedBy="category")
@@ -174,29 +173,6 @@ class ExternalCategory
     }
 
     /**
-     * Set internalParentId
-     *
-     * @param integer $internalParentId
-     * @return ExternalCategory
-     */
-    public function setInternalParentId($internalParentId)
-    {
-        $this->internalParentId = $internalParentId;
-
-        return $this;
-    }
-
-    /**
-     * Get internalParentId
-     *
-     * @return integer 
-     */
-    public function getInternalParentId()
-    {
-        return $this->internalParentId;
-    }
-
-    /**
      * Set internalParentCategory
      *
      * @param \AppBundle\Entity\Category $internalParentCategory
@@ -250,5 +226,28 @@ class ExternalCategory
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * Set site
+     *
+     * @param \AppBundle\Entity\Site $site
+     * @return ExternalCategory
+     */
+    public function setSite(\AppBundle\Entity\Site $site = null)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return \AppBundle\Entity\Site 
+     */
+    public function getSite()
+    {
+        return $this->site;
     }
 }

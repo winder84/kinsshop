@@ -73,6 +73,15 @@ class SiteAdmin extends Admin
                 'edit' => 'inline',
                 'inline' => 'table',
             ))
+            ->add('externalCategories', 'sonata_type_collection', array(
+                'required' => false,
+                'cascade_validation' => true,
+                'by_reference' => false,
+                'label' => 'Категории магазина',
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+            ))
         ;
     }
 

@@ -27,6 +27,11 @@ class Site
     private $categories;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExternalCategory", mappedBy="site")
+     **/
+    private $externalCategories;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
@@ -108,6 +113,7 @@ class Site
 
     public function __construct() {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->externalCategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -436,5 +442,38 @@ class Site
     public function getCategories()
     {
         return $this->categories;
+    }
+
+    /**
+     * Add externalCategories
+     *
+     * @param \AppBundle\Entity\ExternalCategories $externalCategories
+     * @return Site
+     */
+    public function addExternalCategory(\AppBundle\Entity\ExternalCategories $externalCategories)
+    {
+        $this->externalCategories[] = $externalCategories;
+
+        return $this;
+    }
+
+    /**
+     * Remove externalCategories
+     *
+     * @param \AppBundle\Entity\ExternalCategories $externalCategories
+     */
+    public function removeExternalCategory(\AppBundle\Entity\ExternalCategories $externalCategories)
+    {
+        $this->externalCategories->removeElement($externalCategories);
+    }
+
+    /**
+     * Get externalCategories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getExternalCategories()
+    {
+        return $this->externalCategories;
     }
 }

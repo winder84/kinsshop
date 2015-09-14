@@ -1,6 +1,7 @@
 <?php
 namespace AppBundle\Command;
 
+use AppBundle\Entity\ExternalCategory;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -42,14 +43,16 @@ class ParseCommand extends ContainerAwareCommand
             foreach ($sites as $site) {
                 $nowDate = new \DateTime('NOW');
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse market ' . $site->getId());
+                $newVersion = $site->getVersion() + 0.01;
+                $site->setVersion($newVersion);
                 $lastParseDate = $site->getLastParseDate();
-                //            if ($lastParseDate->diff($nowDate)->format('%h') < $site->getUpdatePeriod()) {
-                //                continue;
-                //            }
+//                if ($lastParseDate->diff($nowDate)->format('%h') < $site->getUpdatePeriod()) {
+//                    continue;
+//                }
 
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' start download xml');
 //                $xmlContent = file_get_contents($site->getXmlParseUrl());
-                $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150909_210106.xml');
+                $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_003939.xml');
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' end download xml');
 
                 $crawler = new Crawler($xmlContent);
@@ -67,6 +70,30 @@ class ParseCommand extends ContainerAwareCommand
                         }
                         return $resultArray;
                     });
+                foreach ($externalCategoriesInfo as $externalCategory) {
+                    $oldExternalCategory = $em
+                        ->getRepository('AppBundle:ExternalCategory')
+                        ->findOneBy(array(
+                            'externalId' => $externalCategory,
+                            'site' => $site->getId(),
+                        ));
+                    if (!$oldExternalCategory) {
+                        if (!$externalCategory['parentId']) {
+                            $externalCategory['parentId'] = 0;
+                        }
+                        $newExternalCategory = new ExternalCategory();
+                    } else {
+                        $newExternalCategory = $oldExternalCategory;
+                    }
+                    $newExternalCategory->setVersion($newVersion);
+                    $newExternalCategory->setExternalId($externalCategory['externalId']);
+                    $newExternalCategory->setName($externalCategory['category']);
+                    $newExternalCategory->setSite($site);
+                    $newExternalCategory->setParentId($externalCategory['parentId']);
+                    $em->persist($newExternalCategory);
+                    $em->flush();
+                }
+                $output->writeln('New categories - ' . count($externalCategoriesInfo));
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse categories');
 
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse offers');
