@@ -3,4 +3,16 @@ services:
         class: AppBundle\Admin\SiteAdmin
         arguments: [~, AppBundle\Entity\Site, AppBundle:SiteAdmin]
         tags:
-            - {name: sonata.admin, manager_type: orm, group: Контент, label: Сайты}
+            - {name: sonata.admin, manager_type: orm, group: Контент, label: Магазины}
+
+    app.admin.category:
+        class: AppBundle\Admin\CategoryAdmin
+        arguments: [~, AppBundle\Entity\Category, AppBundle:CategoryAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Контент, label: Категории}
+
+    app.admin.external_category:
+        class: AppBundle\Admin\ExternalCategoryAdmin
+        arguments: [~, AppBundle\Entity\ExternalCategory, AppBundle:ExternalCategoryAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Контент, label: Категории магазинов}

@@ -32,15 +32,17 @@ class SiteAdmin extends Admin
     protected function configureListFields(ListMapper $listMapper)
     {
         $listMapper
-            ->add('id')
-            ->add('title')
-            ->add('alias')
-            ->add('url')
+            ->add('id', null, array('label' => 'Id'))
+            ->add('title', null, array('label' => 'Наименование'))
+            ->add('alias', null, array('label' => 'Alias'))
+            ->add('url', null, array('label' => 'Url'))
+            ->add('version', null, array('label' => 'Версия', 'required' => false))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
                     'delete' => array(),
-                )
+                ),
+                'label' => 'Действия'
             ))
         ;
     }
@@ -61,6 +63,16 @@ class SiteAdmin extends Admin
             ->add('seoDescription', null, array('label' => 'SEO Описание', 'required' => false))
             ->add('seoKeywords', null, array('label' => 'SEO Ключевые слова', 'required' => false))
             ->add('updatePeriod', null, array('label' => 'Период обновления (ч)', 'required' => false))
+            ->add('version', null, array('label' => 'Версия'))
+            ->add('categories', 'sonata_type_collection', array(
+                'required' => false,
+                'cascade_validation' => true,
+                'by_reference' => false,
+                'label' => 'Категории',
+            ), array(
+                'edit' => 'inline',
+                'inline' => 'table',
+            ))
         ;
     }
 

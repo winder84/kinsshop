@@ -40,9 +40,9 @@ class ParseCommand extends ContainerAwareCommand
                 ->findAll();
 
             foreach ($sites as $site) {
-                $output->writeln('start parse market ' . $site->getId());
-                $lastParseDate = $site->getLastParseDate();
                 $nowDate = new \DateTime('NOW');
+                $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse market ' . $site->getId());
+                $lastParseDate = $site->getLastParseDate();
                 //            if ($lastParseDate->diff($nowDate)->format('%h') < $site->getUpdatePeriod()) {
                 //                continue;
                 //            }
@@ -83,11 +83,8 @@ class ParseCommand extends ContainerAwareCommand
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse offers');
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse market ' . $site->getId());
             }
-            echo '<pre>';
             var_dump($categoriesInfo[0]);
             var_dump($productsInfo[0]);
-            echo '</pre>';
-
         }
 
     }

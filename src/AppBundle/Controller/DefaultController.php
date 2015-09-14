@@ -28,7 +28,6 @@ class DefaultController extends Controller
         $site = $em
         ->getRepository('AppBundle:Site')
         ->findOneBy(array('alias' => $alias));
-//        $xmlContent = file_get_contents($site->getXmlParseUrl());
 
         return $this->render(
             'AppBundle:Default:site.html.twig',

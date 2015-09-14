@@ -22,6 +22,11 @@ class Site
     private $id;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Category", mappedBy="site")
+     **/
+    private $categories;
+
+    /**
      * @var string
      *
      * @ORM\Column(name="title", type="string", length=255)
@@ -93,6 +98,26 @@ class Site
      * @ORM\Column(name="updatePeriod", type="integer")
      */
     protected $updatePeriod;
+
+    /**
+     * @var float
+     *
+     * @ORM\Column(name="version", type="float")
+     */
+    private $version;
+
+    public function __construct() {
+        $this->categories = new ArrayCollection();
+    }
+
+    /**
+     *
+     * @return string String Site
+     */
+    public function __toString()
+    {
+        return $this->title;
+    }
 
     /**
      * Get id
@@ -355,5 +380,61 @@ class Site
     public function getUpdatePeriod()
     {
         return $this->updatePeriod;
+    }
+
+    /**
+     * Set version
+     *
+     * @param float $version
+     * @return Site
+     */
+    public function setVersion($version)
+    {
+        $this->version = $version;
+
+        return $this;
+    }
+
+    /**
+     * Get version
+     *
+     * @return float 
+     */
+    public function getVersion()
+    {
+        return $this->version;
+    }
+
+    /**
+     * Add categories
+     *
+     * @param \AppBundle\Entity\Category $categories
+     * @return Site
+     */
+    public function addCategory(\AppBundle\Entity\Category $categories)
+    {
+        $this->categories[] = $categories;
+
+        return $this;
+    }
+
+    /**
+     * Remove categories
+     *
+     * @param \AppBundle\Entity\Category $categories
+     */
+    public function removeCategory(\AppBundle\Entity\Category $categories)
+    {
+        $this->categories->removeElement($categories);
+    }
+
+    /**
+     * Get categories
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getCategories()
+    {
+        return $this->categories;
     }
 }
