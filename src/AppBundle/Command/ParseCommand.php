@@ -83,8 +83,6 @@ class ParseCommand extends ContainerAwareCommand
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse offers');
                 $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse market ' . $site->getId());
             }
-            var_dump($categoriesInfo[0]);
-            var_dump($productsInfo[0]);
         }
 
     }
