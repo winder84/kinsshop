@@ -192,7 +192,8 @@ class ParseCommand extends ContainerAwareCommand
                     $newProduct->setPictures($product['pictures']);
                 }
                 if (isset($product['vendor'])) {
-                    $oldVendor = $em->getRepository('AppBundle:Vendor')->findOneBy(array (
+                    $oldVendor = $em->getRepository('AppBundle:Vendor')
+                        ->findOneBy(array (
                             'name' => $product['vendor'],
                             'site' => $siteId,
                         ));
@@ -205,9 +206,9 @@ class ParseCommand extends ContainerAwareCommand
                     }
                     $newVendor->setSite($site);
                     $newVendor->setName($product['vendor']);
-                    $newProduct->setVendor($newVendor);
                     $em->persist($newVendor);
                     $em->flush();
+                    $newProduct->setVendor($newVendor);
                 }
                 $em->persist($newProduct);
                 $em->flush();
