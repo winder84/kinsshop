@@ -17,6 +17,12 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: Контент, label: Категории магазинов}
 
+    app.admin.vendor:
+        class: AppBundle\Admin\VendorAdmin
+        arguments: [~, AppBundle\Entity\Vendor, AppBundle:VendorAdmin]
+        tags:
+            - {name: sonata.admin, manager_type: orm, group: Контент, label: Бренды}
+
     app.admin.product:
         class: AppBundle\Admin\ProductAdmin
         arguments: [~, AppBundle\Entity\Product, AppBundle:ProductAdmin]

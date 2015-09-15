@@ -21,6 +21,7 @@ class CategoryAdmin extends Admin
             ->add('description', null, array('label' => 'Описание'))
             ->add('seoDescription', null, array('label' => 'SEO описание'))
             ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
+            ->add('site', null, array('label' => 'Магазин'))
         ;
     }
 
@@ -32,9 +33,8 @@ class CategoryAdmin extends Admin
         $listMapper
             ->add('id')
             ->add('name', null, array('label' => 'Наименование'))
-            ->add('description', null, array('label' => 'Описание'))
-            ->add('seoDescription', null, array('label' => 'SEO описание'))
             ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
+            ->add('site', null, array('label' => 'Магазин'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),

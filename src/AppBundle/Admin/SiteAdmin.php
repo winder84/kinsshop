@@ -64,24 +64,6 @@ class SiteAdmin extends Admin
             ->add('seoKeywords', null, array('label' => 'SEO Ключевые слова', 'required' => false))
             ->add('updatePeriod', null, array('label' => 'Период обновления (ч)', 'required' => false))
             ->add('version', null, array('label' => 'Версия'))
-            ->add('categories', 'sonata_type_collection', array(
-                'required' => false,
-                'cascade_validation' => true,
-                'by_reference' => false,
-                'label' => 'Категории',
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-            ))
-            ->add('externalCategories', 'sonata_type_collection', array(
-                'required' => false,
-                'cascade_validation' => true,
-                'by_reference' => false,
-                'label' => 'Категории магазина',
-            ), array(
-                'edit' => 'inline',
-                'inline' => 'table',
-            ))
         ;
     }
 

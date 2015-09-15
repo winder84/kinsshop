@@ -22,13 +22,13 @@ class Category
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Site", inversedBy="categories")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Site", inversedBy="categories", cascade={"persist"})
      * @ORM\JoinColumn(name="siteId", referencedColumnName="id")
      **/
     private $site;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExternalCategory", mappedBy="category")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExternalCategory", mappedBy="internalParentCategory")
      **/
     private $externalCategories;
 

@@ -29,8 +29,8 @@ class ProductAdmin extends Admin
             ->add('price')
             ->add('typePrefix')
             ->add('url')
+            ->add('site', null, array('label' => 'Магазин'))
             ->add('vendor')
-            ->add('vendorCode')
             ->add('version')
         ;
     }
@@ -47,8 +47,6 @@ class ProductAdmin extends Admin
             ->add('externalId')
             ->add('category')
             ->add('price')
-            ->add('vendor')
-            ->add('vendorCode')
             ->add('version')
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -77,8 +75,8 @@ class ProductAdmin extends Admin
             ->add('price', null, array('label' => 'Цена', 'required' => false))
             ->add('typePrefix', null, array('label' => 'Префикс', 'required' => false))
             ->add('url', null, array('label' => 'Url'))
+            ->add('site', null, array('label' => 'Магазин'))
             ->add('vendor', null, array('label' => 'Бренд'))
-            ->add('vendorCode', null, array('label' => 'Код бренда'))
             ->add('version', null, array('label' => 'Версия'))
         ;
     }
@@ -101,8 +99,6 @@ class ProductAdmin extends Admin
             ->add('price')
             ->add('typePrefix')
             ->add('url')
-            ->add('vendor')
-            ->add('vendorCode')
             ->add('version')
         ;
     }

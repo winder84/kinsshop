@@ -22,10 +22,22 @@ class Product
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExternalCategory", inversedBy="products")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Site", inversedBy="products", cascade={"persist"})
+     * @ORM\JoinColumn(name="siteId", referencedColumnName="id")
+     **/
+    private $site;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExternalCategory", inversedBy="products", cascade={"persist"})
      * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
      **/
     private $category;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vendor", inversedBy="products", cascade={"persist"})
+     * @ORM\JoinColumn(name="vendorId", referencedColumnName="id")
+     **/
+    private $vendor;
 
     /**
      * @var string
@@ -105,20 +117,6 @@ class Product
     private $url;
 
     /**
-     * @var string
-     *
-     * @ORM\Column(name="vendor", type="string", length=255, nullable=true)
-     */
-    private $vendor;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="vendorCode", type="string", length=255, nullable=true)
-     */
-    private $vendorCode;
-
-    /**
      * @var float
      *
      * @ORM\Column(name="version", type="float", nullable=true)
@@ -126,8 +124,15 @@ class Product
     private $version;
 
     /**
+     * @var json_encode
      *
-     * @return string String Category
+     * @ORM\Column(name="pictures", type="json_array", nullable=true)
+     */
+    private $pictures;
+
+    /**
+     *
+     * @return string String Product
      */
     public function __toString()
     {
@@ -138,7 +143,7 @@ class Product
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -161,7 +166,7 @@ class Product
     /**
      * Get externalId
      *
-     * @return string 
+     * @return string
      */
     public function getExternalId()
     {
@@ -184,7 +189,7 @@ class Product
     /**
      * Get currencyId
      *
-     * @return string 
+     * @return string
      */
     public function getCurrencyId()
     {
@@ -207,7 +212,7 @@ class Product
     /**
      * Get description
      *
-     * @return string 
+     * @return string
      */
     public function getDescription()
     {
@@ -230,7 +235,7 @@ class Product
     /**
      * Get seoDescription
      *
-     * @return string 
+     * @return string
      */
     public function getSeoDescription()
     {
@@ -253,7 +258,7 @@ class Product
     /**
      * Get seoKeywords
      *
-     * @return string 
+     * @return string
      */
     public function getSeoKeywords()
     {
@@ -276,7 +281,7 @@ class Product
     /**
      * Get model
      *
-     * @return string 
+     * @return string
      */
     public function getModel()
     {
@@ -299,7 +304,7 @@ class Product
     /**
      * Get modifiedTime
      *
-     * @return string 
+     * @return string
      */
     public function getModifiedTime()
     {
@@ -322,7 +327,7 @@ class Product
     /**
      * Get name
      *
-     * @return string 
+     * @return string
      */
     public function getName()
     {
@@ -345,7 +350,7 @@ class Product
     /**
      * Get price
      *
-     * @return float 
+     * @return float
      */
     public function getPrice()
     {
@@ -368,7 +373,7 @@ class Product
     /**
      * Get typePrefix
      *
-     * @return string 
+     * @return string
      */
     public function getTypePrefix()
     {
@@ -391,57 +396,11 @@ class Product
     /**
      * Get url
      *
-     * @return string 
+     * @return string
      */
     public function getUrl()
     {
         return $this->url;
-    }
-
-    /**
-     * Set vendor
-     *
-     * @param string $vendor
-     * @return Product
-     */
-    public function setVendor($vendor)
-    {
-        $this->vendor = $vendor;
-
-        return $this;
-    }
-
-    /**
-     * Get vendor
-     *
-     * @return string 
-     */
-    public function getVendor()
-    {
-        return $this->vendor;
-    }
-
-    /**
-     * Set vendorCode
-     *
-     * @param string $vendorCode
-     * @return Product
-     */
-    public function setVendorCode($vendorCode)
-    {
-        $this->vendorCode = $vendorCode;
-
-        return $this;
-    }
-
-    /**
-     * Get vendorCode
-     *
-     * @return string 
-     */
-    public function getVendorCode()
-    {
-        return $this->vendorCode;
     }
 
     /**
@@ -460,11 +419,57 @@ class Product
     /**
      * Get version
      *
-     * @return float 
+     * @return float
      */
     public function getVersion()
     {
         return $this->version;
+    }
+
+    /**
+     * Set pictures
+     *
+     * @param array $pictures
+     * @return Product
+     */
+    public function setPictures($pictures)
+    {
+        $this->pictures = $pictures;
+
+        return $this;
+    }
+
+    /**
+     * Get pictures
+     *
+     * @return array
+     */
+    public function getPictures()
+    {
+        return $this->pictures;
+    }
+
+    /**
+     * Set site
+     *
+     * @param \AppBundle\Entity\Site $site
+     * @return Product
+     */
+    public function setSite(\AppBundle\Entity\Site $site = null)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return \AppBundle\Entity\Site
+     */
+    public function getSite()
+    {
+        return $this->site;
     }
 
     /**
@@ -483,10 +488,33 @@ class Product
     /**
      * Get category
      *
-     * @return \AppBundle\Entity\ExternalCategory 
+     * @return \AppBundle\Entity\ExternalCategory
      */
     public function getCategory()
     {
         return $this->category;
+    }
+
+    /**
+     * Set vendor
+     *
+     * @param \AppBundle\Entity\Vendor $vendor
+     * @return Product
+     */
+    public function setVendor(\AppBundle\Entity\Vendor $vendor = null)
+    {
+        $this->vendor = $vendor;
+
+        return $this;
+    }
+
+    /**
+     * Get vendor
+     *
+     * @return \AppBundle\Entity\Vendor
+     */
+    public function getVendor()
+    {
+        return $this->vendor;
     }
 }

@@ -29,13 +29,13 @@ class ExternalCategory
     private $externalId;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="externalCategories")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Category", inversedBy="externalCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="internalParentId", referencedColumnName="id")
      **/
     private $internalParentCategory;
 
     /**
-     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Site", inversedBy="externalCategories")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Site", inversedBy="externalCategories", cascade={"persist"})
      * @ORM\JoinColumn(name="siteId", referencedColumnName="id")
      **/
     private $site;

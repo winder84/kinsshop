@@ -27,6 +27,16 @@ class Site
     private $categories;
 
     /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Product", mappedBy="site")
+     **/
+    private $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Vendor", mappedBy="site")
+     **/
+    private $vendors;
+
+    /**
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\ExternalCategory", mappedBy="site")
      **/
     private $externalCategories;
@@ -114,6 +124,8 @@ class Site
     public function __construct() {
         $this->categories = new \Doctrine\Common\Collections\ArrayCollection();
         $this->externalCategories = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->products = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->vendors = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -476,5 +488,71 @@ class Site
     public function getExternalCategories()
     {
         return $this->externalCategories;
+    }
+
+    /**
+     * Add products
+     *
+     * @param \AppBundle\Entity\Product $products
+     * @return Site
+     */
+    public function addProduct(\AppBundle\Entity\Product $products)
+    {
+        $this->products[] = $products;
+
+        return $this;
+    }
+
+    /**
+     * Remove products
+     *
+     * @param \AppBundle\Entity\Product $products
+     */
+    public function removeProduct(\AppBundle\Entity\Product $products)
+    {
+        $this->products->removeElement($products);
+    }
+
+    /**
+     * Get products
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getProducts()
+    {
+        return $this->products;
+    }
+
+    /**
+     * Add vendors
+     *
+     * @param \AppBundle\Entity\Vendor $vendors
+     * @return Site
+     */
+    public function addVendor(\AppBundle\Entity\Vendor $vendors)
+    {
+        $this->vendors[] = $vendors;
+
+        return $this;
+    }
+
+    /**
+     * Remove vendors
+     *
+     * @param \AppBundle\Entity\Vendor $vendors
+     */
+    public function removeVendor(\AppBundle\Entity\Vendor $vendors)
+    {
+        $this->vendors->removeElement($vendors);
+    }
+
+    /**
+     * Get vendors
+     *
+     * @return \Doctrine\Common\Collections\Collection 
+     */
+    public function getVendors()
+    {
+        return $this->vendors;
     }
 }

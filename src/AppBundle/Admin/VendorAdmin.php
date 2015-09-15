@@ -8,7 +8,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Show\ShowMapper;
 
-class ExternalCategoryAdmin extends Admin
+class VendorAdmin extends Admin
 {
     /**
      * @param DatagridMapper $datagridMapper
@@ -17,11 +17,8 @@ class ExternalCategoryAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('externalId', null, array('label' => 'Внешний id'))
-            ->add('parentId', null, array('label' => 'Родительский id'))
-            ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
-            ->add('name', null, array('label' => 'Наименование'))
-            ->add('site', null, array('label' => 'Магазин'))
+            ->add('code', null, array('label' => 'Код бренда'))
+            ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('version', null, array('label' => 'Версия'))
         ;
     }
@@ -33,18 +30,15 @@ class ExternalCategoryAdmin extends Admin
     {
         $listMapper
             ->add('id')
-            ->add('externalId', null, array('label' => 'Внешний id'))
-            ->add('parentId', null, array('label' => 'Родительский id'))
-            ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
-            ->add('name', null, array('label' => 'Наименование'))
-            ->add('site', null, array('label' => 'Магазин'))
+            ->add('code', null, array('label' => 'Код бренда'))
+            ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('version', null, array('label' => 'Версия'))
+            ->add('site', null, array('label' => 'Магазин'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
                     'delete' => array(),
-                ),
-                'label' => 'Действия'
+                )
             ))
         ;
     }
@@ -55,11 +49,9 @@ class ExternalCategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
-            ->add('name', null, array('label' => 'Наименование'))
-            ->add('externalId', null, array('label' => 'Внешний id'))
-            ->add('parentId', null, array('label' => 'Родительский id'))
+            ->add('code', null, array('label' => 'Код бренда'))
+            ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('version', null, array('label' => 'Версия'))
-            ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
             ->add('site', null, array('label' => 'Магазин'))
         ;
     }
@@ -71,8 +63,7 @@ class ExternalCategoryAdmin extends Admin
     {
         $showMapper
             ->add('id')
-            ->add('externalId')
-            ->add('parentId')
+            ->add('code')
             ->add('name')
             ->add('version')
         ;
