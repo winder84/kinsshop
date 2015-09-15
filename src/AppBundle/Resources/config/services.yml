@@ -22,3 +22,7 @@ services:
         arguments: [~, AppBundle\Entity\Product, AppBundle:ProductAdmin]
         tags:
             - {name: sonata.admin, manager_type: orm, group: Контент, label: Продукты}
+
+parameters:
+    # ... other parameters
+    security.acl.permission.map.class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap

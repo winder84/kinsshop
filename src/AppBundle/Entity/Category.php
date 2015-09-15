@@ -61,13 +61,22 @@ class Category
     private $seoKeywords;
 
     /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->externalCategories = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    /**
      *
      * @return string String Category
      */
     public function __toString()
     {
-        return $this->name;
+        return $this->getName() ? $this->getName() : 'Новая категория';
     }
+
 
     /**
      * Get id
@@ -192,14 +201,6 @@ class Category
     public function getSite()
     {
         return $this->site;
-    }
-
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->externalCategories = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

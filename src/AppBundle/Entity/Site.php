@@ -122,8 +122,9 @@ class Site
      */
     public function __toString()
     {
-        return $this->title;
+        return $this->getTitle() ? $this->getTitle() : 'Новый магазин';
     }
+
 
     /**
      * Get id
@@ -179,6 +180,52 @@ class Site
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set seoDescription
+     *
+     * @param string $seoDescription
+     * @return Site
+     */
+    public function setSeoDescription($seoDescription)
+    {
+        $this->seoDescription = $seoDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get seoDescription
+     *
+     * @return string 
+     */
+    public function getSeoDescription()
+    {
+        return $this->seoDescription;
+    }
+
+    /**
+     * Set seoKeywords
+     *
+     * @param string $seoKeywords
+     * @return Site
+     */
+    public function setSeoKeywords($seoKeywords)
+    {
+        $this->seoKeywords = $seoKeywords;
+
+        return $this;
+    }
+
+    /**
+     * Get seoKeywords
+     *
+     * @return string 
+     */
+    public function getSeoKeywords()
+    {
+        return $this->seoKeywords;
     }
 
     /**
@@ -251,29 +298,6 @@ class Site
     }
 
     /**
-     * Set alias
-     *
-     * @param string $alias
-     * @return Site
-     */
-    public function setAlias($alias)
-    {
-        $this->alias = $alias;
-
-        return $this;
-    }
-
-    /**
-     * Get alias
-     *
-     * @return string 
-     */
-    public function getAlias()
-    {
-        return $this->alias;
-    }
-
-    /**
      * Set url
      *
      * @param string $url
@@ -297,49 +321,26 @@ class Site
     }
 
     /**
-     * Set seoDescription
+     * Set alias
      *
-     * @param string $seoDescription
+     * @param string $alias
      * @return Site
      */
-    public function setSeoDescription($seoDescription)
+    public function setAlias($alias)
     {
-        $this->seoDescription = $seoDescription;
+        $this->alias = $alias;
 
         return $this;
     }
 
     /**
-     * Get seoDescription
+     * Get alias
      *
      * @return string 
      */
-    public function getSeoDescription()
+    public function getAlias()
     {
-        return $this->seoDescription;
-    }
-
-    /**
-     * Set seoKeywords
-     *
-     * @param string $seoKeywords
-     * @return Site
-     */
-    public function setSeoKeywords($seoKeywords)
-    {
-        $this->seoKeywords = $seoKeywords;
-
-        return $this;
-    }
-
-    /**
-     * Get seoKeywords
-     *
-     * @return string 
-     */
-    public function getSeoKeywords()
-    {
-        return $this->seoKeywords;
+        return $this->alias;
     }
 
     /**
@@ -447,10 +448,10 @@ class Site
     /**
      * Add externalCategories
      *
-     * @param \AppBundle\Entity\ExternalCategories $externalCategories
+     * @param \AppBundle\Entity\ExternalCategory $externalCategories
      * @return Site
      */
-    public function addExternalCategory(\AppBundle\Entity\ExternalCategories $externalCategories)
+    public function addExternalCategory(\AppBundle\Entity\ExternalCategory $externalCategories)
     {
         $this->externalCategories[] = $externalCategories;
 
@@ -460,9 +461,9 @@ class Site
     /**
      * Remove externalCategories
      *
-     * @param \AppBundle\Entity\ExternalCategories $externalCategories
+     * @param \AppBundle\Entity\ExternalCategory $externalCategories
      */
-    public function removeExternalCategory(\AppBundle\Entity\ExternalCategories $externalCategories)
+    public function removeExternalCategory(\AppBundle\Entity\ExternalCategory $externalCategories)
     {
         $this->externalCategories->removeElement($externalCategories);
     }

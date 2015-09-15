@@ -125,6 +125,15 @@ class Product
      */
     private $version;
 
+    /**
+     *
+     * @return string String Category
+     */
+    public function __toString()
+    {
+        return $this->getModel() ? $this->getName() . $this->getModel() : 'Новый продукт';
+    }
+
 
     /**
      * Get id
@@ -157,29 +166,6 @@ class Product
     public function getExternalId()
     {
         return $this->externalId;
-    }
-
-    /**
-     * Set categoryId
-     *
-     * @param string $categoryId
-     * @return Product
-     */
-    public function setCategoryId($categoryId)
-    {
-        $this->categoryId = $categoryId;
-
-        return $this;
-    }
-
-    /**
-     * Get categoryId
-     *
-     * @return string 
-     */
-    public function getCategoryId()
-    {
-        return $this->categoryId;
     }
 
     /**
@@ -226,6 +212,52 @@ class Product
     public function getDescription()
     {
         return $this->description;
+    }
+
+    /**
+     * Set seoDescription
+     *
+     * @param string $seoDescription
+     * @return Product
+     */
+    public function setSeoDescription($seoDescription)
+    {
+        $this->seoDescription = $seoDescription;
+
+        return $this;
+    }
+
+    /**
+     * Get seoDescription
+     *
+     * @return string 
+     */
+    public function getSeoDescription()
+    {
+        return $this->seoDescription;
+    }
+
+    /**
+     * Set seoKeywords
+     *
+     * @param string $seoKeywords
+     * @return Product
+     */
+    public function setSeoKeywords($seoKeywords)
+    {
+        $this->seoKeywords = $seoKeywords;
+
+        return $this;
+    }
+
+    /**
+     * Get seoKeywords
+     *
+     * @return string 
+     */
+    public function getSeoKeywords()
+    {
+        return $this->seoKeywords;
     }
 
     /**
@@ -433,52 +465,6 @@ class Product
     public function getVersion()
     {
         return $this->version;
-    }
-
-    /**
-     * Set seoDescription
-     *
-     * @param string $seoDescription
-     * @return Product
-     */
-    public function setSeoDescription($seoDescription)
-    {
-        $this->seoDescription = $seoDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get seoDescription
-     *
-     * @return string 
-     */
-    public function getSeoDescription()
-    {
-        return $this->seoDescription;
-    }
-
-    /**
-     * Set seoKeywords
-     *
-     * @param string $seoKeywords
-     * @return Product
-     */
-    public function setSeoKeywords($seoKeywords)
-    {
-        $this->seoKeywords = $seoKeywords;
-
-        return $this;
-    }
-
-    /**
-     * Get seoKeywords
-     *
-     * @return string 
-     */
-    public function getSeoKeywords()
-    {
-        return $this->seoKeywords;
     }
 
     /**

@@ -70,6 +70,12 @@ class ExternalCategory
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    public function __toString()
+    {
+        return $this->getName() ? $this->getName() : 'Новая категория магазина';
+    }
+
+
     /**
      * Get id
      *
@@ -196,6 +202,29 @@ class ExternalCategory
     }
 
     /**
+     * Set site
+     *
+     * @param \AppBundle\Entity\Site $site
+     * @return ExternalCategory
+     */
+    public function setSite(\AppBundle\Entity\Site $site = null)
+    {
+        $this->site = $site;
+
+        return $this;
+    }
+
+    /**
+     * Get site
+     *
+     * @return \AppBundle\Entity\Site 
+     */
+    public function getSite()
+    {
+        return $this->site;
+    }
+
+    /**
      * Add products
      *
      * @param \AppBundle\Entity\Product $products
@@ -226,28 +255,5 @@ class ExternalCategory
     public function getProducts()
     {
         return $this->products;
-    }
-
-    /**
-     * Set site
-     *
-     * @param \AppBundle\Entity\Site $site
-     * @return ExternalCategory
-     */
-    public function setSite(\AppBundle\Entity\Site $site = null)
-    {
-        $this->site = $site;
-
-        return $this;
-    }
-
-    /**
-     * Get site
-     *
-     * @return \AppBundle\Entity\Site 
-     */
-    public function getSite()
-    {
-        return $this->site;
     }
 }
