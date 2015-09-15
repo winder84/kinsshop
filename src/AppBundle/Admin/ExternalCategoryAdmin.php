@@ -19,7 +19,7 @@ class ExternalCategoryAdmin extends Admin
             ->add('id')
             ->add('externalId', null, array('label' => 'Внешний id'))
             ->add('parentId', null, array('label' => 'Родительский id'))
-            ->add('internalParentId', null, array('label' => 'Внутренний родительский id'))
+            ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
             ->add('name', null, array('label' => 'Наименование'))
             ->add('version', null, array('label' => 'Версия'))
         ;
@@ -34,7 +34,7 @@ class ExternalCategoryAdmin extends Admin
             ->add('id')
             ->add('externalId', null, array('label' => 'Внешний id'))
             ->add('parentId', null, array('label' => 'Родительский id'))
-            ->add('internalParentId', null, array('label' => 'Внутренний родительский id'))
+            ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
             ->add('name', null, array('label' => 'Наименование'))
             ->add('version', null, array('label' => 'Версия'))
             ->add('_action', 'actions', array(

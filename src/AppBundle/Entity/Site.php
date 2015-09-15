@@ -41,21 +41,21 @@ class Site
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seoDescription", type="text")
+     * @ORM\Column(name="seoDescription", type="text", nullable=true)
      */
     private $seoDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seoKeywords", type="text")
+     * @ORM\Column(name="seoKeywords", type="text", nullable=true)
      */
     private $seoKeywords;
 
@@ -69,14 +69,14 @@ class Site
     /**
      * @var string
      *
-     * @ORM\Column(name="deliveryUrl", type="string", length=255)
+     * @ORM\Column(name="deliveryUrl", type="string", length=255, nullable=true)
      */
     private $deliveryUrl;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="paymentUrl", type="string", length=255)
+     * @ORM\Column(name="paymentUrl", type="string", length=255, nullable=true)
      */
     private $paymentUrl;
 
@@ -90,24 +90,24 @@ class Site
     /**
      * @var string
      *
-     * @ORM\Column(name="alias", type="string", length=255)
+     * @ORM\Column(name="alias", type="string", length=255, nullable=true)
      */
     private $alias;
 
     /**
-     * @ORM\Column(name="lastParseDate", type="datetime")
+     * @ORM\Column(name="lastParseDate", type="datetime", nullable=true)
      */
     protected $lastParseDate;
 
     /**
-     * @ORM\Column(name="updatePeriod", type="integer")
+     * @ORM\Column(name="updatePeriod", type="integer", nullable=true)
      */
     protected $updatePeriod;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="version", type="float")
+     * @ORM\Column(name="version", type="float", nullable=true)
      */
     private $version;
 

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "e0d4524c097c29e42bb7bf7a350da8b6",
+    "hash": "299ba77778a3bfb02fd6ed4e493c17ea",
     "packages": [
         {
             "name": "cocur/slugify",
@@ -1385,16 +1385,16 @@
         },
         {
             "name": "sonata-project/admin-bundle",
-            "version": "2.3.5",
+            "version": "2.3.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sonata-project/SonataAdminBundle.git",
-                "reference": "8ce1a1b605e6b897e5403aa2003d40a05eca2f69"
+                "reference": "1dfcfcf8650e8d8c4a4400b9525b2097110f1f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/8ce1a1b605e6b897e5403aa2003d40a05eca2f69",
-                "reference": "8ce1a1b605e6b897e5403aa2003d40a05eca2f69",
+                "url": "https://api.github.com/repos/sonata-project/SonataAdminBundle/zipball/1dfcfcf8650e8d8c4a4400b9525b2097110f1f11",
+                "reference": "1dfcfcf8650e8d8c4a4400b9525b2097110f1f11",
                 "shasum": ""
             },
             "require": {
@@ -1466,7 +1466,7 @@
                 "bootstrap",
                 "sonata"
             ],
-            "time": "2015-08-26 08:07:15"
+            "time": "2015-09-10 19:16:15"
         },
         {
             "name": "sonata-project/block-bundle",
@@ -1794,6 +1794,72 @@
                 "xls"
             ],
             "time": "2015-06-29 18:36:46"
+        },
+        {
+            "name": "sonata-project/seo-bundle",
+            "version": "2.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/sonata-project/SonataSeoBundle.git",
+                "reference": "2606cdf6ecc0502a965dde25f9203b19dab1d944"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/sonata-project/SonataSeoBundle/zipball/2606cdf6ecc0502a965dde25f9203b19dab1d944",
+                "reference": "2606cdf6ecc0502a965dde25f9203b19dab1d944",
+                "shasum": ""
+            },
+            "require": {
+                "sonata-project/exporter": "~1.2,>=1.2.2",
+                "symfony/framework-bundle": "~2.3",
+                "symfony/options-resolver": "~2.3",
+                "twig/twig": "~1.12"
+            },
+            "require-dev": {
+                "guzzle/guzzle": "3.*",
+                "sonata-project/admin-bundle": "~2.2",
+                "sonata-project/core-bundle": "~2.3,>=2.3.1",
+                "symfony/console": "~2.3",
+                "symfony/finder": "~2.3"
+            },
+            "suggest": {
+                "guzzle/guzzle": "3.*",
+                "knplabs/knp-menu-bundle": "Used by the BreadcrumbMenuBuilder",
+                "sonaqqta-project/block-bundle": "Allows you to use SEO friendly blocks"
+            },
+            "type": "symfony-bundle",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Sonata\\SeoBundle\\": ""
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Thomas Rabaix",
+                    "email": "thomas.rabaix@sonata-project.org",
+                    "homepage": "http://sonata-project.org"
+                },
+                {
+                    "name": "Sonata Community",
+                    "homepage": "https://github.com/sonata-project/SonataSeoBundle/contributors"
+                }
+            ],
+            "description": "Symfony SonataSeoBundle",
+            "homepage": "http://sonata-project.org/bundles/seo",
+            "keywords": [
+                "seo",
+                "sonata"
+            ],
+            "time": "2015-03-16 10:50:18"
         },
         {
             "name": "swiftmailer/swiftmailer",
@@ -2210,16 +2276,16 @@
         },
         {
             "name": "twig/twig",
-            "version": "v1.21.2",
+            "version": "v1.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "ddce1136beb8db29b9cd7dffa8ab518b978c9db3"
+                "reference": "204a6c94907c2c2225322c267e09adbb2b1c04fd"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/ddce1136beb8db29b9cd7dffa8ab518b978c9db3",
-                "reference": "ddce1136beb8db29b9cd7dffa8ab518b978c9db3",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/204a6c94907c2c2225322c267e09adbb2b1c04fd",
+                "reference": "204a6c94907c2c2225322c267e09adbb2b1c04fd",
                 "shasum": ""
             },
             "require": {
@@ -2232,7 +2298,7 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.21-dev"
+                    "dev-master": "1.22-dev"
                 }
             },
             "autoload": {
@@ -2267,7 +2333,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2015-09-09 05:28:51"
+            "time": "2015-09-13 17:12:38"
         }
     ],
     "packages-dev": [],

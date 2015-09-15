@@ -24,7 +24,7 @@ class ExternalCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="externalId", type="string", length=255)
+     * @ORM\Column(name="externalId", type="string", length=255, nullable=true)
      */
     private $externalId;
 
@@ -48,7 +48,7 @@ class ExternalCategory
     /**
      * @var string
      *
-     * @ORM\Column(name="parentId", type="string", length=255)
+     * @ORM\Column(name="parentId", type="string", length=255, nullable=true)
      */
     private $parentId;
 
@@ -62,7 +62,7 @@ class ExternalCategory
     /**
      * @var float
      *
-     * @ORM\Column(name="version", type="float")
+     * @ORM\Column(name="version", type="float", nullable=true)
      */
     private $version;
 

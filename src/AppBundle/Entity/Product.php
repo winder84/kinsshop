@@ -30,35 +30,35 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="externalId", type="string", length=255)
+     * @ORM\Column(name="externalId", type="string", length=255, nullable=true)
      */
     private $externalId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="currencyId", type="string", length=255)
+     * @ORM\Column(name="currencyId", type="string", length=255, nullable=true)
      */
     private $currencyId;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seoDescription", type="text")
+     * @ORM\Column(name="seoDescription", type="text", nullable=true)
      */
     private $seoDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seoKeywords", type="text")
+     * @ORM\Column(name="seoKeywords", type="text", nullable=true)
      */
     private $seoKeywords;
 
@@ -72,7 +72,7 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="modifiedTime", type="string", length=255)
+     * @ORM\Column(name="modifiedTime", type="string", length=255, nullable=true)
      */
     private $modifiedTime;
 
@@ -86,14 +86,14 @@ class Product
     /**
      * @var float
      *
-     * @ORM\Column(name="price", type="float")
+     * @ORM\Column(name="price", type="float", nullable=true)
      */
     private $price;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="typePrefix", type="string", length=255)
+     * @ORM\Column(name="typePrefix", type="string", length=255, nullable=true)
      */
     private $typePrefix;
 
@@ -107,21 +107,21 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="vendor", type="string", length=255)
+     * @ORM\Column(name="vendor", type="string", length=255, nullable=true)
      */
     private $vendor;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="vendorCode", type="string", length=255)
+     * @ORM\Column(name="vendorCode", type="string", length=255, nullable=true)
      */
     private $vendorCode;
 
     /**
      * @var float
      *
-     * @ORM\Column(name="version", type="float")
+     * @ORM\Column(name="version", type="float", nullable=true)
      */
     private $version;
 

@@ -42,21 +42,21 @@ class Category
     /**
      * @var string
      *
-     * @ORM\Column(name="description", type="text")
+     * @ORM\Column(name="description", type="text", nullable=true)
      */
     private $description;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seoDescription", type="text")
+     * @ORM\Column(name="seoDescription", type="text", nullable=true)
      */
     private $seoDescription;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="seoKeywords", type="text")
+     * @ORM\Column(name="seoKeywords", type="text", nullable=true)
      */
     private $seoKeywords;
 

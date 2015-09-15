@@ -59,7 +59,7 @@ class SiteAdmin extends Admin
             ->add('deliveryUrl', null, array('label' => 'Url доставки', 'required' => false))
             ->add('paymentUrl', null, array('label' => 'Url страницы оплаты', 'required' => false))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
-            ->add('url', null, array('label' => 'Url', 'required' => false))
+            ->add('url', null, array('label' => 'Url'))
             ->add('seoDescription', null, array('label' => 'SEO Описание', 'required' => false))
             ->add('seoKeywords', null, array('label' => 'SEO Ключевые слова', 'required' => false))
             ->add('updatePeriod', null, array('label' => 'Период обновления (ч)', 'required' => false))
