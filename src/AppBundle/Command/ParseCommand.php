@@ -17,6 +17,7 @@ class ParseCommand extends ContainerAwareCommand
 
     protected $delimer = '----------';
 
+    protected $ctx;
 
     protected function configure()
     {
@@ -40,11 +41,14 @@ class ParseCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $this->output = $output;
-        $marketId = $input->getArgument('marketId');
+        $this->ctx = stream_context_create();
+        stream_context_set_params($this->ctx, array("notification" => array($this, 'stream_notification_callback')));
+        $marketId = intval($input->getArgument('marketId'));
         $em = $this->getContainer()->get('doctrine')->getManager();
         if ($marketId) {
             $sites = $em
-                ->getRepository('AppBundle:Site', $marketId);
+                ->getRepository('AppBundle:Site')
+                ->findBy(array('id' => $marketId));
         } else {
             $sites = $em
                 ->getRepository('AppBundle:Site')
@@ -53,7 +57,7 @@ class ParseCommand extends ContainerAwareCommand
 
         foreach ($sites as $site) {
             $siteId = $site->getId();
-            $this->outpuWriteLn('Start parse market ' . $siteId . '.');
+            $this->outputWriteLn('Start parse market ' . $siteId . '.');
             $newVersion = $site->getVersion() + 0.01;
             $site->setVersion($newVersion);
 //            $nowDate = new \DateTime('NOW');
@@ -63,17 +67,17 @@ class ParseCommand extends ContainerAwareCommand
 //                    continue;
 //                }
 
-            $this->outpuWriteLn('Start download xml.');
-            $xmlContent = file_get_contents($site->getXmlParseUrl());
-//            $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_003939.xml');
-            $this->outpuWriteLn('End download xml.');
+            $this->outputWriteLn('Start download xml.');
+//            $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
+            $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_093513.xml', false, $this->ctx);
+            $this->outputWriteLn('End download xml.');
 
             $crawler = new Crawler($xmlContent);
             $site->setLastParseDate(new \DateTime());
             $em->persist($site);
             $em->flush();
 
-            $this->outpuWriteLn('Start parse categories.');
+            $this->outputWriteLn('Start parse categories.');
             $externalCategoriesInfo = $crawler
                 ->filterXPath('//categories/category')
                 ->each(function (Crawler $nodeCrawler) {
@@ -104,10 +108,10 @@ class ParseCommand extends ContainerAwareCommand
                 $em->persist($newExternalCategory);
                 $em->flush();
             }
-            $this->outpuWriteLn('Categories from XML - ' . count($externalCategoriesInfo) . '.');
-            $this->outpuWriteLn('End parse categories');
+            $this->outputWriteLn('Categories from XML - ' . count($externalCategoriesInfo) . '.');
+            $this->outputWriteLn('End parse categories');
 
-            $this->outpuWriteLn('Start parse offers');
+            $this->outputWriteLn('Start parse offers');
             $productsInfo = $crawler
                 ->filterXPath('//offers/offer')
                 ->each(function (Crawler $nodeCrawler) {
@@ -125,7 +129,9 @@ class ParseCommand extends ContainerAwareCommand
             $i = 0;
             foreach ($productsInfo as $product) {
                 if ($i % 1000 == 0) {
-                    $this->outpuWriteLn('Offers - ' . $i . '.');
+                    $em->flush();
+                    $em->clear('AppBundle\Entity\Product');
+                    $this->outputWriteLn('Offers - ' . $i . '.');
                 }
                 $oldProduct = $em
                     ->getRepository('AppBundle:Product')
@@ -186,35 +192,69 @@ class ParseCommand extends ContainerAwareCommand
                             'site' => $siteId,
                         ));
                     if (!$oldVendor) {
-                        $newVendor = new Vendor();
+                        $vendor = new Vendor();
+                    } else {
+                        $vendor = $oldVendor;
                     }
-                    $newVendor->setVersion($newVersion);
+                    $vendor->setVersion($newVersion);
                     if (isset($product['vendorCode'])) {
-                        $newVendor->setCode($product['vendorCode']);
+                        $vendor->setCode($product['vendorCode']);
                     }
-                    $newVendor->setSite($site);
-                    $newVendor->setName($product['vendor']);
-                    $em->persist($newVendor);
+                    $vendor->setSite($site);
+                    $vendor->setName($product['vendor']);
+                    $em->persist($vendor);
                     $em->flush();
-                    $newProduct->setVendor($newVendor);
+                    $newProduct->setVendor($vendor);
                 }
                 $em->persist($newProduct);
                 $em->flush();
-                $em->detach($newProduct);
                 $i++;
             }
-            $this->outpuWriteLn('End parse offers.');
+            $this->outputWriteLn('End parse offers.');
             if (isset($noCategoryArray)) {
-                $this->outpuWriteLn('No categories - ' . count($noCategoryArray) . '.');
+                $this->outputWriteLn('No categories - ' . count($noCategoryArray) . '.');
             }
-            $this->outpuWriteLn('Imported offers - ' . count($productsInfo) . '.');
-            $this->outpuWriteLn('End parse market ' . $siteId . '.');
+            $this->outputWriteLn('Imported offers - ' . count($productsInfo) . '.');
+            $this->outputWriteLn('End parse market ' . $siteId . '.');
         }
 
     }
 
-    private function outpuWriteLn($text)
+    private function outputWriteLn($text)
     {
-        $this->output->writeln($this->delimer . $text . ' Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $this->delimer);
+        $newTimeDate = new \DateTime();
+        $newTimeDate = $newTimeDate->format(\DateTime::ATOM);
+        $this->output->writeln($this->delimer. $newTimeDate . ' ' . $text . ' Memory usage: ' . round(memory_get_usage() / (1024 * 1024)) . ' MB' . $this->delimer);
+    }
+
+    private function stream_notification_callback($notification_code, $severity, $message, $message_code, $bytes_transferred, $bytes_max) {
+        switch($notification_code) {
+            case STREAM_NOTIFY_RESOLVE:
+            case STREAM_NOTIFY_AUTH_REQUIRED:
+            case STREAM_NOTIFY_COMPLETED:
+                printf("\r\n");
+                break;
+            case STREAM_NOTIFY_FAILURE:
+            case STREAM_NOTIFY_AUTH_RESULT:
+//            var_dump($notification_code, $severity, $message, $message_code, $bytes_transferred, $bytes_max);
+                /* Игнорируем */
+                break;
+            case STREAM_NOTIFY_REDIRECTED:
+                /* Игнорируем */
+                break;
+            case STREAM_NOTIFY_CONNECT:
+                /* Игнорируем */
+                break;
+            case STREAM_NOTIFY_FILE_SIZE_IS:
+                /* Игнорируем */
+                break;
+            case STREAM_NOTIFY_MIME_TYPE_IS:
+                /* Игнорируем */
+                break;
+            case STREAM_NOTIFY_PROGRESS:
+                $fileSize = round($bytes_transferred / (1024 * 1024), 1);
+                printf("\r" . $this->delimer . 'Загружено ' . $fileSize . ' MB.' . ' Memory usage: ' . round(memory_get_usage() / (1024 * 1024)) . ' MB' .  $this->delimer);
+                break;
+        }
     }
 }
