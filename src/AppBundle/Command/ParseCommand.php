@@ -60,8 +60,8 @@ class ParseCommand extends ContainerAwareCommand
 
             $nowDate = new \DateTime('NOW');
             $output->writeln($nowDate->format(\DateTime::ATOM) . ' start download xml');
-//            $xmlContent = file_get_contents($site->getXmlParseUrl());
-            $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_003939.xml');
+            $xmlContent = file_get_contents($site->getXmlParseUrl());
+//            $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_003939.xml');
             $nowDate = new \DateTime('NOW');
             $output->writeln($nowDate->format(\DateTime::ATOM) . ' end download xml');
 
