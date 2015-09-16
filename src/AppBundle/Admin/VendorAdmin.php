@@ -20,6 +20,7 @@ class VendorAdmin extends Admin
             ->add('code', null, array('label' => 'Код бренда'))
             ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('version', null, array('label' => 'Версия'))
+            ->add('site', null, array('label' => 'Магазин'))
         ;
     }
 

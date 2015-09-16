@@ -17,21 +17,15 @@ class ProductAdmin extends Admin
     {
         $datagridMapper
             ->add('id')
-            ->add('externalId')
-            ->add('category')
-            ->add('currencyId')
-            ->add('description')
-            ->add('seoDescription')
-            ->add('seoKeywords')
-            ->add('model')
-            ->add('modifiedTime')
-            ->add('name')
-            ->add('price')
-            ->add('typePrefix')
-            ->add('url')
+            ->add('name', null, array('label' => 'Наименование'))
+            ->add('model', null, array('label' => 'Модель'))
+            ->add('externalId', null, array('label' => 'Внешний Id'))
+            ->add('category', null, array('label' => 'Категория'))
+            ->add('description', null, array('label' => 'Описание'))
+            ->add('price', null, array('label' => 'Цена'))
             ->add('site', null, array('label' => 'Магазин'))
-            ->add('vendor')
-            ->add('version')
+            ->add('vendor', null, array('label' => 'Бренд'))
+            ->add('version', null, array('label' => 'Версия'))
         ;
     }
 
@@ -42,12 +36,12 @@ class ProductAdmin extends Admin
     {
         $listMapper
             ->add('id')
-            ->add('name')
-            ->add('model')
-            ->add('externalId')
-            ->add('category')
-            ->add('price')
-            ->add('version')
+            ->add('name', null, array('label' => 'Наименование'))
+            ->add('model', null, array('label' => 'Модель'))
+            ->add('externalId', null, array('label' => 'Внешний Id'))
+            ->add('category', null, array('label' => 'Категория'))
+            ->add('price', null, array('label' => 'Цена'))
+            ->add('version', null, array('label' => 'Версия'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
