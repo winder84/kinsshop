@@ -45,6 +45,7 @@ class ParseCommand extends ContainerAwareCommand
         stream_context_set_params($this->ctx, array("notification" => array($this, 'stream_notification_callback')));
         $marketId = intval($input->getArgument('marketId'));
         $em = $this->getContainer()->get('doctrine')->getManager();
+        $em->getConnection()->getConfiguration()->setSQLLogger(null);
         if ($marketId) {
             $sites = $em
                 ->getRepository('AppBundle:Site')
@@ -88,7 +89,9 @@ class ParseCommand extends ContainerAwareCommand
                     }
                     return $resultArray;
                 });
+            $newExternalCategoriesArray = array();
             foreach ($externalCategoriesInfo as $externalCategory) {
+                $newExternalCategory = null;
                 $oldExternalCategory = $em
                     ->getRepository('AppBundle:ExternalCategory')
                     ->findOneBy(array(
@@ -97,6 +100,7 @@ class ParseCommand extends ContainerAwareCommand
                     ));
                 if (!$oldExternalCategory) {
                     $newExternalCategory = new ExternalCategory();
+                    $newExternalCategoriesArray[] = $externalCategory;
                 } else {
                     $newExternalCategory = $oldExternalCategory;
                 }
@@ -106,9 +110,10 @@ class ParseCommand extends ContainerAwareCommand
                 $newExternalCategory->setSite($site);
                 $newExternalCategory->setParentId($externalCategory['parentId']);
                 $em->persist($newExternalCategory);
-                $em->flush();
             }
-            $this->outputWriteLn('Categories from XML - ' . count($externalCategoriesInfo) . '.');
+            $em->flush();
+            $em->clear('AppBundle\Entity\ExternalCategory');
+            $this->outputWriteLn('New Categories from XML - ' . count($newExternalCategoriesArray) . '.');
             $this->outputWriteLn('End parse categories');
 
             $this->outputWriteLn('Start parse offers');
@@ -126,8 +131,54 @@ class ParseCommand extends ContainerAwareCommand
                     }
                     return $resultArray;
                 });
+            $this->outputWriteLn('End parse offers');
+            $this->outputWriteLn('Start import vendors.');
             $i = 0;
+            $newVendors = array();
             foreach ($productsInfo as $product) {
+                $oldVendor = null;
+                $vendor = null;
+                if ($i % 1000 == 0) {
+                    $em->flush();
+                    $em->clear('AppBundle\Entity\Vendor');
+                    $this->outputWriteLn('Vendors - ' . $i . '.');
+                }
+                if (isset($product['vendor'])) {
+                    if (in_array($product['vendor'], $newVendors)) {
+                        continue;
+                    }
+                    $oldVendor = $em->getRepository('AppBundle:Vendor')
+                        ->findOneBy(array (
+                            'name' => $product['vendor'],
+                            'site' => $siteId,
+                        ));
+                    if (!$oldVendor) {
+                        $vendor = new Vendor();
+                        $newVendors[] = $product['vendor'];
+                    } else {
+                        $vendor = $oldVendor;
+                    }
+                    $vendor->setVersion($newVersion);
+                    if (isset($product['vendorCode'])) {
+                        $vendor->setCode($product['vendorCode']);
+                    }
+                    $vendor->setSite($site);
+                    $vendor->setName($product['vendor']);
+                    $em->persist($vendor);
+                    $i++;
+                }
+            }
+            $em->flush();
+            $em->clear('AppBundle\Entity\Vendor');
+            $this->outputWriteLn('End import vendors.');
+            $this->outputWriteLn('Imported vendors - ' . count($newVendors) . '.');
+            $i = 0;
+            $this->outputWriteLn('Start import offers.');
+            foreach ($productsInfo as $product) {
+                $oldProduct = null;
+                $newProduct = null;
+                $externalCategory = null;
+                $oldVendor = null;
                 if ($i % 1000 == 0) {
                     $em->flush();
                     $em->clear('AppBundle\Entity\Product');
@@ -192,27 +243,28 @@ class ParseCommand extends ContainerAwareCommand
                             'site' => $siteId,
                         ));
                     if (!$oldVendor) {
-                        $vendor = new Vendor();
+                        $noVendorsArray[] = $product['vendor'];
                     } else {
                         $vendor = $oldVendor;
+                        $vendor->setVersion($newVersion);
+                        if (isset($product['vendorCode'])) {
+                            $vendor->setCode($product['vendorCode']);
+                        }
+                        $vendor->setSite($site);
+                        $vendor->setName($product['vendor']);
+                        $em->persist($vendor);
+                        $newProduct->setVendor($vendor);
                     }
-                    $vendor->setVersion($newVersion);
-                    if (isset($product['vendorCode'])) {
-                        $vendor->setCode($product['vendorCode']);
-                    }
-                    $vendor->setSite($site);
-                    $vendor->setName($product['vendor']);
-                    $em->persist($vendor);
-                    $em->flush();
-                    $newProduct->setVendor($vendor);
                 }
                 $em->persist($newProduct);
-                $em->flush();
                 $i++;
             }
-            $this->outputWriteLn('End parse offers.');
+            $this->outputWriteLn('End import offers.');
             if (isset($noCategoryArray)) {
                 $this->outputWriteLn('No categories - ' . count($noCategoryArray) . '.');
+            }
+            if (isset($noVendorsArray)) {
+                $this->outputWriteLn('No vendors - ' . count($noVendorsArray) . '.');
             }
             $this->outputWriteLn('Imported offers - ' . count($productsInfo) . '.');
             $this->outputWriteLn('End parse market ' . $siteId . '.');
@@ -253,7 +305,7 @@ class ParseCommand extends ContainerAwareCommand
                 break;
             case STREAM_NOTIFY_PROGRESS:
                 $fileSize = round($bytes_transferred / (1024 * 1024), 1);
-                printf("\r" . $this->delimer . 'Загружено ' . $fileSize . ' MB.' . ' Memory usage: ' . round(memory_get_usage() / (1024 * 1024)) . ' MB' .  $this->delimer);
+                printf("\r" . $this->delimer . 'Download: ' . $fileSize . ' MB.' . ' Memory usage: ' . round(memory_get_usage() / (1024 * 1024)) . ' MB' .  $this->delimer);
                 break;
         }
     }
