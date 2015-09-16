@@ -35,43 +35,40 @@ class ParseCommand extends ContainerAwareCommand
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $marketId = $input->getArgument('marketId');
+        $em = $this->getContainer()->get('doctrine')->getManager();
         if ($marketId) {
-            $em = $this->getContainer()->get('doctrine')->getManager();
             $sites = $em
-                ->getRepository('AppBundle:Site')
-                ->findOneBy(array('id' => $marketId));
+                ->getRepository('AppBundle:Site', $marketId);
         } else {
-            $em = $this->getContainer()->get('doctrine')->getManager();
             $sites = $em
                 ->getRepository('AppBundle:Site')
                 ->findAll();
         }
 
         foreach ($sites as $site) {
-            $nowDate = new \DateTime('NOW');
             $siteId = $site->getId();
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse market ' . $siteId . ' ----------------------------');
+            $nowDate = new \DateTime('NOW');
+            $delimer = ' ---------- ';
+            $output->writeln($delimer . 'Start parse market ' . $siteId . '. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
             $newVersion = $site->getVersion() + 0.01;
             $site->setVersion($newVersion);
             $lastParseDate = $site->getLastParseDate();
 //                if ($lastParseDate->diff($nowDate)->format('%h') < $site->getUpdatePeriod()) {
+//                    $output->writeln($delimer . 'Skip parse market ' . $siteId . '. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
 //                    continue;
 //                }
 
-            $nowDate = new \DateTime('NOW');
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' start download xml');
+            $output->writeln($delimer . 'Start download xml. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
             $xmlContent = file_get_contents($site->getXmlParseUrl());
 //            $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_003939.xml');
-            $nowDate = new \DateTime('NOW');
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' end download xml');
+            $output->writeln($delimer . 'End download xml. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
 
             $crawler = new Crawler($xmlContent);
             $site->setLastParseDate(new \DateTime());
             $em->persist($site);
             $em->flush();
 
-            $nowDate = new \DateTime('NOW');
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse categories');
+            $output->writeln($delimer . 'Start parse categories. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
             $externalCategoriesInfo = $crawler
                 ->filterXPath('//categories/category')
                 ->each(function (Crawler $nodeCrawler) {
@@ -105,12 +102,10 @@ class ParseCommand extends ContainerAwareCommand
                 $em->persist($newExternalCategory);
                 $em->flush();
             }
-            $nowDate = new \DateTime('NOW');
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' Categories from XML - ' . count($externalCategoriesInfo));
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse categories');
+            $output->writeln($delimer . 'Categories from XML - ' . count($externalCategoriesInfo) . $delimer);
+            $output->writeln($delimer . 'End parse categories. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
 
-            $nowDate = new \DateTime('NOW');
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' start parse offers');
+            $output->writeln($delimer . 'Start parse offers. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
             $productsInfo = $crawler
                 ->filterXPath('//offers/offer')
                 ->each(function (Crawler $nodeCrawler) {
@@ -127,17 +122,10 @@ class ParseCommand extends ContainerAwareCommand
                 });
             $i = 0;
             foreach ($productsInfo as $product) {
-                if ($i % 100 == 0) {
-                    $em->clear();
-                    $em->flush();
-                    $em = $this->getContainer()->get('doctrine')->getManager();
-                    $site = $em
-                        ->getRepository('AppBundle:Site')
-                        ->findOneBy(array('id' => $siteId));
-                }
                 if ($i % 1000 == 0) {
-                    $nowDate = new \DateTime('NOW');
-                    $output->writeln($nowDate->format(\DateTime::ATOM) . ' Offers - ' . $i);
+                    $em->flush();
+                    $em->clear('AppBundle\Entity\Product');
+                    $output->writeln($delimer . 'Offers - ' . $i . '. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
                 }
                 $oldProduct = $em
                     ->getRepository('AppBundle:Product')
@@ -214,13 +202,12 @@ class ParseCommand extends ContainerAwareCommand
                 $em->flush();
                 $i++;
             }
-            $nowDate = new \DateTime('NOW');
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse offers');
+            $output->writeln($delimer . 'End parse offers. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
             if (isset($noCategoryArray)) {
-                $output->writeln($nowDate->format(\DateTime::ATOM) . ' No categories - ' . count($noCategoryArray));
+                $output->writeln($delimer . 'No categories - ' . count($noCategoryArray) . $delimer);
             }
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' Imported offers - ' . count($productsInfo));
-            $output->writeln($nowDate->format(\DateTime::ATOM) . ' end parse market ' . $siteId . ' ------------------------------');
+            $output->writeln($delimer . 'Imported offers - ' . count($productsInfo) . $delimer);
+            $output->writeln($delimer . 'End parse market ' . $siteId . '. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
         }
 
     }
