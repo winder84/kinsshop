@@ -70,7 +70,6 @@ class ParseCommand extends ContainerAwareCommand
 
             $this->outputWriteLn('Start download xml.');
             $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
-//            $xmlContent = file_get_contents($this->getContainer()->get('kernel')->getRootDir() . '/../web/akusherstvo_products_20150915_093513.xml', false, $this->ctx);
             $this->outputWriteLn('End download xml.');
 
             $crawler = new Crawler($xmlContent);

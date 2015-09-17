@@ -1,5 +1,32 @@
 {% extends 'AppBundle:Default:layout.html.twig' %}
 
 {% block content %}
-
+	<div class="productListBlock">
+		<h2>Выбор kinsshop.ru:</h2>
+		<ul class="productListUl">
+			{% for product in products %}
+				<li class="productListItem">
+					<div class="itemName">{{ product.name }}</div>
+					<div class="itemPicture">
+						<a href="/product/{{ product.id }}" title="{{ product.name }} {{ product.model }}"><img src="{{ product.pictures.0 }}"></a>
+					</div>
+					<div class="itemModel">{{ product.model }}</div>
+					<div class="itemLink">
+						<a href="/product/{{ product.id }}" title="{{ product.name }} {{ product.model }}">Подробнее...</a>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+	<hr/>
+	<div class="siteBlock">
+		<h2>Наши партнеры:</h2>
+		<ul class="siteBlockUl">
+			{% for site in sites %}
+				<li>
+					<a href="/shop/{{ site.alias }}"><img src="{{ site.logoUrl }}"></a>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
 {% endblock %}

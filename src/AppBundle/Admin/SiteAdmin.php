@@ -58,6 +58,7 @@ class SiteAdmin extends Admin
             ->add('xmlParseUrl', null, array('label' => 'Xml url'))
             ->add('deliveryUrl', null, array('label' => 'Url доставки', 'required' => false))
             ->add('paymentUrl', null, array('label' => 'Url страницы оплаты', 'required' => false))
+            ->add('logoUrl', null, array('label' => 'Url логотипа', 'required' => false))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('url', null, array('label' => 'Url'))
             ->add('seoDescription', null, array('label' => 'SEO Описание', 'required' => false))

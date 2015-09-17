@@ -10,13 +10,17 @@ body {
 	margin: 0 auto;
 }
 
+.content {
+	background-color: #efefef;
+}
+
 .headerMenuBlock {
 	width: 100%;
 	height: 75px;
 }
 
 .headerMenu {
-	width: 880px;
+	width: 1100px;
 	height: 100%;
 	margin: 0 auto;
 }
@@ -63,7 +67,6 @@ body {
 	line-height: 75px;
 	margin: 0 0 0 10px;
 	padding: 0 10px;
-	border-radius: 0 0 5px 5px;
 	cursor: pointer;
 }
 
@@ -73,13 +76,118 @@ body {
 }
 
 .headerMenuDiv a:hover {
-	background-color: #c0ced7;
+	background-color: #cfdfe8;
 	color: #fff;
 	text-decoration: none;
 }
 
 .middleBlock {
 	width: 100%;
-	height: 234px;
+	height: 232px;
 	background: url("/bundles/app/images/middleBlockPicture.png");
+}
+
+.middleBlockText {
+	color: #fff;
+	padding: 150px 0 0 130px;
+	font-size: 28px;
+}
+
+.productListBlock {
+	width: 1100px;
+	margin: 0 auto;
+}
+
+.content h2 {
+	font-size: 26px;
+	color: #54add7;
+}
+
+.productListBlock h2 {
+	margin: 0 auto;
+	padding: 15px 0 0 0;
+	width: 350px;
+}
+
+.siteBlock h2 {
+	margin: 0 auto;
+	padding: 15px 0 0 0;
+	width: 250px;
+}
+
+.productListUl {
+	list-style: none;
+	margin: 0;
+	padding: 10px 0;
+}
+
+.productListUl li {
+	display: inline-block;
+	vertical-align: top;
+	margin: 10px 2px;
+}
+
+.productListItem {
+	width: 260px;
+	background-color: #fff;
+	text-align: center;
+	font-family: "Droid Sans", sans-serif;
+}
+
+.productListItem .itemName {
+	background-color: #54add7;
+	padding: 7px;
+	font-size: 12px;
+	color: #fff;
+}
+
+.productListItem .itemPicture {
+	height: 180px;
+	margin: 5px 0;
+}
+
+.productListItem .itemPicture img {
+	width: 220px;
+	height: 180px;
+}
+
+.productListItem .itemModel {
+	font-size: 12px;
+	color: #6f6f6f;
+	height: 48px;
+	padding: 10px 0 0 0;
+}
+
+.productListItem .itemLink {
+	padding: 0 0 10px 0;
+}
+
+.productListItem .itemLink a {
+	font-size: 14px;
+	color: #54add7;
+	text-decoration: none;
+}
+
+.footerBlock {
+	width: 100%;
+	height: 50px;
+	background-color: #3a3a3a;
+}
+
+.siteBlockUl {
+	list-style: none;
+	width: 1100px;
+	margin: 0 auto;
+	padding: 0 0 30px 0;
+	text-align: center;
+}
+
+.siteBlockUl li {
+	display: inline-block;
+	margin: 0 30px;
+	width: 150px;
+}
+
+.siteBlockUl li img {
+	width: 150px;
 }

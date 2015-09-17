@@ -93,6 +93,13 @@ class Site
     /**
      * @var string
      *
+     * @ORM\Column(name="logoUrl", type="string", length=255, nullable=true)
+     */
+    private $logoUrl;
+
+    /**
+     * @var string
+     *
      * @ORM\Column(name="url", type="string", length=255)
      */
     private $url;
@@ -554,5 +561,28 @@ class Site
     public function getVendors()
     {
         return $this->vendors;
+    }
+
+    /**
+     * Set logoUrl
+     *
+     * @param string $logoUrl
+     * @return Site
+     */
+    public function setLogoUrl($logoUrl)
+    {
+        $this->logoUrl = $logoUrl;
+
+        return $this;
+    }
+
+    /**
+     * Get logoUrl
+     *
+     * @return string 
+     */
+    public function getLogoUrl()
+    {
+        return $this->logoUrl;
     }
 }

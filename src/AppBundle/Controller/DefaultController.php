@@ -13,15 +13,44 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $em = $this->getDoctrine()->getManager();
+        $products = $em
+            ->getRepository('AppBundle:Product')
+            ->findBy(
+                array(),
+                array(),
+                16,
+                0
+            );
+        $sites = $em
+            ->getRepository('AppBundle:Site')
+            ->findBy(
+                array(),
+                array(),
+                6,
+                0
+            );
+        foreach ($products as $product) {
+            $resultProducts[] = array(
+                'name' => $product->getName(),
+                'model' => $product->getModel(),
+                'pictures' => $product->getPictures(),
+                'id' => $product->getId(),
+            );
+        }
         // replace this example code with whatever you need
 //        return $this->render('AppBundle:Default:index.html.twig', array(
 //            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
 //        ));
-        return $this->render('AppBundle:Default:index.html.twig', array());
+
+        return $this->render('AppBundle:Default:index.html.twig', array(
+            'products' => $resultProducts,
+            'sites' => $sites
+        ));
     }
 
     /**
-     * @Route("/site/{alias}")
+     * @Route("/shop/{alias}")
      */
     public function siteAction($alias)
     {
