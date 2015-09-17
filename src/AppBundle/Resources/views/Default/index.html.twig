@@ -3,20 +3,22 @@
 {% block content %}
 	<div class="productListBlock">
 		<h2>Выбор kinsshop.ru:</h2>
+		{{ paginator|raw }}
 		<ul class="productListUl">
 			{% for product in products %}
 				<li class="productListItem">
-					<div class="itemName">{{ product.name }}</div>
+					<div class="itemName">{{ product.name|raw }}</div>
 					<div class="itemPicture">
-						<a href="/product/{{ product.id }}" title="{{ product.name }} {{ product.model }}"><img src="{{ product.pictures.0 }}"></a>
+						<a href="/product/{{ product.id }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
 					</div>
-					<div class="itemModel">{{ product.model }}</div>
+					<div class="itemModel">{{ product.model|raw }}</div>
 					<div class="itemLink">
-						<a href="/product/{{ product.id }}" title="{{ product.name }} {{ product.model }}">Подробнее...</a>
+						<a href="/product/{{ product.id }}" title="{{ product.name|raw }} {{ product.model|raw }}">Подробнее...</a>
 					</div>
 				</li>
 			{% endfor %}
 		</ul>
+		{{ paginator|raw }}
 	</div>
 	<hr/>
 	<div class="vendorBlock">
@@ -36,7 +38,7 @@
 		<ul class="siteBlockUl">
 			{% for site in sites %}
 				<li>
-					<a href="/shop/description/{{ site.alias }}"><img src="{{ site.logoUrl }}"></a>
+					<a href="/shop/{{ site.alias }}"><img src="{{ site.logoUrl }}"></a>
 				</li>
 			{% endfor %}
 		</ul>

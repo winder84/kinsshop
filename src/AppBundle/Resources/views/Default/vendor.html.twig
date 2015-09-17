@@ -2,7 +2,7 @@
 
 {% block content %}
 	<div class="shopBlock">
-		<h2 class="shopTitle">Товары магазина {{ site.title|raw }}:</h2>
+		<h2 class="shopTitle">Товары бренда {{ vendor.name|raw }}:</h2>
 		{{ paginator|raw }}
 		<ul class="productListUl">
 			{% for product in products %}
@@ -19,17 +19,5 @@
 			{% endfor %}
 		</ul>
 		{{ paginator|raw }}
-	</div>
-	<hr/>
-	<div class="vendorBlock">
-		<h2>Бренды магазина:</h2>
-		<ul class="vendorBlockUl">
-			{% for vendor in vendors %}
-				<li>
-					<a href="/vendor/{{ vendor.0.alias }}">{{ vendor.0.name }}</a>
-					<p>({{ vendor.0.products|length }} товаров)</p>
-				</li>
-			{% endfor %}
-		</ul>
 	</div>
 {% endblock %}
