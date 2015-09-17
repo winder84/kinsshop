@@ -99,7 +99,7 @@ body {
 }
 
 .content h2 {
-	font-size: 26px;
+	font-size: 1.4em;
 	color: #54add7;
 }
 
@@ -109,10 +109,10 @@ body {
 	width: 350px;
 }
 
-.siteBlock h2 {
+.siteBlock h2, .vendorBlock h2 {
 	margin: 0 auto;
 	padding: 15px 0 0 0;
-	width: 250px;
+	width: 230px;
 }
 
 .productListUl {
@@ -174,11 +174,11 @@ body {
 	background-color: #3a3a3a;
 }
 
-.siteBlockUl {
+.siteBlockUl, .vendorBlockUl {
 	list-style: none;
 	width: 1100px;
 	margin: 0 auto;
-	padding: 0 0 30px 0;
+	padding: 10px 0 30px 0;
 	text-align: center;
 }
 
@@ -186,6 +186,22 @@ body {
 	display: inline-block;
 	margin: 0 30px;
 	width: 150px;
+}
+
+.vendorBlockUl li {
+	display: inline-block;
+	margin: 5px 10px;
+	width: 150px;
+}
+
+.vendorBlockUl a {
+	color: #54add7;
+	text-decoration: none;
+}
+
+.vendorBlockUl p {
+	margin: 2px;
+	font-size: 14px;
 }
 
 .siteBlockUl li img {

@@ -22,6 +22,17 @@ class DefaultController extends Controller
                 16,
                 0
             );
+        $qb = $em->createQueryBuilder();
+        $qb->select('Vendor, count(Vendor) as cnt')
+            ->from('AppBundle:Product', 'Product')
+            ->leftJoin('AppBundle:Vendor', 'Vendor')
+            ->where('Vendor = Product.vendor')
+            ->groupBy('Vendor')
+            ->orderBy('cnt', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(12);
+        $query = $qb->getQuery();
+        $vendors = $query->getResult();
         $sites = $em
             ->getRepository('AppBundle:Site')
             ->findBy(
@@ -45,7 +56,8 @@ class DefaultController extends Controller
 
         return $this->render('AppBundle:Default:index.html.twig', array(
             'products' => $resultProducts,
-            'sites' => $sites
+            'sites' => $sites,
+            'vendors' => $vendors
         ));
     }
 

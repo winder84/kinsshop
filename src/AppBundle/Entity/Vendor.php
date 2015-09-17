@@ -47,6 +47,13 @@ class Vendor
     private $name;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="alias", type="string", length=255, nullable=true)
+     */
+    private $alias;
+
+    /**
      * @var float
      *
      * @ORM\Column(name="version", type="float", nullable=true)
@@ -204,5 +211,28 @@ class Vendor
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Vendor
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 }

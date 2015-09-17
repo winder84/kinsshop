@@ -33,6 +33,7 @@ class VendorAdmin extends Admin
             ->add('id')
             ->add('code', null, array('label' => 'Код бренда'))
             ->add('name', null, array('label' => 'Наименование бренда'))
+            ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('version', null, array('label' => 'Версия'))
             ->add('site', null, array('label' => 'Магазин'))
             ->add('_action', 'actions', array(
@@ -52,6 +53,7 @@ class VendorAdmin extends Admin
         $formMapper
             ->add('code', null, array('label' => 'Код бренда'))
             ->add('name', null, array('label' => 'Наименование бренда'))
+            ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('version', null, array('label' => 'Версия'))
             ->add('site', null, array('label' => 'Магазин'))
         ;
