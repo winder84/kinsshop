@@ -61,6 +61,13 @@ class Category
     private $seoKeywords;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="alias", type="string", length=255, nullable=true)
+     */
+    private $alias;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -234,5 +241,28 @@ class Category
     public function getExternalCategories()
     {
         return $this->externalCategories;
+    }
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Category
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 }

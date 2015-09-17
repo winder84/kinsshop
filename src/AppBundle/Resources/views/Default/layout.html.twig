@@ -9,10 +9,27 @@
 					<a href="/" class="headerLogoText">kinsshop.ru</a>
 				</div>
 				<div class="headerMenuDiv">
-					<a href="/">Главная</a>
-					<a>Категории</a>
-					<a href="/">Главная</a>
-					<a href="/">Главная</a>
+					<ul class="dropdown">
+						<li class="dropdown-top">
+							<a href="/">Главная</a>
+						</li>
+						<li class="dropdown-top">
+							<a class="dropdown-top">Категории</a>
+							<ul class="dropdown-inside">
+								{% for category in categories %}
+									<li><a href="/category/{{ category.alias }}">{{ category.name }}</a></li>
+								{% endfor %}
+							</ul>
+						</li>
+						<li class="dropdown-top">
+							<a class="dropdown-top">Магазины</a>
+							<ul class="dropdown-inside">
+								{% for site in sites %}
+									<li><a href="/shop/{{ site.alias }}">{{ site.title }}</a></li>
+								{% endfor %}
+							</ul>
+						</li>
+					</ul>
 				</div>
 			</div>
 		</div>

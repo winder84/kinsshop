@@ -22,6 +22,7 @@ class CategoryAdmin extends Admin
             ->add('seoDescription', null, array('label' => 'SEO описание'))
             ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
             ->add('site', null, array('label' => 'Магазин'))
+            ->add('alias', null, array('label' => 'Alias', 'required' => false))
         ;
     }
 
@@ -34,6 +35,7 @@ class CategoryAdmin extends Admin
             ->add('id')
             ->add('name', null, array('label' => 'Наименование'))
             ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
+            ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('site', null, array('label' => 'Магазин'))
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -55,6 +57,7 @@ class CategoryAdmin extends Admin
             ->add('description', null, array('label' => 'Описание'))
             ->add('seoDescription', null, array('label' => 'SEO описание'))
             ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
+            ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('site', null, array('label' => 'Магазин'))
             ->add('externalCategories', 'sonata_type_collection', array(
                 'required' => false,

@@ -35,12 +35,10 @@ class DefaultController extends Controller
         $vendors = $query->getResult();
         $sites = $em
             ->getRepository('AppBundle:Site')
-            ->findBy(
-                array(),
-                array(),
-                6,
-                0
-            );
+            ->findAll();
+        $categories = $em
+            ->getRepository('AppBundle:Category')
+            ->findAll();
         foreach ($products as $product) {
             $resultProducts[] = array(
                 'name' => $product->getName(),
@@ -57,8 +55,48 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:index.html.twig', array(
             'products' => $resultProducts,
             'sites' => $sites,
-            'vendors' => $vendors
+            'vendors' => $vendors,
+            'categories' => $categories
         ));
+    }
+
+    /**
+     * @Route("/shop/description/{alias}")
+     */
+    public function siteDescriptionAction($alias)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $site = $em
+            ->getRepository('AppBundle:Site')
+            ->findOneBy(array('alias' => $alias));
+
+        $qb = $em->createQueryBuilder();
+        $qb->select('Vendor, count(Vendor) as cnt')
+            ->from('AppBundle:Product', 'Product')
+            ->leftJoin('AppBundle:Vendor', 'Vendor')
+            ->where('Vendor = Product.vendor')
+            ->andWhere('Vendor.site = :site')
+            ->setParameter('site', $site)
+            ->groupBy('Vendor')
+            ->orderBy('cnt', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(12);
+        $query = $qb->getQuery();
+        $vendors = $query->getResult();
+
+        $categories = $em
+            ->getRepository('AppBundle:Category')
+            ->findAll();
+        $sites = $em
+            ->getRepository('AppBundle:Site')
+            ->findAll();
+        return $this->render('AppBundle:Default:site.html.twig', array(
+                'site' => $site,
+                'sites' => $sites,
+                'categories' => $categories,
+                'vendors' => $vendors
+            )
+        );
     }
 
     /**
@@ -68,12 +106,36 @@ class DefaultController extends Controller
     {
         $em = $this->getDoctrine()->getManager();
         $site = $em
-        ->getRepository('AppBundle:Site')
-        ->findOneBy(array('alias' => $alias));
+            ->getRepository('AppBundle:Site')
+            ->findOneBy(array('alias' => $alias));
 
-        return $this->render(
-            'AppBundle:Default:site.html.twig',
-            array('site' => $site)
+        $qb = $em->createQueryBuilder();
+        $qb->select('Vendor, count(Vendor) as cnt')
+            ->from('AppBundle:Product', 'Product')
+            ->leftJoin('AppBundle:Vendor', 'Vendor')
+            ->where('Vendor = Product.vendor')
+            ->andWhere('Vendor.site = :site')
+            ->setParameter('site', $site)
+            ->groupBy('Vendor')
+            ->orderBy('cnt', 'DESC')
+            ->setFirstResult(0)
+            ->setMaxResults(12);
+        $query = $qb->getQuery();
+        $vendors = $query->getResult();
+
+        $categories = $em
+            ->getRepository('AppBundle:Category')
+            ->findAll();
+
+        $sites = $em
+            ->getRepository('AppBundle:Site')
+            ->findAll();
+        return $this->render('AppBundle:Default:site.html.twig', array(
+                'site' => $site,
+                'sites' => $sites,
+                'categories' => $categories,
+                'vendors' => $vendors
+            )
         );
     }
 }

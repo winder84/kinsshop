@@ -68,9 +68,6 @@ body {
 	margin: 0 0 0 10px;
 	padding: 0 10px;
 	cursor: pointer;
-}
-
-.headerMenuDiv a {
 	text-decoration: none;
 	color: #54add7;
 }
@@ -141,6 +138,58 @@ body {
 	color: #fff;
 }
 
+.shopUniBlock {
+	width: 400px;
+	padding: 30px 0 0 0;
+}
+
+.shopUniBlock div {
+	background-color: #fff;
+	padding: 7px;
+	color: #4083a3;
+}
+
+.shopUniBlock a {
+	color: #4083a3;
+}
+
+.shopUniBlock a:hover {
+	color: #234759;
+}
+
+.shopDescBlock .itemDesription{
+	background-color: #fff;
+	color: #4083a3;
+	padding: 5px 20px;
+}
+
+.shopDescBlock {
+	width: 620px;
+	padding: 30px 0 0 0;
+	display: inline-block;
+	vertical-align: top;
+	margin: 0 0 0 50px;
+}
+
+.shopUniBlock img {
+	width: 380px;
+	background: #fff;
+	padding: 10px;
+}
+
+.shopUniBlock .itemName, .shopDescBlock .itemName {
+	background-color: #54add7;
+	padding: 7px;
+	margin: 0;
+	font-size: 16px;
+	color: #fff;
+	text-align: center;
+}
+
+.shopBlockDiv p {
+	margin: 0;
+}
+
 .productListItem .itemPicture {
 	height: 180px;
 	margin: 5px 0;
@@ -166,6 +215,10 @@ body {
 	font-size: 14px;
 	color: #54add7;
 	text-decoration: none;
+}
+
+.productListItem .itemLink a:hover, .vendorBlockUl a:hover {
+	color: #234759;
 }
 
 .footerBlock {
@@ -207,3 +260,59 @@ body {
 .siteBlockUl li img {
 	width: 150px;
 }
+
+.shopBlock {
+	width: 1100px;
+	margin: 0 auto;
+}
+
+.shopBlock .shopBlockDiv {
+	display: inline-block;
+	vertical-align: top;
+}
+
+ul.dropdown li { position: relative; }
+ul.dropdown, ul.dropdown-inside {
+	list-style-type: none;
+	padding: 0;
+}
+ul.dropdown-inside {
+	position: absolute;
+	left: -9999px;
+}
+ul.dropdown-inside a {
+	width: 200px;
+	padding: 0 10px;
+	margin: 0;
+	line-height: 30px;
+	text-align: center;
+	color: #fff;
+}
+ul.dropdown-inside li {
+	padding: 0;
+	margin: 0;
+	line-height: 30px;
+}
+ul.dropdown li.dropdown-top {
+	display: inline;
+	float: left;
+	margin: 0 1px 0 0;
+}
+ul.dropdown li.dropdown-top a {
+	/*padding: 3px 10px 4px;*/
+	/*display: block;*/
+}
+/*ul.dropdown a.dropdown-top { background: #efefef; }*/
+/*ul.dropdown a.dropdown-top:hover { padding: 2px 10px 5px; }*/
+ul.dropdown li.dropdown-top:hover .dropdown-inside {
+	display: block;
+	left: -40px;
+}
+ul.dropdown .dropdown-inside {
+	background: #2e5d74;
+}
+ul.dropdown .dropdown-inside a:hover {
+	background: #efefef;
+	color: #2e5d74;
+}
+ul.dropdown { margin: 0; }

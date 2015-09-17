@@ -1,1 +1,42 @@
-{{ site }}
+{% extends 'AppBundle:Default:layout.html.twig' %}
+
+{% block content %}
+	<div class="shopBlock">
+		<div class="shopBlockDiv">
+			<div class="shopUniBlock">
+				<h2 class="itemName">{{ site.title }}</h2>
+				<a href="{{ site.url }}" title="{{ site.title }} - сайт магазина"><img src="{{ site.logoUrl }}"></a>
+			</div>
+			<div class="shopUniBlock">
+				<h2 class="itemName">Доставка:</h2>
+				<div>
+					<a href="{{ site.deliveryUrl }}" title="{{ site.title }} - доставка">Перейдите на сайт магазина</a> для получения информации по доставке.
+				</div>
+			</div>
+			<div class="shopUniBlock">
+				<h2 class="itemName">Оплата:</h2>
+				<div>
+					<a href="{{ site.paymentUrl }}" title="{{ site.title }} - оплата">Перейдите на сайт магазина</a> для получения информации по способам оплаты.
+				</div>
+			</div>
+		</div>
+		<div class="shopBlockDiv">
+			<div class="shopDescBlock">
+				<h2 class="itemName">Описание:</h2>
+				<p class="itemDesription">{{ site.description }}</p>
+			</div>
+		</div>
+	</div>
+	<hr/>
+	<div class="vendorBlock">
+		<h2>Бренды магазина:</h2>
+		<ul class="vendorBlockUl">
+			{% for vendor in vendors %}
+				<li>
+					<a href="/vendor/{{ vendor.0.alias }}">{{ vendor.0.name }}</a>
+					<p>({{ vendor.0.products|length }} товаров)</p>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+{% endblock %}
