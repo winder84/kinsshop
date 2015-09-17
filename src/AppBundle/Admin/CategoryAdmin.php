@@ -34,7 +34,6 @@ class CategoryAdmin extends Admin
         $listMapper
             ->add('id')
             ->add('name', null, array('label' => 'Наименование'))
-            ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('site', null, array('label' => 'Магазин'))
             ->add('_action', 'actions', array(
