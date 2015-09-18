@@ -191,7 +191,7 @@ class DefaultController extends Controller
     public function siteAction($alias, $page = 0)
     {
         $this->getMetaItems();
-        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
+        $this->metaTags['metaRobots'] = 'NOINDEX';
         $em = $this->getDoctrine()->getManager();
         $site = $em
             ->getRepository('AppBundle:Site')

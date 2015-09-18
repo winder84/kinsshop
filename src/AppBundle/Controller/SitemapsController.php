@@ -57,47 +57,47 @@ class SitemapsController extends Controller
             }
         }
 
-        foreach ($em->getRepository('AppBundle:Vendor')->findAll() as $vendor) {
-            $qb = $em->createQueryBuilder();
-            $qb->select('Product')
-                ->from('AppBundle:Product', 'Product')
-                ->where('Product.vendor = :vendor')
-                ->setParameter('vendor', $vendor);
-            $query = $qb->getQuery()
-                ->setFirstResult(28 * $page)
-                ->setMaxResults(28);
-            $products = new Paginator($query, $fetchJoinCollection = true);
-
-            $productsCount = count($products);
-            $paginatorPagesCount = floor($productsCount / 28);
-            if ($paginatorPagesCount > 0) {
-                for ($page = 0; $page <= $paginatorPagesCount; $page++) {
-                    $urls[] = array('loc' => $this->get('router')->generate('vendor_route',
-                        array('alias' => $vendor->getAlias(), 'page' => $page)), 'changefreq' => 'weekly', 'priority' => '0.7');
-                }
-            }
-        }
-
-        foreach ($em->getRepository('AppBundle:ExternalCategory')->findAll() as $exCategory) {
-            $qb = $em->createQueryBuilder();
-            $qb->select('Product')
-                ->from('AppBundle:Product', 'Product')
-                ->where('Product.category = :category')
-                ->setParameter('category', $exCategory);
-            $query = $qb->getQuery()
-                ->setFirstResult(28 * $page)
-                ->setMaxResults(28);
-            $products = new Paginator($query, $fetchJoinCollection = true);
-
-            $productsCount = count($products);
-            $paginatorPagesCount = floor($productsCount / 28);
-            if ($paginatorPagesCount > 0) {
-                for ($page = 0; $page <= $paginatorPagesCount; $page++) {
-                    $urls[] = array('loc' => $this->get('router')->generate('ex_category_route',
-                        array('id' => $exCategory->getId(), 'page' => $page)), 'changefreq' => 'weekly', 'priority' => '0.7');
-                }
-            }
-        }
+//        foreach ($em->getRepository('AppBundle:Vendor')->findAll() as $vendor) {
+//            $qb = $em->createQueryBuilder();
+//            $qb->select('Product')
+//                ->from('AppBundle:Product', 'Product')
+//                ->where('Product.vendor = :vendor')
+//                ->setParameter('vendor', $vendor);
+//            $query = $qb->getQuery()
+//                ->setFirstResult(28 * $page)
+//                ->setMaxResults(28);
+//            $products = new Paginator($query, $fetchJoinCollection = true);
+//
+//            $productsCount = count($products);
+//            $paginatorPagesCount = floor($productsCount / 28);
+//            if ($paginatorPagesCount > 0) {
+//                for ($page = 0; $page <= $paginatorPagesCount; $page++) {
+//                    $urls[] = array('loc' => $this->get('router')->generate('vendor_route',
+//                        array('alias' => $vendor->getAlias(), 'page' => $page)), 'changefreq' => 'weekly', 'priority' => '0.7');
+//                }
+//            }
+//        }
+//
+//        foreach ($em->getRepository('AppBundle:ExternalCategory')->findAll() as $exCategory) {
+//            $qb = $em->createQueryBuilder();
+//            $qb->select('Product')
+//                ->from('AppBundle:Product', 'Product')
+//                ->where('Product.category = :category')
+//                ->setParameter('category', $exCategory);
+//            $query = $qb->getQuery()
+//                ->setFirstResult(28 * $page)
+//                ->setMaxResults(28);
+//            $products = new Paginator($query, $fetchJoinCollection = true);
+//
+//            $productsCount = count($products);
+//            $paginatorPagesCount = floor($productsCount / 28);
+//            if ($paginatorPagesCount > 0) {
+//                for ($page = 0; $page <= $paginatorPagesCount; $page++) {
+//                    $urls[] = array('loc' => $this->get('router')->generate('ex_category_route',
+//                        array('id' => $exCategory->getId(), 'page' => $page)), 'changefreq' => 'weekly', 'priority' => '0.7');
+//                }
+//            }
+//        }
 
         return array('urls' => $urls, 'hostname' => $hostname);
     }
