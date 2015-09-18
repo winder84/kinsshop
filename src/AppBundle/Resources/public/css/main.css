@@ -220,8 +220,13 @@ h2.categoryH2 {
 .productListItem .itemModel {
 	font-size: 12px;
 	color: #6f6f6f;
-	height: 48px;
 	padding: 10px 0 0 0;
+}
+
+.productListItem .itemPrice {
+	font-size: 14px;
+	color: orange;
+	padding: 0 0 10px 0;
 }
 
 .productListItem .itemLink {

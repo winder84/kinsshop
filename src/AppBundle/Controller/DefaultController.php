@@ -64,6 +64,8 @@ class DefaultController extends Controller
                 'model' => $product->getModel(),
                 'pictures' => $product->getPictures(),
                 'id' => $product->getId(),
+                'url' => $product->getUrl(),
+                'price' => $product->getPrice(),
             );
         }
         // replace this example code with whatever you need
@@ -131,12 +133,10 @@ class DefaultController extends Controller
                 'model' => $product->getModel(),
                 'pictures' => $product->getPictures(),
                 'id' => $product->getId(),
+                'url' => $product->getUrl(),
+                'price' => $product->getPrice(),
             );
         }
-        // replace this example code with whatever you need
-//        return $this->render('AppBundle:Default:index.html.twig', array(
-//            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-//        ));
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:index.html.twig', array(

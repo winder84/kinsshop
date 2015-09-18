@@ -6,10 +6,12 @@
 			<h2 class="categoryH2">Показаны товары следующих категорий:</h2>
 			<ul class="vendorBlockUl">
 				{% for exCategory in exCategories %}
-					<li>
-						<a href="/exCategory/{{ exCategory.id }}">{{ exCategory.name }}</a>
-						<p>({{ exCategory.products|length }} шт.)</p>
-					</li>
+					{% if exCategory.products|length != 0 %}
+						<li>
+							<a href="/exCategory/{{ exCategory.id }}">{{ exCategory.name }}</a>
+							<p>({{ exCategory.products|length }} шт.)</p>
+						</li>
+					{% endif %}
 				{% endfor %}
 			</ul>
 		</div>
@@ -21,9 +23,11 @@
 				<li class="productListItem">
 					<div class="itemName">{{ product.name|raw }}</div>
 					<div class="itemPicture">
-						<a href="/product/{{ product.id }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
+						<a target="_blank" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
 					</div>
 					<div class="itemModel">{{ product.model|raw }}</div>
+					<hr />
+					<div class="itemPrice">Цена: {{ product.price|number_format(0, '', ' ') }} руб.</div>
 					<div class="itemLink">
 						<a href="/product/{{ product.id }}" title="{{ product.name|raw }} {{ product.model|raw }}">Подробнее...</a>
 					</div>
