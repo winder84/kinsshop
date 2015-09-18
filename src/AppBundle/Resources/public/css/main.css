@@ -166,6 +166,10 @@ h2.categoryH2 {
 	color: #4083a3;
 }
 
+.shopUniBlock a.productLink {
+	background-color: orange;
+}
+
 .shopUniBlock a:hover {
 	color: #234759;
 }

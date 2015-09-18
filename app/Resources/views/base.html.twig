@@ -2,7 +2,11 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Kinsshop.ru | Всё для вашего ребенка!{% endblock %}</title>
+        <meta name = "title" content = "{{ metaTags.metaTitle }}">
+        <meta name = "description" content = "{{ metaTags.metaDescription }}">
+        <meta name = "keywords" content = "{{ metaTags.metaKeywords }}">
+		<meta name = "robots" content = "{{ metaTags.metaRobots }}">
+        <title>{% block title %}Kinsshop.ru | {{ metaTags.metaTitle }}{% endblock %}</title>
         {% stylesheets 'bundles/app/css/*' filter='cssrewrite' %}
             <link rel="stylesheet" href="{{ asset_url }}" />
         {% endstylesheets %}

@@ -12,12 +12,14 @@ class DefaultController extends Controller
     private $exCategoriesIds;
     private $categories;
     private $sites;
+    private $metaTags;
 
     /**
      * @Route("/", name="homepage")
      */
     public function indexAction(Request $request)
     {
+        $this->getMetaItems();
         $page = 0;
         $em = $this->getDoctrine()->getManager();
         $products = $em
@@ -75,6 +77,7 @@ class DefaultController extends Controller
             'sites' => $this->sites,
             'vendors' => $vendors,
             'categories' => $this->categories,
+            'metaTags' => $this->metaTags,
             'paginator' => $paginator,
         ));
     }
@@ -84,6 +87,7 @@ class DefaultController extends Controller
      */
     public function indexPageAction(Request $request, $page = 0)
     {
+        $this->getMetaItems();
         $em = $this->getDoctrine()->getManager();
         $products = $em
             ->getRepository('AppBundle:Product')
@@ -139,6 +143,7 @@ class DefaultController extends Controller
             'products' => $resultProducts,
             'sites' => $this->sites,
             'vendors' => $vendors,
+            'metaTags' => $this->metaTags,
             'categories' => $this->categories,
             'paginator' => $paginator,
         ));
@@ -149,6 +154,7 @@ class DefaultController extends Controller
      */
     public function siteDescriptionAction($alias)
     {
+        $this->getMetaItems();
         $em = $this->getDoctrine()->getManager();
         $site = $em
             ->getRepository('AppBundle:Site')
@@ -172,6 +178,7 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:site.description.html.twig', array(
                 'site' => $site,
                 'sites' => $this->sites,
+                'metaTags' => $this->metaTags,
                 'categories' => $this->categories,
                 'vendors' => $vendors
             )
@@ -183,6 +190,8 @@ class DefaultController extends Controller
      */
     public function siteAction($alias, $page = 0)
     {
+        $this->getMetaItems();
+        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $site = $em
             ->getRepository('AppBundle:Site')
@@ -226,6 +235,7 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:site.html.twig', array(
                 'site' => $site,
                 'sites' => $this->sites,
+                'metaTags' => $this->metaTags,
                 'categories' => $this->categories,
                 'products' => $products,
                 'paginator' => $paginator,
@@ -239,6 +249,8 @@ class DefaultController extends Controller
      */
     public function vendorAction($alias, $page = 0)
     {
+        $this->getMetaItems();
+        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $vendor = $em
             ->getRepository('AppBundle:Vendor')
@@ -268,6 +280,7 @@ class DefaultController extends Controller
                 'paginator' => $paginator,
                 'sites' => $this->sites,
                 'vendor' => $vendor,
+                'metaTags' => $this->metaTags,
                 'categories' => $this->categories
             )
         );
@@ -278,6 +291,8 @@ class DefaultController extends Controller
      */
     public function categoryAction($alias, $page = 0)
     {
+        $this->getMetaItems();
+        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $category = $em
             ->getRepository('AppBundle:Category')
@@ -322,6 +337,7 @@ class DefaultController extends Controller
                 'category' => $category,
                 'exCategories' => $exCategories,
                 'sites' => $this->sites,
+                'metaTags' => $this->metaTags,
                 'categories' => $this->categories
             )
         );
@@ -332,6 +348,8 @@ class DefaultController extends Controller
      */
     public function exCategoryAction($id, $page = 0)
     {
+        $this->getMetaItems();
+        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $category = $em
             ->getRepository('AppBundle:ExternalCategory')
@@ -362,6 +380,7 @@ class DefaultController extends Controller
                 'paginator' => $paginator,
                 'category' => $category,
                 'sites' => $this->sites,
+                'metaTags' => $this->metaTags,
                 'categories' => $this->categories
             )
         );
@@ -372,15 +391,20 @@ class DefaultController extends Controller
      */
     public function productAction($id)
     {
+        $this->getMetaItems();
         $em = $this->getDoctrine()->getManager();
         $product = $em
             ->getRepository('AppBundle:Product')
             ->findOneBy(array('id' => $id));
 
         $this->getMenuItems();
+        $this->metaTags['metaTitle'] = $product->getName() . ' - ' . $product->getModel();
+        $this->metaTags['metaDescription'] = $product->getDescription();
+        $this->metaTags['metaKeywords'] .= ', ' . $product->getName() . ' купить, ' . $product->getModel() . ' купить, ' . $product->getCategory()->getName() . ' купить, ' . $product->getVendor()->getName() . ' купить';
         return $this->render('AppBundle:Default:product.description.html.twig', array(
                 'sites' => $this->sites,
                 'product' => $product,
+                'metaTags' => $this->metaTags,
                 'categories' => $this->categories
             )
         );
@@ -416,5 +440,13 @@ class DefaultController extends Controller
         $this->sites = $em
             ->getRepository('AppBundle:Site')
             ->findAll();
+    }
+
+    private function getMetaItems()
+    {
+        $this->metaTags['metaTitle'] = 'Всё для вашего ребенка!';
+        $this->metaTags['metaDescription'] = 'У нас Вы найдете всё самое лучшее для Вашего ребенка!';
+        $this->metaTags['metaKeywords'] = 'ребенок, дети, детё, сын, дочь, игрушки, книжки, кроватки, детская еда';
+        $this->metaTags['metaRobots'] = 'all';
     }
 }
