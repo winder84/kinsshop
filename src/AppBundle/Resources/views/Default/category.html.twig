@@ -23,7 +23,9 @@
 				<li class="productListItem">
 					<div class="itemName">{{ product.name|raw }}</div>
 					<div class="itemPicture">
-						<a target="_blank" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
+						<noindex>
+							<a target="_blank" rel="nofollow" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
+						</noindex>
 					</div>
 					<div class="itemModel">{{ product.model|raw }}</div>
 					<hr />
