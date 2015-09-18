@@ -333,6 +333,17 @@ h2.categoryH2 {
 	color: #54add7;
 }
 
+.e404Block {
+	list-style: none;
+	width: 1200px;
+	height: 415px;
+	margin: 0 auto;
+	padding: 0;
+	text-align: center;
+	color: #54add7;
+	background: url("/bundles/app/images/404.png") no-repeat;
+}
+
 
 /*--------  menu -----------------*/
 ul.dropdown li { position: relative; }
