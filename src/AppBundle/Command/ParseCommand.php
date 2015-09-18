@@ -137,10 +137,10 @@ class ParseCommand extends ContainerAwareCommand
             foreach ($productsInfo as $product) {
                 $oldVendor = null;
                 $vendor = null;
-                if ($i % 1000 == 0) {
+                if ($i % 10000 == 0) {
                     $em->flush();
                     $em->clear('AppBundle\Entity\Vendor');
-                    $this->outputWriteLn('Vendors - ' . $i . '.');
+                    $this->outputWriteLn('Vendors scan in ' . $i . ' offers.');
                 }
                 if (isset($product['vendor'])) {
                     if (in_array($product['vendor'], $newVendors)) {
@@ -178,7 +178,7 @@ class ParseCommand extends ContainerAwareCommand
                 $newProduct = null;
                 $externalCategory = null;
                 $oldVendor = null;
-                if ($i % 1000 == 0) {
+                if ($i % 100 == 0) {
                     $em->flush();
                     $em->clear('AppBundle\Entity\Product');
                     $this->outputWriteLn('Offers - ' . $i . '.');
