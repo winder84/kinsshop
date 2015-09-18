@@ -80,7 +80,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/page/{page}")
+     * @Route("/page/{page}", name="home_page")
      */
     public function indexPageAction(Request $request, $page = 0)
     {
@@ -145,7 +145,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/shop/description/{alias}")
+     * @Route("/shop/description/{alias}", name="shop_description_route")
      */
     public function siteDescriptionAction($alias)
     {
@@ -179,7 +179,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/shop/{alias}/{page}")
+     * @Route("/shop/{alias}/{page}", name="shop_route")
      */
     public function siteAction($alias, $page = 0)
     {
@@ -235,7 +235,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/vendor/{alias}/{page}")
+     * @Route("/vendor/{alias}/{page}", name="vendor_route")
      */
     public function vendorAction($alias, $page = 0)
     {
@@ -274,7 +274,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/category/{alias}/{page}")
+     * @Route("/category/{alias}/{page}", name="category_route")
      */
     public function categoryAction($alias, $page = 0)
     {
@@ -328,7 +328,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/exCategory/{id}/{page}")
+     * @Route("/exCategory/{id}/{page}", name="ex_category_route")
      */
     public function exCategoryAction($id, $page = 0)
     {
@@ -368,7 +368,7 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/product/{id}")
+     * @Route("/product/{id}", name="product_route")
      */
     public function productAction($id)
     {

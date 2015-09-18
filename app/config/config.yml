@@ -139,7 +139,7 @@ sonata_seo:
                 # Open Graph information
                 # see http://developers.facebook.com/docs/opengraphprotocol/#types or http://ogp.me/
                 'og:site_name':       Kinsshop
-#                'og:description':     A demo of the some rich bundles for your Symfony2 projects
+                'og:description':     Всё что Вы искали для Вашего ребёнка!
 
             http-equiv:
                 'Content-Type':         text/html; charset=utf-8
