@@ -6,7 +6,7 @@
 			<div class="shopUniBlock">
 				<h2 class="itemName">{{ product.vendor.name|raw }} | {{ product.model|raw }}</h2>
 				<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина"><img src="{{ product.pictures.0 }}"></a>
-				<a class="productLink" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}">Купить</a>
+				<a class="productLink" rel="nofollow" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}">Купить</a>
 			</div>
 			<div class="shopUniBlock" style="margin-bottom: 20px;">
 				<h2 class="itemName">Цена:</h2>
