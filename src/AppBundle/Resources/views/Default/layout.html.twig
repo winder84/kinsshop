@@ -1,5 +1,12 @@
 {% extends 'base.html.twig' %}
-
+{% block metatags %}
+	{{ include('AppBundle:Default:meta.tags.html.twig', {'metaTags' : metaTags}) }}
+{% endblock %}
+{% block counters %}
+	{% if (app.environment == 'prod') and ('.lan' not in app.request.host) %}
+		{{ include('AppBundle:Default:counters.block.html.twig') }}
+	{% endif %}
+{% endblock %}
 {% block body %}
 	<div class="header">
 		<div class="headerMenuBlock">
@@ -44,8 +51,4 @@
 	</div>
 	<div class="footerBlock">
 	</div>
-{% endblock %}
-
-{% block stylesheets %}
-
 {% endblock %}

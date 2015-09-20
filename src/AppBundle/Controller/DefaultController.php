@@ -32,13 +32,7 @@ class DefaultController extends Controller
             );
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 16);
-        $paginatorData = new \AppBundle\Helpers\Paginator($paginatorPagesCount, $page, 1, 5);
-        $engine = $this->container->get('templating');
-        $paginator =  $engine->render('AppBundle:Default:paginator.html.twig', array(
-                'paginator' => $paginatorData,
-                'path' => '/page/',
-            )
-        );
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
         $products = $em
             ->getRepository('AppBundle:Product')
             ->findBy(
@@ -68,10 +62,6 @@ class DefaultController extends Controller
                 'price' => $product->getPrice(),
             );
         }
-        // replace this example code with whatever you need
-//        return $this->render('AppBundle:Default:index.html.twig', array(
-//            'base_dir' => realpath($this->container->getParameter('kernel.root_dir').'/..'),
-//        ));
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:index.html.twig', array(
@@ -80,7 +70,7 @@ class DefaultController extends Controller
             'vendors' => $vendors,
             'categories' => $this->categories,
             'metaTags' => $this->metaTags,
-            'paginator' => $paginator,
+            'paginatorData' => $paginatorData,
         ));
     }
 
@@ -101,13 +91,7 @@ class DefaultController extends Controller
             );
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 16);
-        $paginatorData = new \AppBundle\Helpers\Paginator($paginatorPagesCount, $page, 1, 5);
-        $engine = $this->container->get('templating');
-        $paginator =  $engine->render('AppBundle:Default:paginator.html.twig', array(
-                'paginator' => $paginatorData,
-                'path' => '/page/',
-            )
-        );
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
         $products = $em
             ->getRepository('AppBundle:Product')
             ->findBy(
@@ -145,7 +129,7 @@ class DefaultController extends Controller
             'vendors' => $vendors,
             'metaTags' => $this->metaTags,
             'categories' => $this->categories,
-            'paginator' => $paginator,
+            'paginatorData' => $paginatorData,
         ));
     }
 
@@ -223,13 +207,7 @@ class DefaultController extends Controller
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = new \AppBundle\Helpers\Paginator($paginatorPagesCount, $page, 1, 5);
-        $engine = $this->container->get('templating');
-        $paginator =  $engine->render('AppBundle:Default:paginator.html.twig', array(
-                'paginator' => $paginatorData,
-                'path' => '/shop/' . $alias . '/',
-            )
-        );
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:site.html.twig', array(
@@ -238,7 +216,7 @@ class DefaultController extends Controller
                 'metaTags' => $this->metaTags,
                 'categories' => $this->categories,
                 'products' => $products,
-                'paginator' => $paginator,
+                'paginatorData' => $paginatorData,
                 'vendors' => $vendors
             )
         );
@@ -267,17 +245,11 @@ class DefaultController extends Controller
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = new \AppBundle\Helpers\Paginator($paginatorPagesCount, $page, 1, 5);
-        $engine = $this->container->get('templating');
-        $paginator =  $engine->render('AppBundle:Default:paginator.html.twig', array(
-                'paginator' => $paginatorData,
-                'path' => '/vendor/' . $alias . '/',
-            )
-        );
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
         $this->getMenuItems();
         return $this->render('AppBundle:Default:vendor.html.twig', array(
                 'products' => $products,
-                'paginator' => $paginator,
+                'paginatorData' => $paginatorData,
                 'sites' => $this->sites,
                 'vendor' => $vendor,
                 'metaTags' => $this->metaTags,
@@ -315,13 +287,7 @@ class DefaultController extends Controller
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = new \AppBundle\Helpers\Paginator($paginatorPagesCount, $page, 1, 5);
-        $engine = $this->container->get('templating');
-        $paginator =  $engine->render('AppBundle:Default:paginator.html.twig', array(
-                'paginator' => $paginatorData,
-                'path' => '/category/' . $alias . '/',
-            )
-        );
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
         $qb->select('ExCategory')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.id IN (:exCategoriesIds)')
@@ -333,7 +299,7 @@ class DefaultController extends Controller
         $this->getMenuItems();
         return $this->render('AppBundle:Default:category.html.twig', array(
                 'products' => $products,
-                'paginator' => $paginator,
+                'paginatorData' => $paginatorData,
                 'category' => $category,
                 'exCategories' => $exCategories,
                 'sites' => $this->sites,
@@ -366,18 +332,12 @@ class DefaultController extends Controller
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = new \AppBundle\Helpers\Paginator($paginatorPagesCount, $page, 1, 5);
-        $engine = $this->container->get('templating');
-        $paginator =  $engine->render('AppBundle:Default:paginator.html.twig', array(
-                'paginator' => $paginatorData,
-                'path' => '/exCategory/' . $id . '/',
-            )
-        );
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:exCategory.html.twig', array(
                 'products' => $products,
-                'paginator' => $paginator,
+                'paginatorData' => $paginatorData,
                 'category' => $category,
                 'sites' => $this->sites,
                 'metaTags' => $this->metaTags,
@@ -448,5 +408,14 @@ class DefaultController extends Controller
         $this->metaTags['metaDescription'] = 'У нас Вы найдете всё самое лучшее для Вашего ребенка!';
         $this->metaTags['metaKeywords'] = 'ребенок, дети, детё, сын, дочь, игрушки, книжки, кроватки, детская еда';
         $this->metaTags['metaRobots'] = 'all';
+    }
+
+    private function getPaginatorData($itemsCount, $currentPage, $limit, $midRange)
+    {
+        $paginator = new \AppBundle\Helpers\Paginator($itemsCount, $currentPage, $limit, $midRange);
+        return array(
+            'paginator' => $paginator,
+            'path' => '/page/',
+        );
     }
 }

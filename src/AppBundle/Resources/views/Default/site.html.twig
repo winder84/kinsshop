@@ -3,26 +3,7 @@
 {% block content %}
 	<div class="shopBlock">
 		<h2 class="shopTitle">Товары магазина {{ site.title|raw }}:</h2>
-		{{ paginator|raw }}
-		<ul class="productListUl">
-			{% for product in products %}
-				<li class="productListItem">
-					<div class="itemName">{{ product.name|raw }}</div>
-					<div class="itemPicture">
-						<noindex>
-							<a target="_blank" rel="nofollow" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
-						</noindex>
-					</div>
-					<div class="itemModel">{{ product.model|raw }}</div>
-					<hr />
-					<div class="itemPrice">Цена: {{ product.price|number_format(0, '', ' ') }} руб.</div>
-					<div class="itemLink">
-						<a href="/product/{{ product.id }}" title="{{ product.name|raw }} {{ product.model|raw }}">Подробнее...</a>
-					</div>
-				</li>
-			{% endfor %}
-		</ul>
-		{{ paginator|raw }}
+		{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': products }) }}
 	</div>
 	<hr/>
 	<div class="vendorBlock">
