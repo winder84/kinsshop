@@ -147,13 +147,8 @@ class ParseCommand extends ContainerAwareCommand
             if (isset($this->updatedProducts)) {
                 $this->outputWriteLn('Updated offers - ' . count($this->updatedProducts) . '.');
             }
-
-            $this->outputWriteLn('Start clear offers.');
-            $this->clearSite($site);
-            $this->outputWriteLn('End clear offers.');
             $this->outputWriteLn('End parse market ' . $siteId . '.');
         }
-
     }
 
     private function outputWriteLn($text)
@@ -353,66 +348,6 @@ class ParseCommand extends ContainerAwareCommand
             }
             $this->em->persist($newProduct);
             $i++;
-        }
-    }
-
-    private function clearSite($site)
-    {
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('Product')
-            ->from('AppBundle:Product', 'Product')
-            ->where('Product.site = :site')
-            ->andWhere('Product.version != :newVersion')
-            ->setParameter('site', $site)
-            ->setParameter('newVersion', $site->getVersion());
-        $query = $qb->getQuery();
-        $productsToDelete = $query->getResult();
-        foreach ($productsToDelete as $productToDelete) {
-            $productsToDeleteArray[] = $productToDelete;
-            $this->em->remove($productToDelete);
-        }
-        $this->em->flush();
-        $this->em->clear('AppBundle\Entity\Product');
-        if (!empty($productsToDeleteArray)) {
-            $this->outputWriteLn('Deleted offers - ' . count($productsToDeleteArray));
-        }
-
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('ExCategory')
-            ->from('AppBundle:ExternalCategory', 'ExCategory')
-            ->where('ExCategory.site = :site')
-            ->andWhere('ExCategory.version != :newVersion')
-            ->setParameter('site', $site)
-            ->setParameter('newVersion', $site->getVersion());
-        $query = $qb->getQuery();
-        $exCategoriesToDelete = $query->getResult();
-        foreach ($exCategoriesToDelete as $exCategoryToDelete) {
-            $exCategoryToDeleteArray[] = $exCategoryToDelete;
-            $this->em->remove($exCategoryToDelete);
-        }
-        $this->em->flush();
-        $this->em->clear('AppBundle\Entity\ExternalCategory');
-        if (!empty($exCategoryToDeleteArray)) {
-            $this->outputWriteLn('Deleted categories - ' . count($exCategoryToDeleteArray));
-        }
-
-        $qb = $this->em->createQueryBuilder();
-        $qb->select('Vendor')
-            ->from('AppBundle:Vendor', 'Vendor')
-            ->where('Vendor.site = :site')
-            ->andWhere('Vendor.version != :newVersion')
-            ->setParameter('site', $site)
-            ->setParameter('newVersion', $site->getVersion());
-        $query = $qb->getQuery();
-        $vendorsToDelete = $query->getResult();
-        foreach ($vendorsToDelete as $vendorToDelete) {
-            $vendorsToDeleteArray[] = $vendorToDelete;
-            $this->em->remove($vendorToDelete);
-        }
-        $this->em->flush();
-        $this->em->clear('AppBundle\Entity\Vendor');
-        if (!empty($vendorsToDeleteArray)) {
-            $this->outputWriteLn('Deleted vendors - ' . count($vendorsToDeleteArray));
         }
     }
 }
