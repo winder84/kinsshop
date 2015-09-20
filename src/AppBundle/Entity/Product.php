@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Product
  *
- * @ORM\Table()
+ * @ORM\Table(indexes={@ORM\Index(name="externalId", columns={"externalId"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ProductRepository")
  */
 class Product
@@ -29,13 +29,13 @@ class Product
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ExternalCategory", inversedBy="products", cascade={"persist"})
-     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="categoryId", referencedColumnName="id", onDelete="SET NULL")
      **/
     private $category;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Vendor", inversedBy="products", cascade={"persist"})
-     * @ORM\JoinColumn(name="vendorId", referencedColumnName="id")
+     * @ORM\JoinColumn(name="vendorId", referencedColumnName="id", onDelete="SET NULL")
      **/
     private $vendor;
 

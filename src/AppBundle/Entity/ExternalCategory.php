@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * ExternalCategory
  *
- * @ORM\Table()
+ * @ORM\Table(indexes={@ORM\Index(name="externalId", columns={"externalId"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\ExternalCategoryRepository")
  */
 class ExternalCategory

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Vendor
  *
- * @ORM\Table()
+ * @ORM\Table(indexes={@ORM\Index(name="name", columns={"name"})})
  * @ORM\Entity(repositoryClass="AppBundle\Entity\VendorRepository")
  */
 class Vendor

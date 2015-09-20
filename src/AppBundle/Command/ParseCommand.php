@@ -19,6 +19,16 @@ class ParseCommand extends ContainerAwareCommand
 
     protected $ctx;
 
+    protected $em;
+
+    protected $noCategoryArray;
+
+    protected $noVendorsArray;
+
+    protected $newProducts;
+
+    protected $updatedProducts;
+
     protected function configure()
     {
         $this
@@ -44,39 +54,39 @@ class ParseCommand extends ContainerAwareCommand
         $this->ctx = stream_context_create();
         stream_context_set_params($this->ctx, array("notification" => array($this, 'stream_notification_callback')));
         $marketId = intval($input->getArgument('marketId'));
-        $em = $this->getContainer()->get('doctrine')->getManager();
-        $em->getConnection()->getConfiguration()->setSQLLogger(null);
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->em->getConnection()->getConfiguration()->setSQLLogger(null);
         if ($marketId) {
-            $sites = $em
+            $sites = $this->em
                 ->getRepository('AppBundle:Site')
                 ->findBy(array('id' => $marketId));
         } else {
-            $sites = $em
+            $sites = $this->em
                 ->getRepository('AppBundle:Site')
                 ->findAll();
         }
 
         foreach ($sites as $site) {
+            $this->noCategoryArray = array();
+            $this->noVendorsArray = array();
+            $this->newProducts = array();
+            $this->updatedProducts = array();
             $siteId = $site->getId();
             $this->outputWriteLn('Start parse market ' . $siteId . '.');
             $newVersion = $site->getVersion() + 0.01;
             $site->setVersion($newVersion);
-//            $nowDate = new \DateTime('NOW');
-//            $lastParseDate = $site->getLastParseDate();
-//                if ($lastParseDate->diff($nowDate)->format('%h') < $site->getUpdatePeriod()) {
-//                    $output->writeln($delimer . 'Skip parse market ' . $siteId . '. Memory usage: ' . (memory_get_usage() / 1024) . ' KB' . $delimer);
-//                    continue;
-//                }
 
             $this->outputWriteLn('Start download xml.');
             $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
-            $this->outputWriteLn('End download xml.');
+            print_r("\n");
+            $this->outputWriteLn("End download xml.");
 
             $crawler = new Crawler($xmlContent);
             $site->setLastParseDate(new \DateTime());
-            $em->persist($site);
-            $em->flush();
+            $this->em->persist($site);
+            $this->em->flush();
 
+            //---------------------- Parse categories ----------------------
             $this->outputWriteLn('Start parse categories.');
             $externalCategoriesInfo = $crawler
                 ->filterXPath('//categories/category')
@@ -88,33 +98,12 @@ class ParseCommand extends ContainerAwareCommand
                     }
                     return $resultArray;
                 });
-            $newExternalCategoriesArray = array();
-            foreach ($externalCategoriesInfo as $externalCategory) {
-                $newExternalCategory = null;
-                $oldExternalCategory = $em
-                    ->getRepository('AppBundle:ExternalCategory')
-                    ->findOneBy(array(
-                        'externalId' => $externalCategory,
-                        'site' => $siteId,
-                    ));
-                if (!$oldExternalCategory) {
-                    $newExternalCategory = new ExternalCategory();
-                    $newExternalCategoriesArray[] = $externalCategory;
-                } else {
-                    $newExternalCategory = $oldExternalCategory;
-                }
-                $newExternalCategory->setVersion($newVersion);
-                $newExternalCategory->setExternalId($externalCategory['externalId']);
-                $newExternalCategory->setName($externalCategory['category']);
-                $newExternalCategory->setSite($site);
-                $newExternalCategory->setParentId($externalCategory['parentId']);
-                $em->persist($newExternalCategory);
-            }
-            $em->flush();
-            $em->clear('AppBundle\Entity\ExternalCategory');
+            $newExternalCategoriesArray = $this->parseCategories($externalCategoriesInfo, $site, $newVersion);
             $this->outputWriteLn('New Categories from XML - ' . count($newExternalCategoriesArray) . '.');
             $this->outputWriteLn('End parse categories');
+            //---------------------- Parse categories ----------------------
 
+            //---------------------- Parse offers ----------------------
             $this->outputWriteLn('Start parse offers');
             $productsInfo = $crawler
                 ->filterXPath('//offers/offer')
@@ -131,141 +120,37 @@ class ParseCommand extends ContainerAwareCommand
                     return $resultArray;
                 });
             $this->outputWriteLn('End parse offers');
+            //---------------------- Parse offers ----------------------
+
+            //---------------------- Import vendors ----------------------
             $this->outputWriteLn('Start import vendors.');
-            $i = 0;
-            $newVendors = array();
-            foreach ($productsInfo as $product) {
-                $oldVendor = null;
-                $vendor = null;
-                if ($i % 10000 == 0) {
-                    $em->flush();
-                    $em->clear('AppBundle\Entity\Vendor');
-                    $this->outputWriteLn('Vendors scan in ' . $i . ' offers.');
-                }
-                if (isset($product['vendor'])) {
-                    if (in_array($product['vendor'], $newVendors)) {
-                        continue;
-                    }
-                    $oldVendor = $em->getRepository('AppBundle:Vendor')
-                        ->findOneBy(array (
-                            'name' => $product['vendor'],
-                            'site' => $siteId,
-                        ));
-                    if (!$oldVendor) {
-                        $vendor = new Vendor();
-                        $newVendors[] = $product['vendor'];
-                    } else {
-                        $vendor = $oldVendor;
-                    }
-                    $vendor->setVersion($newVersion);
-                    if (isset($product['vendorCode'])) {
-                        $vendor->setCode($product['vendorCode']);
-                    }
-                    $vendor->setSite($site);
-                    $vendor->setName($product['vendor']);
-                    $em->persist($vendor);
-                    $i++;
-                }
-            }
-            $em->flush();
-            $em->clear('AppBundle\Entity\Vendor');
+            $newVendors = $this->parseVendors($productsInfo, $site, $newVersion);
+            $this->em->flush();
+            $this->em->clear('AppBundle\Entity\Vendor');
             $this->outputWriteLn('End import vendors.');
             $this->outputWriteLn('Imported vendors - ' . count($newVendors) . '.');
-            $i = 0;
+            //---------------------- Import vendors ----------------------
+
+            //---------------------- Import offers ----------------------
             $this->outputWriteLn('Start import offers.');
-            foreach ($productsInfo as $product) {
-                $oldProduct = null;
-                $newProduct = null;
-                $externalCategory = null;
-                $oldVendor = null;
-                if ($i % 100 == 0) {
-                    $em->flush();
-                    $em->clear('AppBundle\Entity\Product');
-                    $this->outputWriteLn('Offers - ' . $i . '.');
-                }
-                $oldProduct = $em
-                    ->getRepository('AppBundle:Product')
-                    ->findOneBy(array(
-                        'externalId' => $product['externalId'],
-                        'site' => $siteId,
-                    ));
-                if (!$oldProduct) {
-                    $newProduct = new Product();
-                } else {
-                    $newProduct = $oldProduct;
-                }
-                $newProduct->setVersion($newVersion);
-                $newProduct->setExternalId($product['externalId']);
-                $newProduct->setSite($site);
-                if (isset($product['name'])) {
-                    $newProduct->setName($product['name']);
-                }
-                $externalCategory = $em
-                    ->getRepository('AppBundle:ExternalCategory')
-                    ->findOneBy(array(
-                        'externalId' => $product['categoryId'],
-                        'site' => $siteId,
-                    ));
-                if (!$externalCategory) {
-                    $noCategoryArray[] = $product['categoryId'];
-                } else {
-                    $newProduct->setCategory($externalCategory);
-                }
-                if (isset($product['currencyId'])) {
-                    $newProduct->setCurrencyId($product['currencyId']);
-                }
-                if (isset($product['description'])) {
-                    $newProduct->setDescription($product['description']);
-                }
-                if (isset($product['model'])) {
-                    $newProduct->setModel($product['model']);
-                }
-                if (isset($product['modified_time'])) {
-                    $newProduct->setModifiedTime($product['modified_time']);
-                }
-                if (isset($product['price'])) {
-                    $newProduct->setPrice($product['price']);
-                }
-                if (isset($product['typePrefix'])) {
-                    $newProduct->setTypePrefix($product['typePrefix']);
-                }
-                if (isset($product['url'])) {
-                    $newProduct->setUrl($product['url']);
-                }
-                if (isset($product['pictures'])) {
-                    $newProduct->setPictures($product['pictures']);
-                }
-                if (isset($product['vendor'])) {
-                    $oldVendor = $em->getRepository('AppBundle:Vendor')
-                        ->findOneBy(array (
-                            'name' => $product['vendor'],
-                            'site' => $siteId,
-                        ));
-                    if (!$oldVendor) {
-                        $noVendorsArray[] = $product['vendor'];
-                    } else {
-                        $vendor = $oldVendor;
-                        $vendor->setVersion($newVersion);
-                        if (isset($product['vendorCode'])) {
-                            $vendor->setCode($product['vendorCode']);
-                        }
-                        $vendor->setSite($site);
-                        $vendor->setName($product['vendor']);
-                        $em->persist($vendor);
-                        $newProduct->setVendor($vendor);
-                    }
-                }
-                $em->persist($newProduct);
-                $i++;
-            }
+            $this->importProducts($productsInfo, $site, $newVersion);
             $this->outputWriteLn('End import offers.');
-            if (isset($noCategoryArray)) {
-                $this->outputWriteLn('No categories - ' . count($noCategoryArray) . '.');
+            if (isset($this->noCategoryArray)) {
+                $this->outputWriteLn('No categories - ' . count($this->noCategoryArray) . '.');
             }
-            if (isset($noVendorsArray)) {
-                $this->outputWriteLn('No vendors - ' . count($noVendorsArray) . '.');
+            if (isset($this->noVendorsArray)) {
+                $this->outputWriteLn('No vendors - ' . count($this->noVendorsArray) . '.');
             }
-            $this->outputWriteLn('Imported offers - ' . count($productsInfo) . '.');
+            if (isset($this->newProducts)) {
+                $this->outputWriteLn('New offers - ' . count($this->newProducts) . '.');
+            }
+            if (isset($this->updatedProducts)) {
+                $this->outputWriteLn('Updated offers - ' . count($this->updatedProducts) . '.');
+            }
+
+            $this->outputWriteLn('Start clear offers.');
+            $this->clearSite($site);
+            $this->outputWriteLn('End clear offers.');
             $this->outputWriteLn('End parse market ' . $siteId . '.');
         }
 
@@ -306,6 +191,228 @@ class ParseCommand extends ContainerAwareCommand
                 $fileSize = round($bytes_transferred / (1024 * 1024), 1);
                 printf("\r" . $this->delimer . 'Download: ' . $fileSize . ' MB.' . ' Memory usage: ' . round(memory_get_usage() / (1024 * 1024)) . ' MB' .  $this->delimer);
                 break;
+        }
+    }
+
+    private function parseCategories($externalCategoriesInfo, $site, $newVersion)
+    {
+        $newExternalCategoriesArray = array();
+        foreach ($externalCategoriesInfo as $externalCategory) {
+            $newExternalCategory = null;
+            $oldExternalCategory = $this->em
+                ->getRepository('AppBundle:ExternalCategory')
+                ->findOneBy(array(
+                    'externalId' => $externalCategory,
+                    'site' => $site->getId(),
+                ));
+            if (!$oldExternalCategory) {
+                $newExternalCategory = new ExternalCategory();
+                $newExternalCategoriesArray[] = $externalCategory;
+            } else {
+                $newExternalCategory = $oldExternalCategory;
+            }
+            $newExternalCategory->setVersion($newVersion);
+            $newExternalCategory->setExternalId($externalCategory['externalId']);
+            $newExternalCategory->setName($externalCategory['category']);
+            $newExternalCategory->setSite($site);
+            $newExternalCategory->setParentId($externalCategory['parentId']);
+            $this->em->persist($newExternalCategory);
+        }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\ExternalCategory');
+        return $newExternalCategoriesArray;
+    }
+
+    private function parseVendors($productsInfo, $site, $newVersion)
+    {
+        $i = 0;
+        $newVendors = array();
+        foreach ($productsInfo as $product) {
+            $oldVendor = null;
+            $vendor = null;
+            if ($i % 10000 == 0) {
+                $this->em->flush();
+                $this->em->clear('AppBundle\Entity\Vendor');
+                $this->outputWriteLn('Vendors scan in ' . $i . ' offers.');
+            }
+            if (isset($product['vendor'])) {
+                if (in_array($product['vendor'], $newVendors)) {
+                    continue;
+                }
+                $oldVendor = $this->em->getRepository('AppBundle:Vendor')
+                    ->findOneBy(array (
+                        'name' => $product['vendor'],
+                        'site' => $site->getId(),
+                    ));
+                if (!$oldVendor) {
+                    $vendor = new Vendor();
+                    $newVendors[] = $product['vendor'];
+                } else {
+                    $vendor = $oldVendor;
+                }
+                $vendor->setVersion($newVersion);
+                if (isset($product['vendorCode'])) {
+                    $vendor->setCode($product['vendorCode']);
+                }
+                $vendor->setSite($site);
+                $vendor->setName($product['vendor']);
+                $this->em->persist($vendor);
+                $i++;
+            }
+        }
+
+        return $newVendors;
+    }
+
+    private function importProducts($productsInfo, $site, $newVersion)
+    {
+        $i = 0;
+        foreach ($productsInfo as $product) {
+            $oldProduct = null;
+            $newProduct = null;
+            $externalCategory = null;
+            $oldVendor = null;
+            if ($i % 10000 == 0) {
+                $this->em->flush();
+                $this->em->clear('AppBundle\Entity\Product');
+                $this->outputWriteLn('Offers - ' . $i . '.');
+            }
+            $oldProduct = $this->em
+                ->getRepository('AppBundle:Product')
+                ->findOneBy(array(
+                    'externalId' => $product['externalId'],
+                    'site' => $site->getId(),
+                ));
+            if (!$oldProduct) {
+                $newProduct = new Product();
+                $this->newProducts[] = $newProduct;
+            } else {
+                $newProduct = $oldProduct;
+                $this->updatedProducts[] = $newProduct;
+            }
+            $newProduct->setVersion($newVersion);
+            $newProduct->setExternalId($product['externalId']);
+            $newProduct->setSite($site);
+            if (isset($product['name'])) {
+                $newProduct->setName($product['name']);
+            }
+            $externalCategory = $this->em
+                ->getRepository('AppBundle:ExternalCategory')
+                ->findOneBy(array(
+                    'externalId' => $product['categoryId'],
+                    'site' => $site->getId(),
+                ));
+            if (!$externalCategory) {
+                $this->noCategoryArray[] = $product['categoryId'];
+            } else {
+                $newProduct->setCategory($externalCategory);
+            }
+            if (isset($product['currencyId'])) {
+                $newProduct->setCurrencyId($product['currencyId']);
+            }
+            if (isset($product['description'])) {
+                $newProduct->setDescription($product['description']);
+            }
+            if (isset($product['model'])) {
+                $newProduct->setModel($product['model']);
+            }
+            if (isset($product['modified_time'])) {
+                $newProduct->setModifiedTime($product['modified_time']);
+            }
+            if (isset($product['price'])) {
+                $newProduct->setPrice($product['price']);
+            }
+            if (isset($product['typePrefix'])) {
+                $newProduct->setTypePrefix($product['typePrefix']);
+            }
+            if (isset($product['url'])) {
+                $newProduct->setUrl($product['url']);
+            }
+            if (isset($product['pictures'])) {
+                $newProduct->setPictures($product['pictures']);
+            }
+            if (isset($product['vendor'])) {
+                $oldVendor = $this->em->getRepository('AppBundle:Vendor')
+                    ->findOneBy(array (
+                        'name' => $product['vendor'],
+                        'site' => $site->getId(),
+                    ));
+                if (!$oldVendor) {
+                    $this->noVendorsArray[] = $product['vendor'];
+                } else {
+                    $vendor = $oldVendor;
+                    $vendor->setVersion($newVersion);
+                    if (isset($product['vendorCode'])) {
+                        $vendor->setCode($product['vendorCode']);
+                    }
+                    $vendor->setSite($site);
+                    $vendor->setName($product['vendor']);
+                    $this->em->persist($vendor);
+                    $newProduct->setVendor($vendor);
+                }
+            }
+            $this->em->persist($newProduct);
+            $i++;
+        }
+    }
+
+    private function clearSite($site)
+    {
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('Product')
+            ->from('AppBundle:Product', 'Product')
+            ->where('Product.site = :site')
+            ->andWhere('Product.version != :newVersion')
+            ->setParameter('site', $site)
+            ->setParameter('newVersion', $site->getVersion());
+        $query = $qb->getQuery();
+        $productsToDelete = $query->getResult();
+        foreach ($productsToDelete as $productToDelete) {
+            $productsToDeleteArray[] = $productToDelete;
+            $this->em->remove($productToDelete);
+        }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Product');
+        if (!empty($productsToDeleteArray)) {
+            $this->outputWriteLn('Deleted offers - ' . count($productsToDeleteArray));
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('ExCategory')
+            ->from('AppBundle:ExternalCategory', 'ExCategory')
+            ->where('ExCategory.site = :site')
+            ->andWhere('ExCategory.version != :newVersion')
+            ->setParameter('site', $site)
+            ->setParameter('newVersion', $site->getVersion());
+        $query = $qb->getQuery();
+        $exCategoriesToDelete = $query->getResult();
+        foreach ($exCategoriesToDelete as $exCategoryToDelete) {
+            $exCategoryToDeleteArray[] = $exCategoryToDelete;
+            $this->em->remove($exCategoryToDelete);
+        }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\ExternalCategory');
+        if (!empty($exCategoryToDeleteArray)) {
+            $this->outputWriteLn('Deleted categories - ' . count($exCategoryToDeleteArray));
+        }
+
+        $qb = $this->em->createQueryBuilder();
+        $qb->select('Vendor')
+            ->from('AppBundle:Vendor', 'Vendor')
+            ->where('Vendor.site = :site')
+            ->andWhere('Vendor.version != :newVersion')
+            ->setParameter('site', $site)
+            ->setParameter('newVersion', $site->getVersion());
+        $query = $qb->getQuery();
+        $vendorsToDelete = $query->getResult();
+        foreach ($vendorsToDelete as $vendorToDelete) {
+            $vendorsToDeleteArray[] = $vendorToDelete;
+            $this->em->remove($vendorToDelete);
+        }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Vendor');
+        if (!empty($vendorsToDeleteArray)) {
+            $this->outputWriteLn('Deleted vendors - ' . count($vendorsToDeleteArray));
         }
     }
 }
