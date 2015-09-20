@@ -255,6 +255,8 @@ class ParseCommand extends ContainerAwareCommand
                 $i++;
             }
         }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Vendor');
 
         return $newVendors;
     }
@@ -349,5 +351,7 @@ class ParseCommand extends ContainerAwareCommand
             $this->em->persist($newProduct);
             $i++;
         }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Product');
     }
 }
