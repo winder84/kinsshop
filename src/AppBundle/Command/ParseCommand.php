@@ -76,10 +76,8 @@ class ParseCommand extends ContainerAwareCommand
             $newVersion = $site->getVersion() + 0.01;
             $site->setVersion($newVersion);
 
-            $this->outputWriteLn('Start download xml.');
             $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
             print_r("\n");
-            $this->outputWriteLn("End download xml.");
 
             $crawler = new Crawler($xmlContent);
             $site->setLastParseDate(new \DateTime());
@@ -87,7 +85,6 @@ class ParseCommand extends ContainerAwareCommand
             $this->em->flush();
 
             //---------------------- Parse categories ----------------------
-            $this->outputWriteLn('Start parse categories.');
             $externalCategoriesInfo = $crawler
                 ->filterXPath('//categories/category')
                 ->each(function (Crawler $nodeCrawler) {
@@ -100,11 +97,9 @@ class ParseCommand extends ContainerAwareCommand
                 });
             $newExternalCategoriesArray = $this->parseCategories($externalCategoriesInfo, $site, $newVersion);
             $this->outputWriteLn('New Categories from XML - ' . count($newExternalCategoriesArray) . '.');
-            $this->outputWriteLn('End parse categories');
             //---------------------- Parse categories ----------------------
 
             //---------------------- Parse offers ----------------------
-            $this->outputWriteLn('Start parse offers');
             $productsInfo = $crawler
                 ->filterXPath('//offers/offer')
                 ->each(function (Crawler $nodeCrawler) {
@@ -119,22 +114,17 @@ class ParseCommand extends ContainerAwareCommand
                     }
                     return $resultArray;
                 });
-            $this->outputWriteLn('End parse offers');
             //---------------------- Parse offers ----------------------
 
             //---------------------- Import vendors ----------------------
-            $this->outputWriteLn('Start import vendors.');
             $newVendors = $this->parseVendors($productsInfo, $site, $newVersion);
             $this->em->flush();
             $this->em->clear('AppBundle\Entity\Vendor');
-            $this->outputWriteLn('End import vendors.');
             $this->outputWriteLn('Imported vendors - ' . count($newVendors) . '.');
             //---------------------- Import vendors ----------------------
 
             //---------------------- Import offers ----------------------
-            $this->outputWriteLn('Start import offers.');
             $this->importProducts($productsInfo, $site, $newVersion);
-            $this->outputWriteLn('End import offers.');
             if (isset($this->noCategoryArray)) {
                 $this->outputWriteLn('No categories - ' . count($this->noCategoryArray) . '.');
             }
@@ -197,7 +187,7 @@ class ParseCommand extends ContainerAwareCommand
             $oldExternalCategory = $this->em
                 ->getRepository('AppBundle:ExternalCategory')
                 ->findOneBy(array(
-                    'externalId' => $externalCategory,
+                    'externalId' => $externalCategory['externalId'],
                     'site' => $site->getId(),
                 ));
             if (!$oldExternalCategory) {
