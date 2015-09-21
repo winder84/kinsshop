@@ -9,10 +9,9 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
-    private $exCategoriesIds;
-    private $categories;
-    private $sites;
-    private $metaTags;
+    private $exCategoriesIds = array();
+    private $menuItems = array();
+    private $metaTags = array();
 
     /**
      * @Route("/", name="homepage")
@@ -66,9 +65,8 @@ class DefaultController extends Controller
         $this->getMenuItems();
         return $this->render('AppBundle:Default:index.html.twig', array(
             'products' => $resultProducts,
-            'sites' => $this->sites,
             'vendors' => $vendors,
-            'categories' => $this->categories,
+            'menuItems' => $this->menuItems,
             'metaTags' => $this->metaTags,
             'paginatorData' => $paginatorData,
         ));
@@ -125,10 +123,9 @@ class DefaultController extends Controller
         $this->getMenuItems();
         return $this->render('AppBundle:Default:index.html.twig', array(
             'products' => $resultProducts,
-            'sites' => $this->sites,
             'vendors' => $vendors,
             'metaTags' => $this->metaTags,
-            'categories' => $this->categories,
+            'menuItems' => $this->menuItems,
             'paginatorData' => $paginatorData,
         ));
     }
@@ -161,9 +158,8 @@ class DefaultController extends Controller
         $this->getMenuItems();
         return $this->render('AppBundle:Default:site.description.html.twig', array(
                 'site' => $site,
-                'sites' => $this->sites,
                 'metaTags' => $this->metaTags,
-                'categories' => $this->categories,
+                'menuItems' => $this->menuItems,
                 'vendors' => $vendors
             )
         );
@@ -212,9 +208,8 @@ class DefaultController extends Controller
         $this->getMenuItems();
         return $this->render('AppBundle:Default:site.html.twig', array(
                 'site' => $site,
-                'sites' => $this->sites,
                 'metaTags' => $this->metaTags,
-                'categories' => $this->categories,
+                'menuItems' => $this->menuItems,
                 'products' => $products,
                 'paginatorData' => $paginatorData,
                 'vendors' => $vendors
@@ -250,10 +245,9 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:vendor.html.twig', array(
                 'products' => $products,
                 'paginatorData' => $paginatorData,
-                'sites' => $this->sites,
                 'vendor' => $vendor,
                 'metaTags' => $this->metaTags,
-                'categories' => $this->categories
+                'menuItems' => $this->menuItems
             )
         );
     }
@@ -302,9 +296,8 @@ class DefaultController extends Controller
                 'paginatorData' => $paginatorData,
                 'category' => $category,
                 'exCategories' => $exCategories,
-                'sites' => $this->sites,
                 'metaTags' => $this->metaTags,
-                'categories' => $this->categories
+                'menuItems' => $this->menuItems
             )
         );
     }
@@ -339,9 +332,8 @@ class DefaultController extends Controller
                 'products' => $products,
                 'paginatorData' => $paginatorData,
                 'category' => $category,
-                'sites' => $this->sites,
                 'metaTags' => $this->metaTags,
-                'categories' => $this->categories
+                'menuItems' => $this->menuItems
             )
         );
     }
@@ -362,10 +354,9 @@ class DefaultController extends Controller
         $this->metaTags['metaDescription'] = $product->getDescription();
         $this->metaTags['metaKeywords'] .= ', ' . $product->getName() . ' купить, ' . $product->getModel() . ' купить, ' . $product->getCategory()->getName() . ' купить, ' . $product->getVendor()->getName() . ' купить';
         return $this->render('AppBundle:Default:product.description.html.twig', array(
-                'sites' => $this->sites,
                 'product' => $product,
                 'metaTags' => $this->metaTags,
-                'categories' => $this->categories
+                'menuItems' => $this->menuItems
             )
         );
     }
@@ -394,17 +385,30 @@ class DefaultController extends Controller
     private function getMenuItems()
     {
         $em = $this->getDoctrine()->getManager();
-        $this->categories = $em
+        $this->menuItems['categories'] = $em
             ->getRepository('AppBundle:Category')
             ->findAll();
-        $this->sites = $em
+
+        $this->menuItems['sites'] = $em
             ->getRepository('AppBundle:Site')
             ->findAll();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('Vendor.alias, Vendor.name')
+            ->from('AppBundle:Vendor', 'Vendor')
+            ->leftJoin('Vendor.products', 'p')
+            ->having('count(p.id) > 300')
+            ->groupBy('Vendor.alias');
+        $query = $qb->getQuery();
+        $resultVendors = $query->getResult();
+        foreach ($resultVendors as $resultVendor) {
+            $this->menuItems['vendors'][] = $resultVendor;
+        }
     }
 
     private function getMetaItems()
     {
-        $this->metaTags['metaTitle'] = 'Всё для вашего ребенка!';
+        $this->metaTags['metaTitle'] = 'Купить детские товары с доставкой. Детские коляски, обучающие материалы, развивающие игры.';
         $this->metaTags['metaDescription'] = 'У нас Вы найдете всё самое лучшее для Вашего ребенка!';
         $this->metaTags['metaKeywords'] = 'ребенок, дети, детё, сын, дочь, игрушки, книжки, кроватки, детская еда';
         $this->metaTags['metaRobots'] = 'all';

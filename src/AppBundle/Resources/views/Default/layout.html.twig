@@ -23,15 +23,23 @@
 						<li class="dropdown-top">
 							<a class="dropdown-top">Категории</a>
 							<ul class="dropdown-inside">
-								{% for category in categories %}
+								{% for category in menuItems.categories %}
 									<li><a href="/category/{{ category.alias }}">{{ category.name }}</a></li>
+								{% endfor %}
+							</ul>
+						</li>
+						<li class="dropdown-top">
+							<a class="dropdown-top">Бренды</a>
+							<ul class="dropdown-inside">
+								{% for vendor in menuItems.vendors %}
+									<li><a href="/vendor/{{ vendor.alias }}">{{ vendor.name }}</a></li>
 								{% endfor %}
 							</ul>
 						</li>
 						<li class="dropdown-top">
 							<a class="dropdown-top">Магазины</a>
 							<ul class="dropdown-inside">
-								{% for site in sites %}
+								{% for site in menuItems.sites %}
 									<li><a href="/shop/description/{{ site.alias }}">{{ site.title }}</a></li>
 								{% endfor %}
 							</ul>
