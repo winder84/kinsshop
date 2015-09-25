@@ -18,6 +18,8 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
+        $resultProducts = array();
+        $notNeedArray = array(0);
         $this->getMetaItems();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();

@@ -26,6 +26,11 @@ class ProductAdmin extends Admin
             ->add('site', null, array('label' => 'Магазин'))
             ->add('vendor', null, array('label' => 'Бренд'))
             ->add('version', null, array('label' => 'Версия'))
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
         ;
     }
 
