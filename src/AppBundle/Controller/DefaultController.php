@@ -19,27 +19,31 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $this->getMetaItems();
-        $page = 0;
         $em = $this->getDoctrine()->getManager();
+        $qb = $em->createQueryBuilder();
         $products = $em
             ->getRepository('AppBundle:Product')
             ->findBy(
+                array(
+                    'ourChoice' => true
+                ),
                 array(),
-                array(),
-                160,
-                0
+                12
             );
-        $productsCount = count($products);
-        $paginatorPagesCount = floor($productsCount / 16);
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
-        $products = $em
-            ->getRepository('AppBundle:Product')
-            ->findBy(
-                array(),
-                array(),
-                16,
-                16 * $page
-            );
+        if (count($products) < 12) {
+            foreach ($products as $product) {
+                $notNeedArray[] = $product->getId();
+            }
+            $needCount = 12 - count($products);
+            $qb->select('Product')
+                ->from('AppBundle:Product', 'Product')
+                ->where('Product.id NOT IN (:notNeedArray)')
+                ->setParameter('notNeedArray', $notNeedArray)
+                ->setMaxResults($needCount);
+            $query = $qb->getQuery();
+            $moreProducts = $query->getResult();
+            $products = array_merge($products, $moreProducts);
+        }
         $qb = $em->createQueryBuilder();
         $qb->select('Vendor, count(Vendor) as cnt')
             ->from('AppBundle:Product', 'Product')
@@ -68,65 +72,7 @@ class DefaultController extends Controller
             'vendors' => $vendors,
             'menuItems' => $this->menuItems,
             'metaTags' => $this->metaTags,
-            'paginatorData' => $paginatorData,
-        ));
-    }
-
-    /**
-     * @Route("/page/{page}", name="home_page")
-     */
-    public function indexPageAction(Request $request, $page = 0)
-    {
-        $this->getMetaItems();
-        $em = $this->getDoctrine()->getManager();
-        $products = $em
-            ->getRepository('AppBundle:Product')
-            ->findBy(
-                array(),
-                array(),
-                160,
-                0
-            );
-        $productsCount = count($products);
-        $paginatorPagesCount = floor($productsCount / 16);
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
-        $products = $em
-            ->getRepository('AppBundle:Product')
-            ->findBy(
-                array(),
-                array(),
-                16,
-                16 * $page
-            );
-        $qb = $em->createQueryBuilder();
-        $qb->select('Vendor, count(Vendor) as cnt')
-            ->from('AppBundle:Product', 'Product')
-            ->leftJoin('AppBundle:Vendor', 'Vendor')
-            ->where('Vendor = Product.vendor')
-            ->groupBy('Vendor')
-            ->orderBy('cnt', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(12);
-        $query = $qb->getQuery();
-        $vendors = $query->getResult();
-        foreach ($products as $product) {
-            $resultProducts[] = array(
-                'name' => $product->getName(),
-                'model' => $product->getModel(),
-                'pictures' => $product->getPictures(),
-                'id' => $product->getId(),
-                'url' => $product->getUrl(),
-                'price' => $product->getPrice(),
-            );
-        }
-
-        $this->getMenuItems();
-        return $this->render('AppBundle:Default:index.html.twig', array(
-            'products' => $resultProducts,
-            'vendors' => $vendors,
-            'metaTags' => $this->metaTags,
-            'menuItems' => $this->menuItems,
-            'paginatorData' => $paginatorData,
+            'paginatorData' => null,
         ));
     }
 

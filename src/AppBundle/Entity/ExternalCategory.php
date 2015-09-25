@@ -66,6 +66,13 @@ class ExternalCategory
      */
     private $version;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ourChoice", type="boolean", nullable=true)
+     */
+    private $ourChoice;
+
     public function __construct() {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -255,5 +262,28 @@ class ExternalCategory
     public function getProducts()
     {
         return $this->products;
+    }
+
+    /**
+     * Set ourChoice
+     *
+     * @param boolean $ourChoice
+     * @return ExternalCategory
+     */
+    public function setOurChoice($ourChoice)
+    {
+        $this->ourChoice = $ourChoice;
+
+        return $this;
+    }
+
+    /**
+     * Get ourChoice
+     *
+     * @return boolean 
+     */
+    public function getOurChoice()
+    {
+        return $this->ourChoice;
     }
 }
