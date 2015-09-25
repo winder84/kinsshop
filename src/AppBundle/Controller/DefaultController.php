@@ -342,11 +342,12 @@ class DefaultController extends Controller
             ->findAll();
         $qb = $em->createQueryBuilder();
 
-        $qb->select('Vendor.alias, Vendor.name')
+        $qb->select('Vendor.alias, Vendor.name, count(p.id) as cnt')
             ->from('AppBundle:Vendor', 'Vendor')
             ->leftJoin('Vendor.products', 'p')
-            ->having('count(p.id) > 300')
-            ->groupBy('Vendor.alias');
+            ->having('cnt > 270')
+            ->groupBy('Vendor.alias')
+            ->orderBy('cnt', 'DESC');
         $query = $qb->getQuery();
         $resultVendors = $query->getResult();
         foreach ($resultVendors as $resultVendor) {
