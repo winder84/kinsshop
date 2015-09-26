@@ -1,4 +1,6 @@
-{{ include('AppBundle:Default:paginator.html.twig', { 'paginator': paginatorData.paginator, 'path': paginatorData.path }) }}
+{% if paginatorData %}
+	{{ include('AppBundle:Default:paginator.html.twig', { 'paginator': paginatorData.paginator, 'path': paginatorData.path }) }}
+{% endif %}
 <ul class="productListUl">
 	{% for product in products %}
 		<li class="productListItem">
@@ -17,4 +19,6 @@
 		</li>
 	{% endfor %}
 </ul>
-{{ include('AppBundle:Default:paginator.html.twig', { 'paginator': paginatorData.paginator, 'path': paginatorData.path }) }}
+{% if paginatorData %}
+	{{ include('AppBundle:Default:paginator.html.twig', { 'paginator': paginatorData.paginator, 'path': paginatorData.path }) }}
+{% endif %}

@@ -131,6 +131,13 @@ class Product
     private $pictures;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ourChoice", type="boolean", nullable=true)
+     */
+    private $ourChoice;
+
+    /**
      *
      * @return string String Product
      */
@@ -516,5 +523,28 @@ class Product
     public function getVendor()
     {
         return $this->vendor;
+    }
+
+    /**
+     * Set ourChoice
+     *
+     * @param boolean $ourChoice
+     * @return Product
+     */
+    public function setOurChoice($ourChoice)
+    {
+        $this->ourChoice = $ourChoice;
+
+        return $this;
+    }
+
+    /**
+     * Get ourChoice
+     *
+     * @return boolean 
+     */
+    public function getOurChoice()
+    {
+        return $this->ourChoice;
     }
 }

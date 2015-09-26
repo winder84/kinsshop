@@ -7,20 +7,17 @@
 				<h2 class="itemName">{{ product.vendor.name|raw }} | {{ product.model|raw }}</h2>
 				<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина"><img src="{{ product.pictures.0 }}"></a>
 			</div>
-			<div class="shopUniBlock" style="margin-bottom: 20px;">
-				<h2 class="itemName">Цена:</h2>
-				<div style="text-align: center;">
-					{{ product.price|raw }} руб.
-				</div>
+		</div>
+		<div class="shopBlockDiv">
+			<div class="shopUniBlock" style="margin: 0 0 0 50px; width: 620px;">
+				<h2 class="itemName">Цена: {{ product.price|raw }} руб.</h2>
 				<noindex>
 					<a class="productLink" rel="nofollow" target="_blank" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}">Купить</a>
 				</noindex>
 			</div>
-		</div>
-		<div class="shopBlockDiv">
 			<div class="shopDescBlock">
 				<h2 class="itemName">Описание:</h2>
-				<p class="itemDesription">{{ product.description|raw }}</p>
+				<div class="itemDesription">{{ product.description|raw }}</div>
 			</div>
 		</div>
 	</div>

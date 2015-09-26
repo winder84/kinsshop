@@ -38,6 +38,11 @@ class ExternalCategoryAdmin extends Admin
             ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
             ->add('name', null, array('label' => 'Наименование'))
             ->add('site', null, array('label' => 'Магазин'))
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('version', null, array('label' => 'Версия'))
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -55,6 +60,11 @@ class ExternalCategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('name', null, array('label' => 'Наименование'))
             ->add('externalId', null, array('label' => 'Внешний id'))
             ->add('parentId', null, array('label' => 'Родительский id'))

@@ -67,6 +67,13 @@ class Vendor
     private $version;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ourChoice", type="boolean", nullable=true)
+     */
+    private $ourChoice;
+
+    /**
      *
      * @return string String Vendor
      */
@@ -239,6 +246,29 @@ class Vendor
     public function getAlias()
     {
         return $this->alias;
+    }
+
+    /**
+     * Set ourChoice
+     *
+     * @param boolean $ourChoice
+     * @return Vendor
+     */
+    public function setOurChoice($ourChoice)
+    {
+        $this->ourChoice = $ourChoice;
+
+        return $this;
+    }
+
+    /**
+     * Get ourChoice
+     *
+     * @return boolean 
+     */
+    public function getOurChoice()
+    {
+        return $this->ourChoice;
     }
 
     /**

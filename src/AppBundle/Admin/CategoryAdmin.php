@@ -35,6 +35,11 @@ class CategoryAdmin extends Admin
             ->add('id')
             ->add('name', null, array('label' => 'Наименование'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
                 'context'  => 'engine'
@@ -55,10 +60,15 @@ class CategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('ourChoice', 'checkbox', array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('name', null, array('label' => 'Наименование'))
-            ->add('description', null, array('label' => 'Описание'))
-            ->add('seoDescription', null, array('label' => 'SEO описание'))
-            ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
+            ->add('description', 'ckeditor', array('label' => 'Описание'))
+            ->add('seoDescription', 'ckeditor', array('label' => 'SEO описание'))
+            ->add('seoKeywords', 'ckeditor', array('label' => 'SEO ключевые слова'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',

@@ -26,6 +26,11 @@ class ProductAdmin extends Admin
             ->add('site', null, array('label' => 'Магазин'))
             ->add('vendor', null, array('label' => 'Бренд'))
             ->add('version', null, array('label' => 'Версия'))
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
         ;
     }
 
@@ -38,10 +43,15 @@ class ProductAdmin extends Admin
             ->add('id')
             ->add('name', null, array('label' => 'Наименование'))
             ->add('model', null, array('label' => 'Модель'))
-            ->add('externalId', null, array('label' => 'Внешний Id'))
+//            ->add('externalId', null, array('label' => 'Внешний Id'))
             ->add('category', null, array('label' => 'Категория'))
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('price', null, array('label' => 'Цена'))
-            ->add('version', null, array('label' => 'Версия'))
+//            ->add('version', null, array('label' => 'Версия'))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -57,21 +67,26 @@ class ProductAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('ourChoice', 'checkbox', array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('name', null, array('label' => 'Наименование'))
             ->add('model', null, array('label' => 'Модель'))
             ->add('externalId', null, array('label' => 'Внешний Id'))
             ->add('category', null, array('label' => 'Категория', 'required' => false))
             ->add('currencyId', null, array('label' => 'Валюта'))
-            ->add('description', null, array('label' => 'Описание'))
-            ->add('seoDescription', null, array('label' => 'SEO описание', 'required' => false))
-            ->add('seoKeywords', null, array('label' => 'SEO ключевые слова', 'required' => false))
+            ->add('description', 'ckeditor', array('label' => 'Описание'))
+            ->add('seoDescription', 'ckeditor', array('label' => 'SEO описание', 'required' => false))
+            ->add('seoKeywords', 'ckeditor', array('label' => 'SEO ключевые слова', 'required' => false))
             ->add('modifiedTime', null, array('label' => 'Время обновления'))
             ->add('price', null, array('label' => 'Цена', 'required' => false))
             ->add('typePrefix', null, array('label' => 'Префикс', 'required' => false))
             ->add('url', null, array('label' => 'Url'))
             ->add('site', null, array('label' => 'Магазин'))
             ->add('vendor', null, array('label' => 'Бренд'))
-            ->add('version', null, array('label' => 'Версия'))
+//            ->add('version', null, array('label' => 'Версия'))
         ;
     }
 

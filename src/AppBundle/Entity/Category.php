@@ -74,6 +74,13 @@ class Category
     private $alias;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="ourChoice", type="boolean", nullable=true)
+     */
+    private $ourChoice;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -270,6 +277,29 @@ class Category
     public function getAlias()
     {
         return $this->alias;
+    }
+
+    /**
+     * Set ourChoice
+     *
+     * @param boolean $ourChoice
+     * @return Category
+     */
+    public function setOurChoice($ourChoice)
+    {
+        $this->ourChoice = $ourChoice;
+
+        return $this;
+    }
+
+    /**
+     * Get ourChoice
+     *
+     * @return boolean 
+     */
+    public function getOurChoice()
+    {
+        return $this->ourChoice;
     }
 
     /**

@@ -34,8 +34,13 @@ class VendorAdmin extends Admin
             ->add('code', null, array('label' => 'Код бренда'))
             ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
-            ->add('version', null, array('label' => 'Версия'))
             ->add('site', null, array('label' => 'Магазин'))
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
+            ->add('version', null, array('label' => 'Версия'))
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
                 'template' => 'AppBundle:Default:image.preview.html.twig'
@@ -55,6 +60,11 @@ class VendorAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('ourChoice', null, array(
+                    'label'    => 'Наш выбор',
+                    'required' => false,
+                )
+            )
             ->add('code', null, array('label' => 'Код бренда'))
             ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
