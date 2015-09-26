@@ -42,7 +42,7 @@ class CategoryAdmin extends Admin
             )
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context'  => 'engine'
+                'template' => 'AppBundle:Default:image.preview.html.twig'
             ))
             ->add('_action', 'actions', array(
                 'actions' => array(
@@ -72,7 +72,7 @@ class CategoryAdmin extends Admin
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'template' => 'AppBundle:Default:image.preview.html.twig'
+                'context'  => 'engine'
             ))
             ->add('externalCategories', 'sonata_type_collection', array(
                 'required' => false,
