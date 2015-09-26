@@ -31,10 +31,8 @@ class VendorAdmin extends Admin
     {
         $listMapper
             ->add('id')
-            ->add('code', null, array('label' => 'Код бренда'))
             ->add('name', null, array('label' => 'Наименование бренда'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
-            ->add('site', null, array('label' => 'Магазин'))
             ->add('ourChoice', null, array(
                     'label'    => 'Наш выбор',
                     'required' => false,
