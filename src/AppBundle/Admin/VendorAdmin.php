@@ -36,6 +36,10 @@ class VendorAdmin extends Admin
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('version', null, array('label' => 'Версия'))
             ->add('site', null, array('label' => 'Магазин'))
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'template' => 'AppBundle:Default:image.preview.html.twig'
+            ))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -56,6 +60,10 @@ class VendorAdmin extends Admin
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('version', null, array('label' => 'Версия'))
             ->add('site', null, array('label' => 'Магазин'))
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'engine'
+            ))
         ;
     }
 

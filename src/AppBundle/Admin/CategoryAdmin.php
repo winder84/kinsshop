@@ -35,7 +35,10 @@ class CategoryAdmin extends Admin
             ->add('id')
             ->add('name', null, array('label' => 'Наименование'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
-            ->add('site', null, array('label' => 'Магазин'))
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'context'  => 'engine'
+            ))
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -57,7 +60,10 @@ class CategoryAdmin extends Admin
             ->add('seoDescription', null, array('label' => 'SEO описание'))
             ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
-            ->add('site', null, array('label' => 'Магазин'))
+            ->add('media', 'sonata_media_type', array(
+                'provider' => 'sonata.media.provider.image',
+                'template' => 'AppBundle:Default:image.preview.html.twig'
+            ))
             ->add('externalCategories', 'sonata_type_collection', array(
                 'required' => false,
                 'cascade_validation' => true,
