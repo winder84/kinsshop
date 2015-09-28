@@ -29,9 +29,9 @@ class SitemapsController extends Controller
 //            $urls[] = array('loc' => $this->get('router')->generate('home_contact', array('_locale' => $lang)), 'changefreq' => 'monthly', 'priority' => '0.3');
 //        }
 
-        for ($i = 1; $i <= 10 ; $i++) {
-            $urls[] = array('loc' => $this->get('router')->generate('home_page', array('page' => $i)), 'changefreq' => 'weekly', 'priority' => '1.0');
-        }
+//        for ($i = 1; $i <= 10 ; $i++) {
+//            $urls[] = array('loc' => $this->get('router')->generate('home_page', array('page' => $i)), 'changefreq' => 'weekly', 'priority' => '1.0');
+//        }
         // urls from database
 //        $urls[] = array('loc' => $this->get('router')->generate('product_route', array('_locale' => 'ru')), 'changefreq' => 'weekly', 'priority' => '0.7');
         // service
