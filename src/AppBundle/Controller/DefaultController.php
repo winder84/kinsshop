@@ -12,6 +12,7 @@ class DefaultController extends Controller
     private $exCategoriesIds = array();
     private $menuItems = array();
     private $metaTags = array();
+    private $productsPerPage = 28;
 
     /**
      * @Route("/", name="homepage")
@@ -145,12 +146,12 @@ class DefaultController extends Controller
             ->where('Product.site = :site')
             ->setParameter('site', $site);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * ($page - 1))
-            ->setMaxResults(28);
+            ->setFirstResult($this->productsPerPage * ($page - 1))
+            ->setMaxResults($this->productsPerPage);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
-        $paginatorPagesCount = floor($productsCount / 28);
+        $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/shop/$alias/";
         $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
 
@@ -183,12 +184,12 @@ class DefaultController extends Controller
             ->where('Product.vendor = :vendor')
             ->setParameter('vendor', $vendor);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * ($page - 1))
-            ->setMaxResults(28);
+            ->setFirstResult($this->productsPerPage * ($page - 1))
+            ->setMaxResults($this->productsPerPage);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
-        $paginatorPagesCount = floor($productsCount / 28);
+        $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/vendor/$alias/";
         $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
         $this->getMenuItems();
@@ -225,12 +226,12 @@ class DefaultController extends Controller
             ->where('Product.category IN (:exCategoriesIds)')
             ->setParameter('exCategoriesIds', $this->exCategoriesIds);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * ($page - 1))
-            ->setMaxResults(28);
+            ->setFirstResult($this->productsPerPage * ($page - 1))
+            ->setMaxResults($this->productsPerPage);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
-        $paginatorPagesCount = floor($productsCount / 28);
+        $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/category/$alias/";
         $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
         $qb->select('ExCategory')
@@ -270,12 +271,12 @@ class DefaultController extends Controller
             ->where('Product.category = :category')
             ->setParameter('category', $category);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * ($page - 1))
-            ->setMaxResults(28);
+            ->setFirstResult($this->productsPerPage * ($page - 1))
+            ->setMaxResults($this->productsPerPage);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
-        $paginatorPagesCount = floor($productsCount / 28);
+        $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/exCategory/$id/";
         $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
 
