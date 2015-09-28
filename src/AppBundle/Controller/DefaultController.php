@@ -366,7 +366,7 @@ class DefaultController extends Controller
         $qb->select('Vendor.alias, Vendor.name, count(p.id) as cnt')
             ->from('AppBundle:Vendor', 'Vendor')
             ->leftJoin('Vendor.products', 'p')
-            ->having('cnt > 270')
+            ->having('cnt > 350')
             ->groupBy('Vendor.alias')
             ->orderBy('cnt', 'DESC');
         $query = $qb->getQuery();
