@@ -2,7 +2,7 @@
 
 {% block content %}
 	<div class="shopBlock">
-		<h1 class="shopTitle">Товары бренда {{ vendor.name|raw }}:</h1>
+		<h1 class="shopTitle">Купить товары "{{ vendor.name|raw }}":</h1>
 		{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': products }) }}
 	</div>
 {% endblock %}
