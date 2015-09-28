@@ -54,7 +54,7 @@ class SiteAdmin extends Admin
     {
         $formMapper
             ->add('title', null, array('label' => 'Наименование'))
-            ->add('description', null, array('label' => 'Описание', 'required' => false))
+            ->add('description', 'ckeditor', array('label' => 'Описание', 'required' => false))
             ->add('xmlParseUrl', null, array('label' => 'Xml url'))
             ->add('deliveryUrl', null, array('label' => 'Url доставки', 'required' => false))
             ->add('paymentUrl', null, array('label' => 'Url страницы оплаты', 'required' => false))

@@ -73,7 +73,7 @@ class ProductAdmin extends Admin
                 )
             )
             ->add('name', null, array('label' => 'Наименование'))
-            ->add('model', null, array('label' => 'Модель'))
+            ->add('model', null, array('label' => 'Модель', 'required' => false))
             ->add('externalId', null, array('label' => 'Внешний Id'))
             ->add('category', null, array('label' => 'Категория', 'required' => false))
             ->add('currencyId', null, array('label' => 'Валюта'))

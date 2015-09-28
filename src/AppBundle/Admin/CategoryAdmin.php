@@ -67,8 +67,8 @@ class CategoryAdmin extends Admin
             )
             ->add('name', null, array('label' => 'Наименование'))
             ->add('description', 'ckeditor', array('label' => 'Описание'))
-            ->add('seoDescription', 'ckeditor', array('label' => 'SEO описание'))
-            ->add('seoKeywords', 'ckeditor', array('label' => 'SEO ключевые слова'))
+            ->add('seoDescription', null, array('label' => 'SEO описание'))
+            ->add('seoKeywords', null, array('label' => 'SEO ключевые слова'))
             ->add('alias', null, array('label' => 'Alias', 'required' => false))
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
