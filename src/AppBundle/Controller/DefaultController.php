@@ -179,14 +179,17 @@ class DefaultController extends Controller
         $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
-        $vendor = $em
+        $vendors = $em
             ->getRepository('AppBundle:Vendor')
-            ->findOneBy(array('alias' => $alias));
+            ->findBy(array('alias' => $alias));
+        foreach ($vendors as $vendor) {
+            $vendorIds[] = $vendor->getId();
+        }
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
-            ->where('Product.vendor = :vendor')
-            ->setParameter('vendor', $vendor);
+            ->where('Product.vendor IN (:vendorIds)')
+            ->setParameter('vendorIds', $vendorIds);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
             ->setMaxResults($this->productsPerPage);
@@ -204,7 +207,7 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:vendor.html.twig', array(
                 'products' => $products,
                 'paginatorData' => $paginatorData,
-                'vendor' => $vendor,
+                'vendor' => $vendors[0],
                 'metaTags' => $this->metaTags,
                 'menuItems' => $this->menuItems
             )
