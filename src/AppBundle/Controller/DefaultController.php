@@ -153,7 +153,11 @@ class DefaultController extends Controller
         $productsCount = count($products);
         $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/shop/$alias/";
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        if ($productsCount <= $this->productsPerPage) {
+            $paginatorData = null;
+        } else {
+            $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        }
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:site.html.twig', array(
@@ -191,7 +195,11 @@ class DefaultController extends Controller
         $productsCount = count($products);
         $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/vendor/$alias/";
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        if ($productsCount <= $this->productsPerPage) {
+            $paginatorData = null;
+        } else {
+            $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        }
         $this->getMenuItems();
         return $this->render('AppBundle:Default:vendor.html.twig', array(
                 'products' => $products,
@@ -233,7 +241,11 @@ class DefaultController extends Controller
         $productsCount = count($products);
         $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/category/$alias/";
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        if ($productsCount <= $this->productsPerPage) {
+            $paginatorData = null;
+        } else {
+            $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        }
         $qb->select('ExCategory')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.id IN (:exCategoriesIds)')
@@ -278,7 +290,11 @@ class DefaultController extends Controller
         $productsCount = count($products);
         $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/exCategory/$id/";
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        if ($productsCount <= $this->productsPerPage) {
+            $paginatorData = null;
+        } else {
+            $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        }
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:exCategory.html.twig', array(
