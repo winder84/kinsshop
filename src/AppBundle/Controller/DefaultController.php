@@ -116,7 +116,7 @@ class DefaultController extends Controller
     /**
      * @Route("/shop/{alias}/{page}", name="shop_route")
      */
-    public function siteAction($alias, $page = 0)
+    public function siteAction($alias, $page = 1)
     {
         $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX';
@@ -145,13 +145,14 @@ class DefaultController extends Controller
             ->where('Product.site = :site')
             ->setParameter('site', $site);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * $page)
+            ->setFirstResult(28 * ($page - 1))
             ->setMaxResults(28);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
+        $path = "/shop/$alias/";
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:site.html.twig', array(
@@ -168,7 +169,7 @@ class DefaultController extends Controller
     /**
      * @Route("/vendor/{alias}/{page}", name="vendor_route")
      */
-    public function vendorAction($alias, $page = 0)
+    public function vendorAction($alias, $page = 1)
     {
         $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
@@ -182,13 +183,14 @@ class DefaultController extends Controller
             ->where('Product.vendor = :vendor')
             ->setParameter('vendor', $vendor);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * $page)
+            ->setFirstResult(28 * ($page - 1))
             ->setMaxResults(28);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
+        $path = "/vendor/$alias/";
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
         $this->getMenuItems();
         return $this->render('AppBundle:Default:vendor.html.twig', array(
                 'products' => $products,
@@ -203,7 +205,7 @@ class DefaultController extends Controller
     /**
      * @Route("/category/{alias}/{page}", name="category_route")
      */
-    public function categoryAction($alias, $page = 0)
+    public function categoryAction($alias, $page = 1)
     {
         $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
@@ -223,13 +225,14 @@ class DefaultController extends Controller
             ->where('Product.category IN (:exCategoriesIds)')
             ->setParameter('exCategoriesIds', $this->exCategoriesIds);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * $page)
+            ->setFirstResult(28 * ($page - 1))
             ->setMaxResults(28);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
+        $path = "/category/$alias/";
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
         $qb->select('ExCategory')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.id IN (:exCategoriesIds)')
@@ -253,7 +256,7 @@ class DefaultController extends Controller
     /**
      * @Route("/exCategory/{id}/{page}", name="ex_category_route")
      */
-    public function exCategoryAction($id, $page = 0)
+    public function exCategoryAction($id, $page = 1)
     {
         $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
@@ -267,13 +270,14 @@ class DefaultController extends Controller
             ->where('Product.category = :category')
             ->setParameter('category', $category);
         $query = $qb->getQuery()
-            ->setFirstResult(28 * $page)
+            ->setFirstResult(28 * ($page - 1))
             ->setMaxResults(28);
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
         $paginatorPagesCount = floor($productsCount / 28);
-        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5);
+        $path = "/exCategory/$id/";
+        $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
 
         $this->getMenuItems();
         return $this->render('AppBundle:Default:exCategory.html.twig', array(
@@ -363,12 +367,12 @@ class DefaultController extends Controller
         $this->metaTags['metaRobots'] = 'all';
     }
 
-    private function getPaginatorData($itemsCount, $currentPage, $limit, $midRange)
+    private function getPaginatorData($itemsCount, $currentPage, $limit, $midRange, $path = '/page/')
     {
         $paginator = new \AppBundle\Helpers\Paginator($itemsCount, $currentPage, $limit, $midRange);
         return array(
             'paginator' => $paginator,
-            'path' => '/page/',
+            'path' => $path,
         );
     }
 }

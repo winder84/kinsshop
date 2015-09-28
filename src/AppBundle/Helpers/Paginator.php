@@ -41,7 +41,7 @@ class Paginator
      * @param int $limit
      * @param int $midRange
      */
-    function __construct($itemsCount, $currentPage = 1, $limit = 20, $midRange = 7)
+    function __construct($itemsCount, $currentPage = 0, $limit = 20, $midRange = 7)
     {
         //set total items count from controller
         $this->itemsCount = $itemsCount;

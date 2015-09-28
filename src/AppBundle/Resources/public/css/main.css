@@ -307,8 +307,8 @@ h2.categoryH2 {
 
 .paginator ul {
 	list-style: none;
-	margin: 10px 0;
-	padding: 0;
+	padding: 10px 0;
+	margin: 0;
 }
 
 .paginator ul li {
