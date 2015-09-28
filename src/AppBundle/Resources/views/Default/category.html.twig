@@ -3,7 +3,7 @@
 {% block content %}
 	<div class="shopBlock">
 		<div class="vendorBlock">
-			<h2 class="categoryH2">Показаны товары следующих категорий:</h2>
+			<h1 class="categoryH2">Показаны товары следующих категорий:</h1>
 			<ul class="vendorBlockUl">
 				{% for exCategory in exCategories %}
 					{% if exCategory.products|length != 0 %}
@@ -16,7 +16,7 @@
 			</ul>
 		</div>
 		<hr/>
-		<h2 class="shopTitle">{{ category.name|raw }}:</h2>
+		<h1 class="shopTitle">Купить "{{ category.name|raw }}" с доставкой:</h1>
 		{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': products }) }}
 	</div>
 {% endblock %}

@@ -7,7 +7,9 @@
 			<div class="itemName">{{ product.name|raw }}</div>
 			<div class="itemPicture">
 				<noindex>
-					<a target="_blank" rel="nofollow" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}"><img src="{{ product.pictures.0 }}"></a>
+					<a target="_blank" rel="nofollow" href="{{ product.url|raw }}" title="{{ product.name|raw }} {{ product.model|raw }}">
+						<img src="{% if product.pictures.0 is not defined %}{{ asset('bundles/app/images/nopic.jpg') }}{% else %}{{ product.pictures.0 }}{% endif %}">
+					</a>
 				</noindex>
 			</div>
 			<div class="itemModel">{{ product.model|raw }}</div>

@@ -95,18 +95,18 @@ body {
 	margin: 0 auto;
 }
 
-.content h2 {
+.content h1 {
 	font-size: 1.4em;
 	color: #54add7;
 }
 
-.productListBlock h2 {
+.productListBlock h1 {
 	text-align: center;
 	padding: 15px 0 0 0;
 	margin: 0;
 }
 
-.siteBlock h2, .vendorBlock h2 {
+.siteBlock h1, .vendorBlock h1 {
 	margin: 0 auto;
 	padding: 15px 0 0 0;
 	width: 300px;

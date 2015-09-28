@@ -2,12 +2,12 @@
 
 {% block content %}
 	<div class="shopBlock">
-		<h2 class="shopTitle">Товары магазина {{ site.title|raw }}:</h2>
+		<h1 class="shopTitle">Товары магазина {{ site.title|raw }}:</h1>
 		{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': products }) }}
 	</div>
 	<hr/>
 	<div class="vendorBlock">
-		<h2>Бренды магазина:</h2>
+		<h1>Бренды магазина:</h1>
 		<ul class="vendorBlockUl">
 			{% for vendor in vendors %}
 				<li>
