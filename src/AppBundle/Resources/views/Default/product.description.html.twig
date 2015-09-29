@@ -5,7 +5,7 @@
 		<div class="shopBlockDiv">
 			<div class="shopUniBlock">
 				<h1 class="itemName">{{ product.vendor.name|raw }} | {{ product.model|raw }}</h1>
-				<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина"><img src="{{ product.pictures.0 }}"></a>
+				<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина" {% if (app.environment == 'prod') and ('.lan' not in app.request.host) %}onclick="yaCounter32562670.reachGoal('ON_DESCRIPTION_CLICK'); return true;"{% endif %}><img src="{{ product.pictures.0 }}"></a>
 			</div>
 		</div>
 		<div class="shopBlockDiv">
