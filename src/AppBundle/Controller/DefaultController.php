@@ -14,6 +14,11 @@ class DefaultController extends Controller
     private $metaTags = array();
     private $productsPerPage = 28;
 
+    public function __construct()
+    {
+        $this->getMetaItems();
+    }
+
     /**
      * @Route("/", name="homepage")
      */
@@ -21,7 +26,6 @@ class DefaultController extends Controller
     {
         $resultProducts = array();
         $notNeedArray = array(0);
-        $this->getMetaItems();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $products = $em
@@ -84,7 +88,6 @@ class DefaultController extends Controller
      */
     public function siteDescriptionAction($alias)
     {
-        $this->getMetaItems();
         $em = $this->getDoctrine()->getManager();
         $site = $em
             ->getRepository('AppBundle:Site')
@@ -119,7 +122,6 @@ class DefaultController extends Controller
      */
     public function siteAction($alias, $page = 1)
     {
-        $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX';
         $em = $this->getDoctrine()->getManager();
         $site = $em
@@ -176,7 +178,6 @@ class DefaultController extends Controller
      */
     public function vendorAction($alias, $page = 1)
     {
-        $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $vendors = $em
@@ -219,7 +220,6 @@ class DefaultController extends Controller
      */
     public function categoryAction($alias, $page = 1)
     {
-        $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $category = $em
@@ -274,7 +274,6 @@ class DefaultController extends Controller
      */
     public function exCategoryAction($id, $page = 1)
     {
-        $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $category = $em
@@ -315,11 +314,19 @@ class DefaultController extends Controller
      */
     public function productAction($id)
     {
-        $this->getMetaItems();
+        $likeProducts = array();
         $em = $this->getDoctrine()->getManager();
         $product = $em
             ->getRepository('AppBundle:Product')
             ->findOneBy(array('id' => $id));
+        $categoryProducts = $product->getCategory()->getProducts();
+        foreach ($categoryProducts as $categoryProduct) {
+            if (count($likeProducts) < 4) {
+                if ($categoryProduct->getId() != $id) {
+                    $likeProducts[] = $categoryProduct;
+                }
+            }
+        }
 
         $this->getMenuItems();
         $this->metaTags['metaTitle'] = $product->getName() . ' - ' . $product->getModel();
@@ -328,6 +335,8 @@ class DefaultController extends Controller
         return $this->render('AppBundle:Default:product.description.html.twig', array(
                 'product' => $product,
                 'metaTags' => $this->metaTags,
+                'likeProducts' => $likeProducts,
+                'paginatorData' => null,
                 'menuItems' => $this->menuItems
             )
         );

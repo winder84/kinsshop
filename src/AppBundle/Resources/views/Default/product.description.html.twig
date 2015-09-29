@@ -4,7 +4,7 @@
 	<div class="shopBlock">
 		<div class="shopBlockDiv">
 			<div class="shopUniBlock">
-				<h2 class="itemName">{{ product.vendor.name|raw }} | {{ product.model|raw }}</h2>
+				<h1 class="itemName">{{ product.vendor.name|raw }} | {{ product.model|raw }}</h1>
 				<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина"><img src="{{ product.pictures.0 }}"></a>
 			</div>
 		</div>
@@ -20,5 +20,10 @@
 				<div class="itemDesription">{{ product.description|raw }}</div>
 			</div>
 		</div>
+		{% if likeProducts is not empty %}
+			<hr/>
+			<h3 class="shopTitle">Похожие товары:</h3>
+			{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': likeProducts }) }}
+		{% endif %}
 	</div>
 {% endblock %}
