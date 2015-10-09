@@ -32,7 +32,8 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Product')
             ->findBy(
                 array(
-                    'ourChoice' => true
+                    'ourChoice' => true,
+                    'isDelete' => false
                 ),
                 array(),
                 12
@@ -45,6 +46,7 @@ class DefaultController extends Controller
             $qb->select('Product')
                 ->from('AppBundle:Product', 'Product')
                 ->where('Product.id NOT IN (:notNeedArray)')
+                ->andWhere('Product.isDelete = 0')
                 ->setParameter('notNeedArray', $notNeedArray)
                 ->setMaxResults($needCount);
             $query = $qb->getQuery();
@@ -56,6 +58,7 @@ class DefaultController extends Controller
             ->from('AppBundle:Product', 'Product')
             ->leftJoin('AppBundle:Vendor', 'Vendor')
             ->where('Vendor = Product.vendor')
+            ->andWhere('Product.isDelete = 0')
             ->groupBy('Vendor')
             ->orderBy('cnt', 'DESC')
             ->setFirstResult(0)
@@ -146,6 +149,7 @@ class DefaultController extends Controller
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
             ->where('Product.site = :site')
+            ->andWhere('Product.isDelete = 0')
             ->setParameter('site', $site);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
@@ -190,6 +194,7 @@ class DefaultController extends Controller
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
             ->where('Product.vendor IN (:vendorIds)')
+            ->andWhere('Product.isDelete = 0')
             ->setParameter('vendorIds', $vendorIds);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
@@ -235,6 +240,7 @@ class DefaultController extends Controller
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
             ->where('Product.category IN (:exCategoriesIds)')
+            ->andWhere('Product.isDelete = 0')
             ->setParameter('exCategoriesIds', $this->exCategoriesIds);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
@@ -283,6 +289,7 @@ class DefaultController extends Controller
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
             ->where('Product.category = :category')
+            ->andWhere('Product.isDelete = 0')
             ->setParameter('category', $category);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
@@ -319,10 +326,14 @@ class DefaultController extends Controller
         $product = $em
             ->getRepository('AppBundle:Product')
             ->findOneBy(array('id' => $id));
+        if ($product->getIsDelete()) {
+            $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
+            $product->deleted = true;
+        }
         $categoryProducts = $product->getCategory()->getProducts();
         foreach ($categoryProducts as $categoryProduct) {
             if (count($likeProducts) < 4) {
-                if ($categoryProduct->getId() != $id) {
+                if ($categoryProduct->getId() != $id && !$categoryProduct->getIsDelete()) {
                     $likeProducts[] = $categoryProduct;
                 }
             }

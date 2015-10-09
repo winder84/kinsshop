@@ -280,6 +280,8 @@ class ParseCommand extends ContainerAwareCommand
             $newProduct->setVersion($newVersion);
             $newProduct->setExternalId($product['externalId']);
             $newProduct->setSite($site);
+            $newProduct->setIsDelete(false);
+            $newProduct->setUpdated(new \DateTime());
             if (isset($product['name'])) {
                 $newProduct->setName($product['name']);
             }

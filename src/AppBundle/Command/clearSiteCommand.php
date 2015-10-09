@@ -46,9 +46,9 @@ class clearSiteCommand extends ContainerAwareCommand
                 ->findAll();
         }
         foreach ($sites as $site) {
-            $this->outputWriteLn('Start clear offers.');
+            $this->outputWriteLn('Start clear offers ----- |' . $site->getTitle() . '| ----- ');
             $this->clearSite($site);
-            $this->outputWriteLn('End clear offers.');
+            $this->outputWriteLn('End clear offers ----- |' . $site->getTitle() . '| ----- ');
         }
     }
 
@@ -70,14 +70,27 @@ class clearSiteCommand extends ContainerAwareCommand
             ->setParameter('newVersion', $site->getVersion());
         $query = $qb->getQuery();
         $productsToDelete = $query->getResult();
+        $nowDateTime = new \DateTime();
         foreach ($productsToDelete as $productToDelete) {
-            $productsToDeleteArray[] = $productToDelete;
-            $this->em->remove($productToDelete);
+            $productUpdated = $productToDelete->getUpdated();
+            if ($productToDelete->getIsDelete()) {
+                if ($nowDateTime->diff($productUpdated)->days >= 14) {
+                    $deletedProductsArray[] = $productToDelete;
+                    $this->em->remove($productToDelete);
+                }
+            } else {
+                $productToDelete->setIsDelete(true);
+                $productToDelete->setUpdated(new \DateTime());
+                $productsToDeleteArray[] = $productToDelete;
+            }
         }
         $this->em->flush();
         $this->em->clear('AppBundle\Entity\Product');
         if (!empty($productsToDeleteArray)) {
-            $this->outputWriteLn('Deleted offers - ' . count($productsToDeleteArray));
+            $this->outputWriteLn('Offers to delete - ' . count($productsToDeleteArray));
+        }
+        if (!empty($deletedProductsArray)) {
+            $this->outputWriteLn('Deleted offers - ' . count($deletedProductsArray));
         }
 
         $qb = $this->em->createQueryBuilder();

@@ -138,6 +138,18 @@ class Product
     private $ourChoice;
 
     /**
+     * @ORM\Column(name="updated", type="datetime", nullable=true)
+     */
+    protected $updated;
+
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isDelete", type="boolean", nullable=true, options={"default" = false})
+     */
+    private $isDelete = false;
+
+    /**
      *
      * @return string String Product
      */
@@ -546,5 +558,51 @@ class Product
     public function getOurChoice()
     {
         return $this->ourChoice;
+    }
+
+    /**
+     * Set updated
+     *
+     * @param \DateTime $updated
+     * @return Product
+     */
+    public function setUpdated($updated)
+    {
+        $this->updated = $updated;
+
+        return $this;
+    }
+
+    /**
+     * Get updated
+     *
+     * @return \DateTime 
+     */
+    public function getUpdated()
+    {
+        return $this->updated;
+    }
+
+    /**
+     * Set isDelete
+     *
+     * @param boolean $isDelete
+     * @return Product
+     */
+    public function setIsDelete($isDelete)
+    {
+        $this->isDelete = $isDelete;
+
+        return $this;
+    }
+
+    /**
+     * Get isDelete
+     *
+     * @return boolean 
+     */
+    public function getIsDelete()
+    {
+        return $this->isDelete;
     }
 }

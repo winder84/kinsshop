@@ -50,6 +50,11 @@ class ProductAdmin extends Admin
                     'required' => false,
                 )
             )
+            ->add('isDelete', null, array(
+                    'label'    => 'На удаление',
+                    'required' => false,
+                )
+            )
             ->add('price', null, array('label' => 'Цена'))
 //            ->add('version', null, array('label' => 'Версия'))
             ->add('_action', 'actions', array(
