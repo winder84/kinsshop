@@ -31,6 +31,11 @@ class ProductAdmin extends Admin
                     'required' => false,
                 )
             )
+            ->add('isDelete', null, array(
+                    'label'    => 'На удаление',
+                    'required' => false,
+                )
+            )
         ;
     }
 

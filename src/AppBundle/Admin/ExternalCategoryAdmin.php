@@ -18,7 +18,11 @@ class ExternalCategoryAdmin extends Admin
         $datagridMapper
             ->add('id')
             ->add('externalId', null, array('label' => 'Внешний id'))
-            ->add('parentId', null, array('label' => 'Родительский id'))
+            ->add('parentId', 'doctrine_orm_callback', array(
+                    'label' => 'Родительский id',
+                    'callback' => array($this, 'getParentIdFilter'),
+                )
+            )
             ->add('internalParentCategory', null, array('label' => 'Внутренняя категория'))
             ->add('name', null, array('label' => 'Наименование'))
             ->add('site', null, array('label' => 'Магазин'))
@@ -86,5 +90,26 @@ class ExternalCategoryAdmin extends Admin
             ->add('name')
             ->add('version')
         ;
+    }
+
+
+    /**
+     * получить equal parentId
+     * @param $queryBuilder
+     * @param $alias
+     * @param $field
+     * @param $value
+     * @return bool
+     */
+    public function getParentIdFilter($queryBuilder, $alias, $field, $value)
+    {
+        if (!isset($value['value'])) {
+            return;
+        }
+
+        $queryBuilder->andWhere("$alias.parentId = :value");
+        $queryBuilder->setParameter('value', $value['value']);
+
+        return true;
     }
 }
