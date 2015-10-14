@@ -18,7 +18,7 @@ class chpuGeneratorCommand extends ContainerAwareCommand
     protected function configure()
     {
         $this
-            ->setName('chpu:generate')
+            ->setName('kins:chpu')
             ->setDescription('Parse markets')
 //            ->addArgument(
 //                'marketId',
