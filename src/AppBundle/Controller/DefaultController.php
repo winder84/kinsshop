@@ -190,7 +190,7 @@ class DefaultController extends Controller
             ->findBy(array('alias' => $alias));
         foreach ($vendors as $vendor) {
             $vendorIds[] = $vendor->getId();
-            $this->metaTags['metaTitle'] = 'Купить товары ' . $vendor->getName() . ' с доставкой по России.';
+            $this->metaTags['metaTitle'] = 'Купить ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
         }
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
@@ -232,7 +232,7 @@ class DefaultController extends Controller
         $category = $em
             ->getRepository('AppBundle:Category')
             ->findOneBy(array('alias' => $alias));
-        $this->metaTags['metaTitle'] = 'Купить ' . $category->getName() . ' с доставкой по России.';
+        $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($category->getName(), 'UTF-8') . ' с доставкой по России.';
 
         $externalCategories = $category->getExternalCategories();
         foreach ($externalCategories as $externalCategory ) {
@@ -288,7 +288,7 @@ class DefaultController extends Controller
         $category = $em
             ->getRepository('AppBundle:ExternalCategory')
             ->findOneBy(array('id' => $id));
-        $this->metaTags['metaTitle'] = 'Купить ' . $category->getName() . ' с доставкой по России.';
+        $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($category->getName(), 'UTF-8') . ' с доставкой по России.';
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
