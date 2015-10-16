@@ -76,7 +76,7 @@ class clearSiteCommand extends ContainerAwareCommand
             if ($productToDelete->getIsDelete()) {
                 if ($nowDateTime->diff($productUpdated)->days >= 14) {
                     $deletedProductsArray[] = $productToDelete;
-                    $this->em->remove($productToDelete);
+//                    $this->em->remove($productToDelete);
                 }
             } else {
                 $productToDelete->setIsDelete(true);
