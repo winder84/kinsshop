@@ -95,6 +95,7 @@ class DefaultController extends Controller
         $site = $em
             ->getRepository('AppBundle:Site')
             ->findOneBy(array('alias' => $alias));
+        $this->metaTags['metaTitle'] = 'Описание магазина ' . $site->getTitle() . '. Купить товары "' . $site->getTitle() . '" с доставкой по России.';
 
         $qb = $em->createQueryBuilder();
         $qb->select('Vendor, count(Vendor) as cnt')
@@ -189,6 +190,7 @@ class DefaultController extends Controller
             ->findBy(array('alias' => $alias));
         foreach ($vendors as $vendor) {
             $vendorIds[] = $vendor->getId();
+            $this->metaTags['metaTitle'] = 'Купить товары ' . $vendor->getName() . ' с доставкой по России.';
         }
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
@@ -230,6 +232,7 @@ class DefaultController extends Controller
         $category = $em
             ->getRepository('AppBundle:Category')
             ->findOneBy(array('alias' => $alias));
+        $this->metaTags['metaTitle'] = 'Купить ' . $category->getName() . ' с доставкой по России.';
 
         $externalCategories = $category->getExternalCategories();
         foreach ($externalCategories as $externalCategory ) {
@@ -285,6 +288,7 @@ class DefaultController extends Controller
         $category = $em
             ->getRepository('AppBundle:ExternalCategory')
             ->findOneBy(array('id' => $id));
+        $this->metaTags['metaTitle'] = 'Купить ' . $category->getName() . ' с доставкой по России.';
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
@@ -340,8 +344,8 @@ class DefaultController extends Controller
         }
 
         $this->getMenuItems();
-        $this->metaTags['metaTitle'] = $product->getName() . ' - ' . $product->getModel();
-        $this->metaTags['metaDescription'] = $product->getDescription();
+        $this->metaTags['metaTitle'] = 'Описание и цена ' . $product->getModel() . '. Купить ' . $product->getName() . ' с доставкой по России.';
+        $this->metaTags['metaDescription'] = substr($product->getDescription(), 0, 400);
         $this->metaTags['metaKeywords'] .= ', ' . $product->getName() . ' купить, ' . $product->getModel() . ' купить, ' . $product->getCategory()->getName() . ' купить, ' . $product->getVendor()->getName() . ' купить';
         return $this->render('AppBundle:Default:product.description.html.twig', array(
                 'product' => $product,
