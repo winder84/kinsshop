@@ -47,7 +47,7 @@ body {
 	line-height: 75px;
 	font-size: 28px;
 	vertical-align: top;
-	color: #54add7;
+	color: #366D88;
 	font-weight: bold;
 	text-decoration: none;
 }
@@ -69,7 +69,7 @@ body {
 	padding: 0 10px;
 	cursor: pointer;
 	text-decoration: none;
-	color: #54add7;
+	color: #366D88;
 }
 
 .headerMenuDiv a:hover {
@@ -97,12 +97,12 @@ body {
 
 .content h1 {
 	font-size: 1.4em;
-	color: #54add7;
+	color: #366D88;
 }
 
 .content h3 {
 	font-size: 1.2em;
-	color: #54add7;
+	color: #366D88;
 }
 
 .productListBlock h1 {
@@ -142,7 +142,7 @@ h2.categoryH2 {
 }
 
 .productListItem .itemName {
-	background-color: #54add7;
+	background-color: #366D88;
 	padding: 7px;
 	font-size: 12px;
 	color: #fff;
@@ -201,7 +201,7 @@ h2.categoryH2 {
 }
 
 .shopUniBlock .itemName, .shopDescBlock .itemName {
-	background-color: #54add7;
+	background-color: #366D88;
 	padding: 7px;
 	margin: 0;
 	font-size: 16px;
@@ -241,7 +241,7 @@ h2.categoryH2 {
 
 .productListItem .itemLink a {
 	font-size: 14px;
-	color: #54add7;
+	color: #366D88;
 	text-decoration: none;
 }
 
@@ -276,7 +276,7 @@ h2.categoryH2 {
 }
 
 .vendorBlockUl a {
-	color: #54add7;
+	color: #366D88;
 	text-decoration: none;
 }
 
@@ -319,7 +319,7 @@ h2.categoryH2 {
 
 .paginator ul li {
 	display: inline-block;
-	background-color: #54add7;
+	background-color: #366D88;
 }
 
 .paginator ul li a {
@@ -332,12 +332,12 @@ h2.categoryH2 {
 
 .paginator ul li a:hover {
 	background-color: #234759;
-	color: #54add7;
+	color: #366D88;
 }
 
 .paginator ul li a.active {
 	background-color: #234759;
-	color: #54add7;
+	color: #65B6DD;
 }
 
 .e404Block {
@@ -347,7 +347,7 @@ h2.categoryH2 {
 	margin: 0 auto;
 	padding: 0;
 	text-align: center;
-	color: #54add7;
+	color: #366D88;
 	background: url("/bundles/app/images/404.png") no-repeat;
 }
 
