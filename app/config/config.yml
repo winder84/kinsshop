@@ -242,5 +242,5 @@ sonata_media:
 
 presta_sitemap:
     timetolive: 3600
-#    dumper_base_url: "http://www.kinsshop.ru/"
+    dumper_base_url: "http://www.kinsshop.ru/"
     items_by_set: 5000
