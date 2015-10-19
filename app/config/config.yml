@@ -239,3 +239,8 @@ sonata_media:
     providers:
         image:
             resizer: sonata.media.resizer.square
+
+presta_sitemap:
+    timetolive: 3600
+#    dumper_base_url: "http://www.kinsshop.ru/"
+    items_by_set: 5000

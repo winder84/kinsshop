@@ -183,7 +183,7 @@ class DefaultController extends Controller
      */
     public function vendorAction($alias, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
+        $this->metaTags['metaRobots'] = 'NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $vendors = $em
             ->getRepository('AppBundle:Vendor')
@@ -227,7 +227,7 @@ class DefaultController extends Controller
      */
     public function categoryAction($alias, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
+        $this->metaTags['metaRobots'] = 'NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $category = $em
             ->getRepository('AppBundle:Category')
@@ -283,7 +283,7 @@ class DefaultController extends Controller
      */
     public function exCategoryAction($id, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
+        $this->metaTags['metaRobots'] = 'NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
         $category = $em
             ->getRepository('AppBundle:ExternalCategory')

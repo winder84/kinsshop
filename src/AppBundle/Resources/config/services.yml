@@ -29,6 +29,12 @@ services:
         tags:
             - {name: sonata.admin, manager_type: orm, group: Контент, label: Продукты}
 
+    sitemap.listener:
+        class: %sitemap.listener.class%
+        arguments: [@router, @doctrine.orm.entity_manager]
+        tags: [{name: "presta.sitemap.listener"}]
+
 parameters:
     # ... other parameters
     security.acl.permission.map.class: Sonata\AdminBundle\Security\Acl\Permission\AdminPermissionMap
+    sitemap.listener.class: AppBundle\EventListener\SitemapListener
