@@ -334,6 +334,16 @@ class DefaultController extends Controller
             $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
             $product->deleted = true;
         }
+        $productCategory = $product->getCategory();
+        $productCategoryName = '';
+        if ($productCategory) {
+            $productCategoryName = $productCategory->getName();
+        }
+        $productVendor = $product->getVendor();
+        $productVendorName = '';
+        if ($productVendor) {
+            $productVendorName = $productVendor->getName();
+        }
         $categoryProducts = $product->getCategory()->getProducts();
         foreach ($categoryProducts as $categoryProduct) {
             if (count($likeProducts) < 4) {
@@ -346,7 +356,13 @@ class DefaultController extends Controller
         $this->getMenuItems();
         $this->metaTags['metaTitle'] = 'Описание и цена ' . $product->getModel() . '. Купить ' . $product->getName() . ' с доставкой по России.';
         $this->metaTags['metaDescription'] = substr($product->getDescription(), 0, 400);
-        $this->metaTags['metaKeywords'] .= ', ' . $product->getName() . ' купить, ' . $product->getModel() . ' купить, ' . $product->getCategory()->getName() . ' купить, ' . $product->getVendor()->getName() . ' купить';
+        $this->metaTags['metaKeywords'] .= ', ' . $product->getName() . ' ' . $product->getModel() . ' купить, ';
+        if (!empty($productCategoryName)) {
+            $this->metaTags['metaKeywords'] .= $productCategoryName . ' купить, ';
+        }
+        if (!empty($productVendorName)) {
+            $this->metaTags['metaKeywords'] .= $productVendorName . ' купить, ';
+        }
         return $this->render('AppBundle:Default:product.description.html.twig', array(
                 'product' => $product,
                 'metaTags' => $this->metaTags,
