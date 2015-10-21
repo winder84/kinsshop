@@ -362,7 +362,6 @@ class DefaultController extends Controller
             $productFullName[] = $productVendorName;
         }
         $productFullName[] = $product->getName();
-        $productFullName[] = $product->getModel();
         $this->getMenuItems();
         $this->metaTags['metaTitle'] = 'Описание и цена ' . $product->getModel() . '. Купить ' . implode(' ', $productFullName) . ' с доставкой по России.';
         $this->metaTags['metaDescription'] = substr($product->getDescription(), 0, 400);
