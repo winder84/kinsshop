@@ -353,16 +353,21 @@ class DefaultController extends Controller
             }
         }
 
-        $this->getMenuItems();
-        $this->metaTags['metaTitle'] = 'Описание и цена ' . $product->getModel() . '. Купить ' . $product->getName() . ' с доставкой по России.';
-        $this->metaTags['metaDescription'] = substr($product->getDescription(), 0, 400);
-        $this->metaTags['metaKeywords'] .= ', ' . $product->getName() . ' ' . $product->getModel() . ' купить, ';
         if (!empty($productCategoryName)) {
-            $this->metaTags['metaKeywords'] .= $productCategoryName . ' купить, ';
+            $productKeywords[] =  $productCategoryName . ' купить';
+            $productFullName[] = $productCategoryName;
         }
         if (!empty($productVendorName)) {
-            $this->metaTags['metaKeywords'] .= $productVendorName . ' купить, ';
+            $productKeywords[] =  $productVendorName . ' купить';
+            $productFullName[] = $productVendorName;
         }
+        $productFullName[] = $product->getName();
+        $productFullName[] = $product->getModel();
+        $this->getMenuItems();
+        $this->metaTags['metaTitle'] = 'Описание и цена ' . $product->getModel() . '. Купить ' . implode(' ', $productFullName) . ' с доставкой по России.';
+        $this->metaTags['metaDescription'] = substr($product->getDescription(), 0, 400);
+        $productKeywords[] =  $product->getName() . ' ' . $product->getModel() . ' купить';
+        $this->metaTags['metaKeywords'] .= ',' . implode(',', $productKeywords);
         return $this->render('AppBundle:Default:product.description.html.twig', array(
                 'product' => $product,
                 'metaTags' => $this->metaTags,
