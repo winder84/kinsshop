@@ -330,6 +330,9 @@ class DefaultController extends Controller
         $product = $em
             ->getRepository('AppBundle:Product')
             ->findOneBy(array('id' => $id));
+        if (!$product) {
+            throw $this->createNotFoundException('The product does not exist');
+        }
         if ($product->getIsDelete()) {
             $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
             $product->deleted = true;
