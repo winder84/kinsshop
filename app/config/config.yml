@@ -157,11 +157,16 @@ sonata_seo:
             #'xmlns:fb':           "http://www.facebook.com/2008/fbml"
 
 fos_user:
-    db_driver: orm
-    firewall_name: main
-    user_class: AppBundle\Entity\User
-    group:
-        group_class: Application\Sonata\UserBundle\Entity\Group
+  db_driver:  orm # can be orm or odm
+  firewall_name:  main
+  user_class:  Application\Sonata\UserBundle\Entity\User
+
+  group:
+    group_class:  Application\Sonata\UserBundle\Entity\Group
+    group_manager: sonata.user.orm.group_manager
+
+  service:
+    user_manager: sonata.user.orm.user_manager
 
 sonata_formatter:
     formatters:
