@@ -81,13 +81,17 @@ body {
 .middleBlock {
 	width: 100%;
 	height: 232px;
-	background: url("/bundles/app/images/middleBlockPicture.png");
+}
+
+.middleBlock img {
+	position: absolute;
 }
 
 .middleBlockText {
 	color: #fff;
 	padding: 150px 0 0 130px;
 	font-size: 28px;
+	position: absolute;
 }
 
 .productListBlock {

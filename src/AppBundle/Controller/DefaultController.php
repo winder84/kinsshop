@@ -267,6 +267,15 @@ class DefaultController extends Controller
         $exCategories = $query->getResult();
 
         $this->getMenuItems();
+        $media = $category->getMedia();
+        if ($media) {
+            $provider = $this->container->get($media->getProviderName());
+            $url = $provider->generatePublicUrl($media, 'reference');
+            $this->menuItems['slideUrl'] = $url;
+        }
+        if (!empty($category->getSeoDescription())) {
+            $this->menuItems['slideText'] = $category->getSeoDescription();
+        }
         return $this->render('AppBundle:Default:category.html.twig', array(
                 'products' => $products,
                 'paginatorData' => $paginatorData,
@@ -426,6 +435,8 @@ class DefaultController extends Controller
         foreach ($resultVendors as $resultVendor) {
             $this->menuItems['vendors'][] = $resultVendor;
         }
+        $this->menuItems['slideUrl'] = '/bundles/app/images/middleBlockPicture.png';
+        $this->menuItems['slideText'] = 'Всё что Вы искали для Вашего ребёнка!';
     }
 
     private function getMetaItems()
