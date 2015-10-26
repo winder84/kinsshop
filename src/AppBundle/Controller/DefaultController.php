@@ -419,7 +419,8 @@ class DefaultController extends Controller
             ->leftJoin('Vendor.products', 'p')
             ->having('cnt > 450')
             ->groupBy('Vendor.alias')
-            ->orderBy('cnt', 'DESC');
+            ->orderBy('cnt', 'DESC')
+            ->setMaxResults(25);
         $query = $qb->getQuery();
         $resultVendors = $query->getResult();
         foreach ($resultVendors as $resultVendor) {
