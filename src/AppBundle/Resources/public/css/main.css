@@ -383,6 +383,7 @@ ul.dropdown li.dropdown-top {
 	display: inline;
 	float: left;
 	margin: 0 1px 0 0;
+	z-index: 1000;
 }
 ul.dropdown li.dropdown-top a {
 	/*padding: 3px 10px 4px;*/
