@@ -43,7 +43,9 @@ class SitemapListener implements SitemapListenerInterface
         }
 
         foreach ($this->em->getRepository('AppBundle:Product')->findAll() as $product) {
-            $urls[] = $this->router->generate('product_route', array('id' => $product->getId()), true);
+            if (!$product->getIsDelete()) {
+                $urls[] = $this->router->generate('product_route', array('id' => $product->getId()), true);
+            }
         }
 
         foreach ($urls as $url) {
