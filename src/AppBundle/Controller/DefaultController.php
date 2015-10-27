@@ -53,18 +53,6 @@ class DefaultController extends Controller
             $moreProducts = $query->getResult();
             $products = array_merge($products, $moreProducts);
         }
-        $qb = $em->createQueryBuilder();
-        $qb->select('Vendor, count(Vendor) as cnt')
-            ->from('AppBundle:Product', 'Product')
-            ->leftJoin('AppBundle:Vendor', 'Vendor')
-            ->where('Vendor = Product.vendor')
-            ->andWhere('Product.isDelete = 0')
-            ->groupBy('Vendor')
-            ->orderBy('cnt', 'DESC')
-            ->setFirstResult(0)
-            ->setMaxResults(12);
-        $query = $qb->getQuery();
-        $vendors = $query->getResult();
         foreach ($products as $product) {
             $resultProducts[] = array(
                 'name' => $product->getName(),
@@ -79,7 +67,7 @@ class DefaultController extends Controller
         $this->getMenuItems();
         return $this->render('AppBundle:Default:index.html.twig', array(
             'products' => $resultProducts,
-            'vendors' => $vendors,
+            'vendors' => $this->menuItems['vendors'],
             'menuItems' => $this->menuItems,
             'metaTags' => $this->metaTags,
             'paginatorData' => null,
@@ -233,6 +221,9 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Category')
             ->findOneBy(array('alias' => $alias));
         $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($category->getName(), 'UTF-8') . ' с доставкой по России.';
+        if ($category->getSeoDescription()) {
+            $this->metaTags['metaDescription'] = $category->getSeoDescription();
+        }
 
         $externalCategories = $category->getExternalCategories();
         foreach ($externalCategories as $externalCategory ) {

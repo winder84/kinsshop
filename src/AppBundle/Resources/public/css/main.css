@@ -123,7 +123,10 @@ body {
 }
 
 h2.categoryH2 {
-	width: 500px;
+	text-align: center;
+	font-size: 1.2em;
+	color: #366D88;
+	margin: 0;
 }
 
 .productListUl {
@@ -249,7 +252,7 @@ h2.categoryH2 {
 	text-decoration: none;
 }
 
-.productListItem .itemLink a:hover, .vendorBlockUl a:hover {
+.productListItem .itemLink a:hover, .vendorBlockUl a:hover, .categoryBlockUl a:hover {
 	color: #234759;
 }
 
@@ -275,20 +278,38 @@ h2.categoryH2 {
 
 .vendorBlockUl li {
 	display: inline-block;
-	margin: 5px 10px;
-	width: 200px;
+	margin: 10px 10px;
+	font-size: 1em;
 }
 
 .vendorBlockUl a {
 	color: #366D88;
-	text-decoration: none;
 }
 
-.vendorBlockUl p {
-	margin: 2px;
-	font-size: 14px;
+.categoryBlockUl {
+	padding: 0;
+	text-align: center;
+	margin: 5px 0;
 }
 
+.categoryBlockUl li {
+	display: inline-block;
+	margin: 2px 5px;
+}
+
+.categoryBlockUl a {
+	font-size: 0.8em;
+	color: #366D88;
+}
+
+.categoryDesc {
+	font-size: 1em;
+	color: #6f6f6f;
+}
+
+.categoryDesc p {
+	margin: 5px 0;
+}
 .siteBlockUl li img {
 	width: 150px;
 }
@@ -304,11 +325,21 @@ h2.categoryH2 {
 	vertical-align: top;
 }
 
-.shopTitle {
+h1.shopTitle {
+	font-size: 1.2em;
 	margin: 0;
 	width: 100%;
 	text-align: center;
 	padding: 20px 0;
+}
+
+h2.shopTitle {
+	color: #366D88;
+	font-size: 1.2em;
+	margin: 0;
+	width: 100%;
+	text-align: center;
+	padding: 10px 0;
 }
 
 .paginator {
