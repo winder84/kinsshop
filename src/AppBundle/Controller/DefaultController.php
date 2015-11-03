@@ -326,6 +326,7 @@ class DefaultController extends Controller
     public function productAction($id)
     {
         $likeProducts = array();
+        $categoryProducts = array();
         $em = $this->getDoctrine()->getManager();
         $product = $em
             ->getRepository('AppBundle:Product')
@@ -341,13 +342,13 @@ class DefaultController extends Controller
         $productCategoryName = '';
         if ($productCategory) {
             $productCategoryName = $productCategory->getName();
+            $categoryProducts = $productCategory->getProducts();
         }
         $productVendor = $product->getVendor();
         $productVendorName = '';
         if ($productVendor) {
             $productVendorName = $productVendor->getName();
         }
-        $categoryProducts = $product->getCategory()->getProducts();
         foreach ($categoryProducts as $categoryProduct) {
             if (count($likeProducts) < 4) {
                 if ($categoryProduct->getId() != $id && !$categoryProduct->getIsDelete()) {
