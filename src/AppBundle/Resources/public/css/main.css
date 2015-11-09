@@ -286,6 +286,14 @@ h2.categoryH2 {
 	color: #366D88;
 }
 
+.vendorBlock {
+	background-color: #efefef;
+}
+
+.vendorBlock hr {
+	margin: 0;
+}
+
 .categoryBlockUl {
 	padding: 0;
 	text-align: center;
@@ -305,10 +313,12 @@ h2.categoryH2 {
 .categoryDesc {
 	font-size: 1em;
 	color: #6f6f6f;
+	padding: 10px 95px 10px 70px;
+	text-align: justify;
 }
 
 .categoryDesc p {
-	margin: 5px 0;
+	margin: 0;
 }
 .siteBlockUl li img {
 	width: 150px;

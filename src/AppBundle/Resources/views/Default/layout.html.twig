@@ -59,6 +59,28 @@
 			<div class="middleBlockText">{{ menuItems.slideText|raw }}</div>
 		</div>
 	</div>
+	<div class="vendorBlock">
+		{% if category is defined %}
+			{% if category.description %}
+				<div class="categoryDesc">
+					{{ category.description|raw }}
+				</div>
+				<hr />
+			{% endif %}
+		{% endif %}
+		{% if exCategories is defined %}
+			<ul class="categoryBlockUl">
+				{% for exCategory in exCategories %}
+					{% if exCategory.products|length != 0 %}
+						<li>
+							<a href="/exCategory/{{ exCategory.id }}">{{ exCategory.name }}</a>
+						</li>
+					{% endif %}
+				{% endfor %}
+			</ul>
+			<hr/>
+		{% endif %}
+	</div>
 	<div class="content">
 		{% block content %}
 

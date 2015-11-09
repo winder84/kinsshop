@@ -283,18 +283,22 @@ class DefaultController extends Controller
      */
     public function exCategoryAction($id, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOFOLLOW';
         $em = $this->getDoctrine()->getManager();
-        $category = $em
+        $exCategory = $em
             ->getRepository('AppBundle:ExternalCategory')
             ->findOneBy(array('id' => $id));
-        $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($category->getName(), 'UTF-8') . ' с доставкой по России.';
+        $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($exCategory->getName(), 'UTF-8') . ' с доставкой по России.';
+        $parentId = $exCategory->getParentId();
+        $parentCategory = $em
+            ->getRepository('AppBundle:ExternalCategory')
+            ->findOneBy(array('externalId' => $parentId));
+        $internalParentCategory = $parentCategory->getInternalParentCategory();
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
             ->where('Product.category = :category')
             ->andWhere('Product.isDelete = 0')
-            ->setParameter('category', $category);
+            ->setParameter('category', $exCategory);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
             ->setMaxResults($this->productsPerPage);
@@ -310,14 +314,34 @@ class DefaultController extends Controller
         }
 
         $this->getMenuItems();
-        return $this->render('AppBundle:Default:exCategory.html.twig', array(
-                'products' => $products,
-                'paginatorData' => $paginatorData,
-                'category' => $category,
-                'metaTags' => $this->metaTags,
-                'menuItems' => $this->menuItems
-            )
+        $returnArray = array(
+            'products' => $products,
+            'paginatorData' => $paginatorData,
+            'exCategory' => $exCategory,
+            'metaTags' => $this->metaTags
         );
+        if ($internalParentCategory) {
+            $returnArray['category'] = $internalParentCategory;
+            $media = $internalParentCategory->getMedia();
+            if ($media) {
+                $provider = $this->container->get($media->getProviderName());
+                $url = $provider->generatePublicUrl($media, 'reference');
+                $this->menuItems['slideUrl'] = $url;
+            }
+            if (!empty($internalParentCategory->getSeoDescription())) {
+                $this->menuItems['slideText'] = $internalParentCategory->getSeoDescription();
+            }
+            if (!empty($parentCategory)) {
+                $exCategories = $em
+                    ->getRepository('AppBundle:ExternalCategory')
+                    ->findBy(array('parentId' => $parentCategory->getExternalId()));
+                if ($exCategories) {
+                    $returnArray['exCategories'] = $exCategories;
+                }
+            }
+        }
+        $returnArray['menuItems'] = $this->menuItems;
+        return $this->render('AppBundle:Default:exCategory.html.twig', $returnArray);
     }
 
     /**

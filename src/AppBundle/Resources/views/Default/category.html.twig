@@ -2,24 +2,6 @@
 
 {% block content %}
 	<div class="shopBlock">
-		<div class="vendorBlock">
-			{% if category.description %}
-				<div class="categoryDesc">
-					{{ category.description|raw }}
-				</div>
-				<hr />
-			{% endif %}
-			<ul class="categoryBlockUl">
-				{% for exCategory in exCategories %}
-					{% if exCategory.products|length != 0 %}
-						<li>
-							<a href="/exCategory/{{ exCategory.id }}">{{ exCategory.name }}</a>
-						</li>
-					{% endif %}
-				{% endfor %}
-			</ul>
-		</div>
-		<hr/>
 		<h1 class="shopTitle">Купить товары категории "{{ category.name|raw }}" с доставкой:</h1>
 		{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': products }) }}
 	</div>
