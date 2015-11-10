@@ -292,7 +292,9 @@ class DefaultController extends Controller
         $parentCategory = $em
             ->getRepository('AppBundle:ExternalCategory')
             ->findOneBy(array('externalId' => $parentId));
-        $internalParentCategory = $parentCategory->getInternalParentCategory();
+        if ($parentCategory) {
+            $internalParentCategory = $parentCategory->getInternalParentCategory();
+        }
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
