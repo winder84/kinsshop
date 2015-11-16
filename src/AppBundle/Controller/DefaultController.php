@@ -176,6 +176,9 @@ class DefaultController extends Controller
         $vendors = $em
             ->getRepository('AppBundle:Vendor')
             ->findBy(array('alias' => $alias));
+        if (empty($vendors)) {
+            return $this->redirect("/404");
+        }
         foreach ($vendors as $vendor) {
             $vendorIds[] = $vendor->getId();
             $this->metaTags['metaTitle'] = 'Купить ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
@@ -322,7 +325,7 @@ class DefaultController extends Controller
             'exCategory' => $exCategory,
             'metaTags' => $this->metaTags
         );
-        if ($internalParentCategory) {
+        if (isset($internalParentCategory)) {
             $returnArray['category'] = $internalParentCategory;
             $media = $internalParentCategory->getMedia();
             if ($media) {

@@ -11,6 +11,7 @@ class ExceptionController extends Controller
     private $metaTags;
     private $categories;
     private $sites;
+    private $menuItems;
 
     /**
      * @Route("/404")
@@ -22,8 +23,7 @@ class ExceptionController extends Controller
         $this->getMetaItems();
         $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
         return $this->render('AppBundle:Exception:show404.html.twig', array(
-            'sites' => $this->sites,
-            'categories' => $this->categories,
+            'menuItems' => $this->menuItems,
             'metaTags' => $this->metaTags,
         ));
     }
@@ -31,12 +31,29 @@ class ExceptionController extends Controller
     private function getMenuItems()
     {
         $em = $this->getDoctrine()->getManager();
-        $this->categories = $em
+        $this->menuItems['categories'] = $em
             ->getRepository('AppBundle:Category')
             ->findAll();
-        $this->sites = $em
+
+        $this->menuItems['sites'] = $em
             ->getRepository('AppBundle:Site')
             ->findAll();
+        $qb = $em->createQueryBuilder();
+
+        $qb->select('Vendor.alias, Vendor.name, count(p.id) as cnt')
+            ->from('AppBundle:Vendor', 'Vendor')
+            ->leftJoin('Vendor.products', 'p')
+            ->having('cnt > 450')
+            ->groupBy('Vendor.alias')
+            ->orderBy('cnt', 'DESC')
+            ->setMaxResults(25);
+        $query = $qb->getQuery();
+        $resultVendors = $query->getResult();
+        foreach ($resultVendors as $resultVendor) {
+            $this->menuItems['vendors'][] = $resultVendor;
+        }
+        $this->menuItems['slideUrl'] = '/bundles/app/images/middleBlockPicture.png';
+        $this->menuItems['slideText'] = 'Всё что Вы искали для Вашего ребёнка!';
     }
 
     private function getMetaItems()
