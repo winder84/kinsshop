@@ -177,7 +177,7 @@ class DefaultController extends Controller
             ->getRepository('AppBundle:Vendor')
             ->findBy(array('alias' => $alias));
         if (empty($vendors)) {
-            return $this->redirect("/404");
+            throw $this->createNotFoundException();
         }
         foreach ($vendors as $vendor) {
             $vendorIds[] = $vendor->getId();
