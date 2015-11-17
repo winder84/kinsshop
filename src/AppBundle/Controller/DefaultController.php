@@ -290,6 +290,9 @@ class DefaultController extends Controller
         $exCategory = $em
             ->getRepository('AppBundle:ExternalCategory')
             ->findOneBy(array('id' => $id));
+        if (!$exCategory) {
+            throw $this->createNotFoundException();
+        }
         $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($exCategory->getName(), 'UTF-8') . ' с доставкой по России.';
         $parentId = $exCategory->getParentId();
         $parentCategory = $em
