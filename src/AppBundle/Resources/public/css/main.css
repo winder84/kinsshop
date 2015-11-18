@@ -295,9 +295,9 @@ h2.categoryH2 {
 }
 
 .categoryBlockUl {
-	padding: 0;
+	padding: 5px 0;
 	text-align: center;
-	margin: 5px 0;
+	margin: 0 0 5px 0;
 }
 
 .categoryBlockUl li {
