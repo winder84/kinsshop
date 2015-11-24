@@ -157,7 +157,6 @@ h2.categoryH2 {
 }
 
 .productLink {
-	background: #fff;
 	display: block;
 	padding: 10px;
 	font-weight: bold;
@@ -180,7 +179,8 @@ h2.categoryH2 {
 }
 
 .shopUniBlock a.productLink {
-	background-color: orange;
+	color: #4083a3;
+	background-color: #7FFFD4;
 }
 
 .shopUniBlock a:hover {
@@ -350,6 +350,10 @@ h2.shopTitle {
 	width: 100%;
 	text-align: center;
 	padding: 10px 0;
+}
+
+h3.shopTitle {
+	text-align: center;
 }
 
 .paginator {
