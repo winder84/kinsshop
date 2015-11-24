@@ -368,7 +368,6 @@ class DefaultController extends Controller
         }
         if ($product->getIsDelete()) {
             $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
-            $product->deleted = true;
         }
         $productCategory = $product->getCategory();
         $productCategoryName = '';
