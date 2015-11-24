@@ -273,6 +273,9 @@ class ParseCommand extends ContainerAwareCommand
             if (!$oldProduct) {
                 $newProduct = new Product();
                 $this->newProducts[] = $newProduct;
+                if (isset($product['description'])) {
+                    $newProduct->setDescription($product['description']);
+                }
             } else {
                 $newProduct = $oldProduct;
                 $this->updatedProducts[] = $newProduct;
@@ -298,9 +301,6 @@ class ParseCommand extends ContainerAwareCommand
             }
             if (isset($product['currencyId'])) {
                 $newProduct->setCurrencyId($product['currencyId']);
-            }
-            if (isset($product['description'])) {
-                $newProduct->setDescription($product['description']);
             }
             if (isset($product['model'])) {
                 $newProduct->setModel($product['model']);
