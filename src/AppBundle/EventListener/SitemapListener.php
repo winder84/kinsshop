@@ -60,7 +60,7 @@ class SitemapListener implements SitemapListenerInterface
                 $exCategory = $product->getCategory();
                 if ($vendor && $exCategory) {
                     $path = $this->router->generate('filter_route', array(
-                        'vendorAlias' => $vendor->getAlias(),
+                        'vendorAlias' => mb_strtolower($vendor->getAlias(), 'UTF-8'),
                         'categoryId' => $exCategory->getId(),
                     ), true);
                     $filterPages[$path] = $path;

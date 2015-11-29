@@ -329,7 +329,7 @@ class DefaultController extends Controller
             'metaTags' => $this->metaTags
         );
         if (isset($internalParentCategory)) {
-            $returnArray['category'] = $internalParentCategory;
+//            $returnArray['category'] = $internalParentCategory;
             $media = $internalParentCategory->getMedia();
             if ($media) {
                 $provider = $this->container->get($media->getProviderName());
