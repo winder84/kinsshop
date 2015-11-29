@@ -434,8 +434,8 @@ class DefaultController extends Controller
         }
         foreach ($vendors as $vendor) {
             $vendorIds[] = $vendor->getId();
-            $this->metaTags['metaTitle'] = 'Заказать ' . mb_strtolower ($exCategory->getName()) . ' ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
-            $this->metaTags['metaDescription'] = 'Посмотреть и купить ' . mb_strtolower ($exCategory->getName()) . ' ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
+            $this->metaTags['metaTitle'] = 'Заказать ' . mb_strtolower ($exCategory->getName(), 'UTF-8') . ' ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
+            $this->metaTags['metaDescription'] = 'Посмотреть и купить ' . mb_strtolower ($exCategory->getName(), 'UTF-8') . ' ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
         }
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
