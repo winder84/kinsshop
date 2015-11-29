@@ -51,16 +51,23 @@ class SitemapListener implements SitemapListenerInterface
         }
         $categories = null;
 
-        $products = $this->em->getRepository('AppBundle:Product')
-            ->createQueryBuilder('e')
-            ->select('e')
-            ->getQuery()
-            ->getResult(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $filterPages = array();
+        $products = $this->em->getRepository('AppBundle:Product')->findAll();
         foreach ($products as $product) {
-            if (!$product['isDelete']) {
-                $urls[] = $this->router->generate('product_route', array('id' => $product['id']), true);
+            if (!$product->getIsDelete()) {
+                $urls[] = $this->router->generate('product_route', array('id' => $product->getId()), true);
+                $vendor = $product->getVendor();
+                $exCategory = $product->getCategory();
+                if ($vendor && $exCategory) {
+                    $path = $this->router->generate('filter_route', array(
+                        'vendorAlias' => $vendor->getAlias(),
+                        'categoryId' => $exCategory->getId(),
+                    ), true);
+                    $filterPages[$path] = $path;
+                }
             }
         }
+        $urls = array_merge($urls, array_values($filterPages));
         $products = null;
 
         foreach ($urls as $url) {

@@ -413,6 +413,63 @@ class DefaultController extends Controller
         );
     }
 
+    /**
+     * @Route("/filter/{vendorAlias}/{categoryId}/{page}", name="filter_route")
+     */
+    public function filterAction($vendorAlias = '', $categoryId = 0, $page = 1)
+    {
+        if ($categoryId == 0 && $vendorAlias == '') {
+            return $this->redirectToRoute('homepage');
+        }
+        $em = $this->getDoctrine()->getManager();
+        $vendorIds = array();
+        $vendors = $em
+            ->getRepository('AppBundle:Vendor')
+            ->findBy(array('alias' => $vendorAlias));
+        $exCategory = $em
+            ->getRepository('AppBundle:ExternalCategory')
+            ->findOneBy(array('id' => $categoryId));
+        if (!$exCategory || empty($vendors)) {
+            throw $this->createNotFoundException();
+        }
+        foreach ($vendors as $vendor) {
+            $vendorIds[] = $vendor->getId();
+            $this->metaTags['metaTitle'] = 'Заказать ' . mb_strtolower ($exCategory->getName()) . ' ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
+            $this->metaTags['metaDescription'] = 'Посмотреть и купить ' . mb_strtolower ($exCategory->getName()) . ' ' . $vendor->getName() . ' со скидкой в интернет-магазине. Доставка по РФ';
+        }
+        $qb = $em->createQueryBuilder();
+        $qb->select('Product')
+            ->from('AppBundle:Product', 'Product')
+            ->where('Product.vendor IN (:vendorIds)')
+            ->andWhere('Product.isDelete = 0')
+            ->andWhere('Product.category = :category')
+            ->setParameter('category', $categoryId)
+            ->setParameter('vendorIds', $vendorIds);
+        $query = $qb->getQuery()
+            ->setFirstResult($this->productsPerPage * ($page - 1))
+            ->setMaxResults($this->productsPerPage);
+        $products = new Paginator($query, $fetchJoinCollection = true);
+
+        $productsCount = count($products);
+        $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
+        $path = "/filter/$vendorAlias/$categoryId/";
+        if ($productsCount <= $this->productsPerPage) {
+            $paginatorData = null;
+        } else {
+            $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
+        }
+        $this->getMenuItems();
+        $returnArray = array(
+            'products' => $products,
+            'paginatorData' => $paginatorData,
+            'exCategory' => $exCategory,
+            'vendor' => $vendors[0],
+            'metaTags' => $this->metaTags
+        );
+        $returnArray['menuItems'] = $this->menuItems;
+        return $this->render('AppBundle:Default:filter.html.twig', $returnArray);
+    }
+
     private function getCategoriesIdsRecursive()
     {
         $em = $this->getDoctrine()->getManager();
