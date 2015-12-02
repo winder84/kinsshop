@@ -32,11 +32,11 @@
 					<h2 class="itemName">Описание:</h2>
 					<div class="itemDesription">{{ product.description|raw }}</div>
 				</div>
-			{% else %}
-				<div class="shopDescBlock">
-					<h2 class="itemName">Описание:</h2>
-					<div class="itemDesription">{{ product.site.description|raw }}</div>
-				</div>
+			{#{% else %}#}
+				{#<div class="shopDescBlock">#}
+					{#<h2 class="itemName">Описание:</h2>#}
+					{#<div class="itemDesription">{{ product.site.description|raw }}</div>#}
+				{#</div>#}
 			{% endif %}
 		</div>
 		{% if likeProducts is not empty %}
