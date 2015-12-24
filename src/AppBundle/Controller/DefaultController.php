@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Stat;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -114,7 +115,7 @@ class DefaultController extends Controller
      */
     public function siteAction($alias, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOINDEX';
+        $this->metaTags['metaRobots'] = 'noindex';
         $em = $this->getDoctrine()->getManager();
         $site = $em
             ->getRepository('AppBundle:Site')
@@ -171,7 +172,7 @@ class DefaultController extends Controller
      */
     public function vendorAction($alias, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOFOLLOW';
+        $this->metaTags['metaRobots'] = 'nofollow';
         $em = $this->getDoctrine()->getManager();
         $vendors = $em
             ->getRepository('AppBundle:Vendor')
@@ -218,7 +219,7 @@ class DefaultController extends Controller
      */
     public function categoryAction($alias, $page = 1)
     {
-        $this->metaTags['metaRobots'] = 'NOFOLLOW';
+        $this->metaTags['metaRobots'] = 'nofollow';
         $em = $this->getDoctrine()->getManager();
         $category = $em
             ->getRepository('AppBundle:Category')
@@ -367,7 +368,7 @@ class DefaultController extends Controller
             throw $this->createNotFoundException('The product does not exist');
         }
         if ($product->getIsDelete()) {
-            $this->metaTags['metaRobots'] = 'NOINDEX, NOFOLLOW';
+            $this->metaTags['metaRobots'] = 'noindex, nofollow';
         }
         $productCategory = $product->getCategory();
         $productCategoryName = '';
@@ -468,6 +469,28 @@ class DefaultController extends Controller
         );
         $returnArray['menuItems'] = $this->menuItems;
         return $this->render('AppBundle:Default:filter.html.twig', $returnArray);
+    }
+
+    /**
+     * @Route("/product/buy/{id}", name="product_buy_route")
+     */
+    public function productBuyAction($id, Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $product = $em
+            ->getRepository('AppBundle:Product')
+            ->findOneBy(array('id' => $id));
+        if (!$product) {
+            throw $this->createNotFoundException('The product does not exist');
+        }
+        $newStat = new Stat();
+        $newStat->setProductId($id);
+        if ($request->getClientIp()) {
+            $newStat->setClientIp($request->getClientIp());
+        }
+        $em->persist($newStat);
+        $em->flush();
+        return $this->redirect($product->getURl());
     }
 
     private function getCategoriesIdsRecursive()
