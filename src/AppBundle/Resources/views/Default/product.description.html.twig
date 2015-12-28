@@ -4,7 +4,7 @@
 	<div class="shopBlock">
 		<div class="shopBlockDiv">
 			<div class="shopUniBlock">
-				<h1 class="itemName">{{ product.vendor.name|raw }} | {% if product.model is not empty %}{{ product.model|raw }}{% else %}{{ product.name|raw }}{% endif %}</h1>
+				<h1 class="itemName">{% if product.vendor|raw is not empty %}{{ product.vendor.name|raw }} | {% endif %}{% if product.model is not empty %}{{ product.model|raw }}{% else %}{{ product.name|raw }}{% endif %}</h1>
 				{% if product.isDelete %}
 					<img src="{{ product.pictures.0 }}">
 				{% else %}
