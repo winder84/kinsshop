@@ -517,9 +517,18 @@ class DefaultController extends Controller
     private function getMenuItems()
     {
         $em = $this->getDoctrine()->getManager();
-        $this->menuItems['categories'] = $em
-            ->getRepository('AppBundle:Category')
-            ->findAll();
+        $qb = $em->createQueryBuilder();
+        $qb->select('Category.alias, Category.name, count(exC.id) as cnt')
+            ->from('AppBundle:Category', 'Category')
+            ->leftJoin('Category.externalCategories', 'exC')
+            ->having('cnt > 0')
+            ->groupBy('Category.alias')
+            ->orderBy('cnt', 'DESC');
+        $query = $qb->getQuery();
+        $resultCategories = $query->getResult();
+        foreach ($resultCategories as $resultCategory) {
+            $this->menuItems['categories'][] = $resultCategory;
+        }
 
         $this->menuItems['sites'] = $em
             ->getRepository('AppBundle:Site')
