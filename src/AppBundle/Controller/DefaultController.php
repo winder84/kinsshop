@@ -452,6 +452,39 @@ class DefaultController extends Controller
         $products = new Paginator($query, $fetchJoinCollection = true);
 
         $productsCount = count($products);
+        if ($productsCount <= 0) {
+            $qb = $em->createQueryBuilder();
+            $qb->select('Product')
+                ->from('AppBundle:Product', 'Product')
+                ->where('Product.vendor IN (:vendorIds)')
+                ->andWhere('Product.isDelete = 0')
+                ->setParameter('vendorIds', $vendorIds);
+            $query = $qb->getQuery()
+                ->setFirstResult($this->productsPerPage * ($page - 1))
+                ->setMaxResults($this->productsPerPage);
+            $products = new Paginator($query, $fetchJoinCollection = true);
+            $productsCount = count($products);
+            if ($productsCount > 0) {
+                return $this->redirectToRoute('vendor_route', array('alias' => $vendorAlias));
+            } else {
+                $qb = $em->createQueryBuilder();
+                $qb->select('Product')
+                    ->from('AppBundle:Product', 'Product')
+                    ->andWhere('Product.isDelete = 0')
+                    ->andWhere('Product.category = :category')
+                    ->setParameter('category', $categoryId);
+                $query = $qb->getQuery()
+                    ->setFirstResult($this->productsPerPage * ($page - 1))
+                    ->setMaxResults($this->productsPerPage);
+                $products = new Paginator($query, $fetchJoinCollection = true);
+                $productsCount = count($products);
+                if ($productsCount > 0 ) {
+                    return $this->redirectToRoute('ex_category_route', array('id' => $categoryId));
+                } else {
+                    return $this->redirectToRoute('homepage');
+                }
+            }
+        }
         $paginatorPagesCount = ceil($productsCount / $this->productsPerPage);
         $path = "/filter/$vendorAlias/$categoryId/";
         if ($productsCount <= $this->productsPerPage) {
