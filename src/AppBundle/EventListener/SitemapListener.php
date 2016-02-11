@@ -54,7 +54,7 @@ class SitemapListener implements SitemapListenerInterface
         $filterPages = array();
         $iterableResult = $this->em->createQuery("SELECT p FROM 'AppBundle\Entity\Product' p WHERE p.isDelete = 0")->iterate();
         while ((list($product) = $iterableResult->next()) !== false) {
-            $urls[] = $this->router->generate('product_route', array('id' => $product->getId()), true);
+            $urls[] = $this->router->generate('product_detail_route', array('alias' => $product->getAlias()), true);
             $vendor = $product->getVendor();
             $exCategory = $product->getCategory();
             if ($vendor && $exCategory) {
