@@ -150,6 +150,13 @@ class Product
     private $isDelete = false;
 
     /**
+     * @var string
+     *
+     * @ORM\Column(name="alias", type="string", length=255, nullable=true)
+     */
+    private $alias;
+
+    /**
      *
      * @return string String Product
      */
@@ -604,5 +611,28 @@ class Product
     public function getIsDelete()
     {
         return $this->isDelete;
+    }
+
+    /**
+     * Set alias
+     *
+     * @param string $alias
+     * @return Product
+     */
+    public function setAlias($alias)
+    {
+        $this->alias = $alias;
+
+        return $this;
+    }
+
+    /**
+     * Get alias
+     *
+     * @return string 
+     */
+    public function getAlias()
+    {
+        return $this->alias;
     }
 }

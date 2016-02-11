@@ -21,7 +21,7 @@
 					<a class="productLink" rel="nofollow" title="{{ product.name|raw }} {{ product.model|raw }}">Нет в наличии</a>
 				{% else %}
 					<noindex>
-						<a class="productLink" rel="nofollow" target="_blank" href="/product/buy/{{ product.id|raw }}" title="{{ product.name|raw }}
+						<a class="productLink" rel="nofollow" target="_blank" href="/product/buy/{{ product.alias|raw }}" title="{{ product.name|raw }}
 						 {{ product.model|raw }}"{% if (app.environment == 'prod') and ('.lan' not in app.request.host) %}
 							onclick="yaCounter32562670.reachGoal('ON_DESCRIPTION_BUY_CLICK'); return true;"{% endif %}>Купить в магазине {{ product.site }}</a>
 					</noindex>

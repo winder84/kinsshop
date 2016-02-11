@@ -15,6 +15,8 @@ class chpuGeneratorCommand extends ContainerAwareCommand
 
     protected $delimer = '----------';
 
+    protected $em;
+
     protected function configure()
     {
         $this
@@ -36,10 +38,10 @@ class chpuGeneratorCommand extends ContainerAwareCommand
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $em = $this->getContainer()->get('doctrine')->getManager();
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
         $this->output = $output;
         $this->outputWriteLn('Start generate chpu - categories');
-        $categories = $em
+        $categories = $this->em
                 ->getRepository('AppBundle:Category')
                 ->findAll();
         foreach ($categories as $category) {
@@ -48,15 +50,15 @@ class chpuGeneratorCommand extends ContainerAwareCommand
                 $name = $category->getName();
                 $alias = $this->TransUrl($name);
                 $category->setAlias($alias);
-                $em->persist($category);
+                $this->em->persist($category);
             }
         }
-        $em->flush();
-        $em->clear('AppBundle\Entity\Category');
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Category');
         $this->outputWriteLn('End generate chpu - categories');
 
         $this->outputWriteLn('Start generate chpu - vendors');
-        $vendors = $em
+        $vendors = $this->em
                 ->getRepository('AppBundle:Vendor')
                 ->findAll();
         foreach ($vendors as $vendor) {
@@ -65,12 +67,37 @@ class chpuGeneratorCommand extends ContainerAwareCommand
                 $name = $vendor->getName();
                 $alias = $this->TransUrl($name);
                 $vendor->setAlias($alias);
-                $em->persist($vendor);
+                $this->em->persist($vendor);
             }
         }
-        $em->flush();
-        $em->clear('AppBundle\Entity\Vendor');
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Vendor');
         $this->outputWriteLn('End generate chpu - vendors');
+
+        $this->outputWriteLn('Start generate chpu - products');
+        $iterableResult = $this->em->createQuery("SELECT p FROM 'AppBundle\Entity\Product' p WHERE p.isDelete = 0")->iterate();
+        $i = 0;
+        while ((list($product) = $iterableResult->next()) !== false) {
+            $productAlias = $product->getAlias();
+            if (empty($productAlias)) {
+                $name = $product->getExternalId() . '_' . $product->getName();
+                $alias = $this->TransUrl($name);
+                $product->setAlias($alias);
+                $this->em->persist($product);
+            }
+            if ($i % 10000 == 0) {
+                $this->em->flush();
+                $this->em->clear('AppBundle\Entity\Product');
+                $this->em->detach($product);
+                $this->outputWriteLn('Offers - ' . $i . '.');
+            }
+
+            $i++;
+        }
+        $this->em->flush();
+        $this->em->clear('AppBundle\Entity\Product');
+        $this->outputWriteLn('Offers - ' . $i . '.');
+        $this->outputWriteLn('End generate chpu - products');
 
     }
 

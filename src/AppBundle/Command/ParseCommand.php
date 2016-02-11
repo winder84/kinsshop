@@ -259,11 +259,6 @@ class ParseCommand extends ContainerAwareCommand
             $newProduct = null;
             $externalCategory = null;
             $oldVendor = null;
-            if ($i % 10000 == 0) {
-                $this->em->flush();
-                $this->em->clear('AppBundle\Entity\Product');
-                $this->outputWriteLn('Offers - ' . $i . '.');
-            }
             $oldProduct = $this->em
                 ->getRepository('AppBundle:Product')
                 ->findOneBy(array(
@@ -341,6 +336,11 @@ class ParseCommand extends ContainerAwareCommand
                 }
             }
             $this->em->persist($newProduct);
+            if ($i % 10000 == 0) {
+                $this->em->flush();
+                $this->em->clear('AppBundle\Entity\Product');
+                $this->outputWriteLn('Offers - ' . $i . '.');
+            }
             $i++;
         }
         $this->em->flush();

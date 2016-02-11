@@ -16,7 +16,7 @@
 			<hr />
 			<div class="itemPrice">Цена: {{ product.price|number_format(0, '', ' ') }} руб.</div>
 			<div class="itemLink">
-				<a href="/product/{{ product.id }}" title="{{ product.name|raw }} {{ product.model|raw }}">Подробнее...</a>
+				<a href="/product/detail/{{ product.alias }}" title="{{ product.name|raw }} {{ product.model|raw }}">Подробнее...</a>
 			</div>
 		</li>
 	{% endfor %}

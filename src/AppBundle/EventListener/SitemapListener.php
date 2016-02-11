@@ -52,19 +52,17 @@ class SitemapListener implements SitemapListenerInterface
         $categories = null;
 
         $filterPages = array();
-        $products = $this->em->getRepository('AppBundle:Product')->findAll();
-        foreach ($products as $product) {
-            if (!$product->getIsDelete()) {
-                $urls[] = $this->router->generate('product_route', array('id' => $product->getId()), true);
-                $vendor = $product->getVendor();
-                $exCategory = $product->getCategory();
-                if ($vendor && $exCategory) {
-                    $path = $this->router->generate('filter_route', array(
-                        'vendorAlias' => mb_strtolower($vendor->getAlias(), 'UTF-8'),
-                        'categoryId' => $exCategory->getId(),
-                    ), true);
-                    $filterPages[$path] = $path;
-                }
+        $iterableResult = $this->em->createQuery("SELECT p FROM 'AppBundle\Entity\Product' p WHERE p.isDelete = 0")->iterate();
+        while ((list($product) = $iterableResult->next()) !== false) {
+            $urls[] = $this->router->generate('product_route', array('id' => $product->getId()), true);
+            $vendor = $product->getVendor();
+            $exCategory = $product->getCategory();
+            if ($vendor && $exCategory) {
+                $path = $this->router->generate('filter_route', array(
+                    'vendorAlias' => mb_strtolower($vendor->getAlias(), 'UTF-8'),
+                    'categoryId' => $exCategory->getId(),
+                ), true);
+                $filterPages[$path] = $path;
             }
         }
         $urls = array_merge($urls, array_values($filterPages));

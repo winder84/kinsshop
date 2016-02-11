@@ -62,6 +62,7 @@ class DefaultController extends Controller
                 'id' => $product->getId(),
                 'url' => $product->getUrl(),
                 'price' => $product->getPrice(),
+                'alias' => $product->getAlias(),
             );
         }
 
@@ -358,12 +359,31 @@ class DefaultController extends Controller
      */
     public function productAction($id)
     {
+        $em = $this->getDoctrine()->getManager();
+        $product = $em
+            ->getRepository('AppBundle:Product')
+            ->findOneBy(array('id' => $id));
+        if (!$product) {
+            throw $this->createNotFoundException('The product does not exist');
+        }
+        $productAlias = $product->getAlias();
+        if (!$productAlias) {
+            throw $this->createNotFoundException('The product does not exist');
+        }
+        return $this->redirectToRoute('product_detail_route', array('alias' => $productAlias));
+    }
+
+    /**
+     * @Route("/product/detail/{alias}", name="product_detail_route")
+     */
+    public function productDetailAction($alias)
+    {
         $likeProducts = array();
         $categoryProducts = array();
         $em = $this->getDoctrine()->getManager();
         $product = $em
             ->getRepository('AppBundle:Product')
-            ->findOneBy(array('id' => $id));
+            ->findOneBy(array('alias' => $alias));
         if (!$product) {
             throw $this->createNotFoundException('The product does not exist');
         }
@@ -383,7 +403,7 @@ class DefaultController extends Controller
         }
         foreach ($categoryProducts as $categoryProduct) {
             if (count($likeProducts) < 4) {
-                if ($categoryProduct->getId() != $id && !$categoryProduct->getIsDelete()) {
+                if ($categoryProduct->getId() != $product->getId() && !$categoryProduct->getIsDelete()) {
                     $likeProducts[] = $categoryProduct;
                 }
             }
@@ -505,19 +525,19 @@ class DefaultController extends Controller
     }
 
     /**
-     * @Route("/product/buy/{id}", name="product_buy_route")
+     * @Route("/product/buy/{alias}", name="product_buy_route")
      */
-    public function productBuyAction($id, Request $request)
+    public function productBuyAction($alias, Request $request)
     {
         $em = $this->getDoctrine()->getManager();
         $product = $em
             ->getRepository('AppBundle:Product')
-            ->findOneBy(array('id' => $id));
+            ->findOneBy(array('alias' => $alias));
         if (!$product) {
             throw $this->createNotFoundException('The product does not exist');
         }
         $newStat = new Stat();
-        $newStat->setProductId($id);
+        $newStat->setProductId($product->getId());
         if ($request->getClientIp()) {
             $newStat->setClientIp($request->getClientIp());
         }
