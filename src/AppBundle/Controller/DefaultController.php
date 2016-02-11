@@ -234,13 +234,13 @@ class DefaultController extends Controller
         foreach ($externalCategories as $externalCategory ) {
             $this->exCategoriesIds[] = $externalCategory->getExternalId();
         }
-        $this->getCategoriesIdsRecursive();
+        $childCategoriesIds = $this->getChildCategoriesIds($category->getId());
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
             ->where('Product.category IN (:exCategoriesIds)')
             ->andWhere('Product.isDelete = 0')
-            ->setParameter('exCategoriesIds', $this->exCategoriesIds);
+            ->setParameter('exCategoriesIds', $childCategoriesIds);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
             ->setMaxResults($this->productsPerPage);
@@ -257,7 +257,7 @@ class DefaultController extends Controller
         $qb->select('ExCategory')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.id IN (:exCategoriesIds)')
-            ->setParameter('exCategoriesIds', $this->exCategoriesIds);
+            ->setParameter('exCategoriesIds', $childCategoriesIds);
         $query = $qb->getQuery()
             ->setMaxResults(18);
         $exCategories = $query->getResult();
@@ -546,42 +546,61 @@ class DefaultController extends Controller
         return $this->redirect($product->getURl());
     }
 
-    private function getCategoriesIdsRecursive()
+    private function getChildCategoriesIds($parentCategoryId)
     {
+        $resultCategoriesIds = array();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
-        $qb->select('ExCategory.id')
+        $qb->select('ExCategory.externalId')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
-            ->where('ExCategory.parentId IN (:exCategoriesIds)')
-            ->andWhere('ExCategory.id NOT IN (:exCategoriesIds)')
-            ->setParameter('exCategoriesIds', $this->exCategoriesIds);
+            ->where('ExCategory.internalParentCategory = :parentCategoryId')
+            ->setParameter('parentCategoryId', $parentCategoryId);
         $query = $qb->getQuery();
-        $resultExCategories = $query->getResult();
-        if (empty($resultExCategories)) {
-            return $this->exCategoriesIds;
-        } else {
-            foreach ($resultExCategories as $externalCategory ) {
-                $this->exCategoriesIds[] = $externalCategory['id'];
-            }
-            $this->getCategoriesIdsRecursive();
+        $exCategoriesIds = $query->getResult();
+        foreach ($exCategoriesIds as $exCategoriesId) {
+            $parentCategoryIds[] = $exCategoriesId['externalId'];
         }
+        $qb = $em->createQueryBuilder();
+        $qb->select('ExCat.id')
+            ->from('AppBundle:ExternalCategory', 'ExCat')
+            ->where('ExCat.parentId IN (:parentCategoryIds)')
+            ->setParameter('parentCategoryIds', $parentCategoryIds);
+        $query = $qb->getQuery();
+        $exCategoriesIds = $query->getResult();
+        foreach ($exCategoriesIds as $exCategoriesId) {
+            $resultCategoriesIds[] = $exCategoriesId['id'];
+        }
+        return $resultCategoriesIds;
     }
 
     private function getMenuItems()
     {
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
-        $qb->select('Category.alias, Category.name, count(exC.id) as cnt')
+        $qb->select('Category.alias, Category.name, Category.id')
             ->from('AppBundle:Category', 'Category')
-            ->leftJoin('Category.externalCategories', 'exC')
-            ->having('cnt > 0')
-            ->groupBy('Category.alias')
-            ->orderBy('cnt', 'DESC');
+            ->groupBy('Category.alias');
         $query = $qb->getQuery();
         $resultCategories = $query->getResult();
         foreach ($resultCategories as $resultCategory) {
-            $this->menuItems['categories'][] = $resultCategory;
+            $count = 0;
+            $childCategoriesIds = $this->getChildCategoriesIds($resultCategory['id']);
+            $qb = $em->createQueryBuilder();
+            $qb->select('exCategory.id, exCategory.name, count(Product.id) as cnt')
+                ->from('AppBundle:ExternalCategory', 'exCategory')
+                ->leftJoin('exCategory.products', 'Product')
+                ->where('exCategory.id IN (:childCategoriesIds)')
+                ->having('cnt > 0')
+                ->orderBy('cnt', 'DESC')
+                ->setParameter('childCategoriesIds', $childCategoriesIds);
+            $query = $qb->getQuery();
+            $resultChildCategories = $query->getResult();
+            foreach ($resultChildCategories as $resultChildCategory) {
+                $count += $resultChildCategory['cnt'];
+            }
+            $this->menuItems['categories'][$count] = $resultCategory;
         }
+        krsort($this->menuItems['categories']);
 
         $this->menuItems['sites'] = $em
             ->getRepository('AppBundle:Site')
