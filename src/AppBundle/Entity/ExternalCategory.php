@@ -73,6 +73,13 @@ class ExternalCategory
      */
     private $ourChoice;
 
+    /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isActive", type="boolean", nullable=true, options={"default" = true})
+     */
+    private $isActive = false;
+
     public function __construct() {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();
     }
@@ -285,5 +292,28 @@ class ExternalCategory
     public function getOurChoice()
     {
         return $this->ourChoice;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return ExternalCategory
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

@@ -93,6 +93,7 @@ class DefaultController extends Controller
             ->leftJoin('AppBundle:Vendor', 'Vendor')
             ->where('Vendor = Product.vendor')
             ->andWhere('Vendor.site = :site')
+            ->andWhere('Vendor.isActive = 1')
             ->setParameter('site', $site)
             ->groupBy('Vendor')
             ->orderBy('cnt', 'DESC')
@@ -128,6 +129,7 @@ class DefaultController extends Controller
             ->leftJoin('AppBundle:Vendor', 'Vendor')
             ->where('Vendor = Product.vendor')
             ->andWhere('Vendor.site = :site')
+            ->andWhere('Vendor.isActive = 1')
             ->setParameter('site', $site)
             ->groupBy('Vendor')
             ->orderBy('cnt', 'DESC')
@@ -177,7 +179,10 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $vendors = $em
             ->getRepository('AppBundle:Vendor')
-            ->findBy(array('alias' => $alias));
+            ->findBy(array(
+                'alias' => $alias,
+                'isActive' => 1
+            ));
         if (empty($vendors)) {
             throw $this->createNotFoundException();
         }
@@ -224,7 +229,13 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $category = $em
             ->getRepository('AppBundle:Category')
-            ->findOneBy(array('alias' => $alias));
+            ->findOneBy(array(
+                'alias' => $alias,
+                'isActive' => 1
+            ));
+        if (!$category) {
+            throw $this->createNotFoundException();
+        }
         $this->metaTags['metaTitle'] = 'Купить ' . mb_strtolower($category->getName(), 'UTF-8') . ' с доставкой по России.';
         if ($category->getSeoDescription()) {
             $this->metaTags['metaDescription'] = $category->getSeoDescription();
@@ -257,6 +268,7 @@ class DefaultController extends Controller
         $qb->select('ExCategory')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.id IN (:exCategoriesIds)')
+            ->andWhere('ExCategory.isActive = 1')
             ->setParameter('exCategoriesIds', $childCategoriesIds);
         $query = $qb->getQuery()
             ->setMaxResults(18);
@@ -291,7 +303,10 @@ class DefaultController extends Controller
         $em = $this->getDoctrine()->getManager();
         $exCategory = $em
             ->getRepository('AppBundle:ExternalCategory')
-            ->findOneBy(array('id' => $id));
+            ->findOneBy(array(
+                'id' => $id,
+                'isActive' => 1
+            ));
         if (!$exCategory) {
             throw $this->createNotFoundException();
         }
@@ -299,7 +314,10 @@ class DefaultController extends Controller
         $parentId = $exCategory->getParentId();
         $parentCategory = $em
             ->getRepository('AppBundle:ExternalCategory')
-            ->findOneBy(array('externalId' => $parentId));
+            ->findOneBy(array(
+                'externalId' => $parentId,
+                'isActive' => 1
+            ));
         if ($parentCategory) {
             $internalParentCategory = $parentCategory->getInternalParentCategory();
         }
@@ -331,7 +349,6 @@ class DefaultController extends Controller
             'metaTags' => $this->metaTags
         );
         if (isset($internalParentCategory)) {
-//            $returnArray['category'] = $internalParentCategory;
             $media = $internalParentCategory->getMedia();
             if ($media) {
                 $provider = $this->container->get($media->getProviderName());
@@ -446,10 +463,16 @@ class DefaultController extends Controller
         $vendorIds = array();
         $vendors = $em
             ->getRepository('AppBundle:Vendor')
-            ->findBy(array('alias' => $vendorAlias));
+            ->findBy(array(
+                'alias' => $vendorAlias,
+                'isActive' => 1
+            ));
         $exCategory = $em
             ->getRepository('AppBundle:ExternalCategory')
-            ->findOneBy(array('id' => $categoryId));
+            ->findOneBy(array(
+                'id' => $categoryId,
+                'isActive' => 1
+            ));
         if (!$exCategory || empty($vendors)) {
             throw $this->createNotFoundException();
         }
@@ -554,6 +577,7 @@ class DefaultController extends Controller
         $qb->select('ExCategory.externalId')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.internalParentCategory = :parentCategoryId')
+            ->andWhere('ExCategory.isActive = 1')
             ->setParameter('parentCategoryId', $parentCategoryId);
         $query = $qb->getQuery();
         $exCategoriesIds = $query->getResult();
@@ -564,6 +588,7 @@ class DefaultController extends Controller
         $qb->select('ExCat.id')
             ->from('AppBundle:ExternalCategory', 'ExCat')
             ->where('ExCat.parentId IN (:parentCategoryIds)')
+            ->andWhere('ExCat.isActive = 1')
             ->setParameter('parentCategoryIds', $parentCategoryIds);
         $query = $qb->getQuery();
         $exCategoriesIds = $query->getResult();
@@ -579,6 +604,7 @@ class DefaultController extends Controller
         $qb = $em->createQueryBuilder();
         $qb->select('Category.alias, Category.name, Category.id')
             ->from('AppBundle:Category', 'Category')
+            ->where('Category.isActive = 1')
             ->groupBy('Category.alias');
         $query = $qb->getQuery();
         $resultCategories = $query->getResult();
@@ -590,6 +616,7 @@ class DefaultController extends Controller
                 ->from('AppBundle:ExternalCategory', 'exCategory')
                 ->leftJoin('exCategory.products', 'Product')
                 ->where('exCategory.id IN (:childCategoriesIds)')
+                ->andWhere('exCategory.isActive = 1')
                 ->having('cnt > 0')
                 ->orderBy('cnt', 'DESC')
                 ->setParameter('childCategoriesIds', $childCategoriesIds);
@@ -610,6 +637,7 @@ class DefaultController extends Controller
         $qb->select('Vendor.alias, Vendor.name, count(p.id) as cnt')
             ->from('AppBundle:Vendor', 'Vendor')
             ->leftJoin('Vendor.products', 'p')
+            ->where('Vendor.isActive = 1')
             ->having('cnt > 450')
             ->groupBy('Vendor.alias')
             ->orderBy('cnt', 'DESC')

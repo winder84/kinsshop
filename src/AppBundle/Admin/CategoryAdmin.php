@@ -44,6 +44,11 @@ class CategoryAdmin extends Admin
                 'provider' => 'sonata.media.provider.image',
                 'template' => 'AppBundle:Default:image.preview.html.twig'
             ))
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -60,6 +65,11 @@ class CategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
             ->add('ourChoice', 'checkbox', array(
                     'label'    => 'Наш выбор',
                     'required' => false,

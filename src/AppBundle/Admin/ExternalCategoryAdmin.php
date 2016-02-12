@@ -27,6 +27,11 @@ class ExternalCategoryAdmin extends Admin
             ->add('name', null, array('label' => 'Наименование'))
             ->add('site', null, array('label' => 'Магазин'))
             ->add('version', null, array('label' => 'Версия'))
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
         ;
     }
 
@@ -48,6 +53,11 @@ class ExternalCategoryAdmin extends Admin
                 )
             )
             ->add('version', null, array('label' => 'Версия'))
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -64,6 +74,11 @@ class ExternalCategoryAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
             ->add('ourChoice', null, array(
                     'label'    => 'Наш выбор',
                     'required' => false,

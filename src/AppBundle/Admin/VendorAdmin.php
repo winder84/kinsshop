@@ -43,6 +43,11 @@ class VendorAdmin extends Admin
                 'provider' => 'sonata.media.provider.image',
                 'template' => 'AppBundle:Default:image.preview.html.twig'
             ))
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
             ->add('_action', 'actions', array(
                 'actions' => array(
                     'edit' => array(),
@@ -58,6 +63,11 @@ class VendorAdmin extends Admin
     protected function configureFormFields(FormMapper $formMapper)
     {
         $formMapper
+            ->add('isActive', null, array(
+                    'label'    => 'Вкл.',
+                    'required' => false,
+                )
+            )
             ->add('ourChoice', null, array(
                     'label'    => 'Наш выбор',
                     'required' => false,
@@ -70,7 +80,8 @@ class VendorAdmin extends Admin
             ->add('site', null, array('label' => 'Магазин'))
             ->add('media', 'sonata_media_type', array(
                 'provider' => 'sonata.media.provider.image',
-                'context'  => 'engine'
+                'context'  => 'engine',
+                'required' => false
             ))
         ;
     }

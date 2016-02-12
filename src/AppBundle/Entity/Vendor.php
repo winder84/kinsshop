@@ -74,6 +74,13 @@ class Vendor
     private $ourChoice;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isActive", type="boolean", nullable=true, options={"default" = true})
+     */
+    private $isActive = false;
+
+    /**
      *
      * @return string String Vendor
      */
@@ -292,5 +299,28 @@ class Vendor
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return Vendor
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }

@@ -81,6 +81,13 @@ class Category
     private $ourChoice;
 
     /**
+     * @var boolean
+     *
+     * @ORM\Column(name="isActive", type="boolean", nullable=true, options={"default" = true})
+     */
+    private $isActive = false;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -323,5 +330,28 @@ class Category
     public function getMedia()
     {
         return $this->media;
+    }
+
+    /**
+     * Set isActive
+     *
+     * @param boolean $isActive
+     * @return Category
+     */
+    public function setIsActive($isActive)
+    {
+        $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * Get isActive
+     *
+     * @return boolean 
+     */
+    public function getIsActive()
+    {
+        return $this->isActive;
     }
 }
