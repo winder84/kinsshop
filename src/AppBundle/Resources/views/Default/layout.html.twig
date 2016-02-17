@@ -81,6 +81,21 @@
 			<hr/>
 		{% endif %}
 	</div>
+	<div class="breadcrumbs">
+		{% if breadcrumbsCategories is defined %}
+			<ul>
+				{% for breadcrumbsCategory in breadcrumbsCategories %}
+					<li>
+						{% if loop.first %}
+							<a href="/category/{{ breadcrumbsCategory.alias }}">{{ breadcrumbsCategory.name }}</a> \
+						{% else %}
+							<a href="/exCategory/{{ breadcrumbsCategory.id }}">{{ breadcrumbsCategory.name }}</a> {% if not loop.last %}\{% endif %}
+						{% endif %}
+					</li>
+				{% endfor %}
+			</ul>
+		{% endif %}
+	</div>
 	<div class="content">
 		{% block content %}
 

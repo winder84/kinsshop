@@ -400,6 +400,30 @@ h3.shopTitle {
 	background: url("/bundles/app/images/404.png") no-repeat;
 }
 
+.breadcrumbs {
+	background: #efefef;
+}
+
+.breadcrumbs ul {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	padding: 10px 0 0 75px;
+}
+
+.breadcrumbs li {
+	display: inline-block;
+	color: #666;
+}
+
+.breadcrumbs li a {
+	text-decoration: none;
+	color: #666;
+}
+
+.breadcrumbs li a:hover {
+	text-decoration: underline;
+}
 
 /*--------  menu -----------------*/
 ul.dropdown li { position: relative; }

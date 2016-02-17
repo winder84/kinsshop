@@ -14,6 +14,7 @@ class DefaultController extends Controller
     private $menuItems = array();
     private $metaTags = array();
     private $productsPerPage = 28;
+    private $breadcrumbsCategories = array();
 
     public function __construct()
     {
@@ -441,12 +442,14 @@ class DefaultController extends Controller
         $this->metaTags['metaDescription'] = substr($product->getDescription(), 0, 400);
         $productKeywords[] =  $product->getName() . ' ' . $product->getModel() . ' купить';
         $this->metaTags['metaKeywords'] .= ',' . implode(',', $productKeywords);
+        $this->getBreadcrumbs($product, 'product');
         return $this->render('AppBundle:Default:product.description.html.twig', array(
                 'product' => $product,
                 'metaTags' => $this->metaTags,
                 'likeProducts' => $likeProducts,
                 'paginatorData' => null,
-                'menuItems' => $this->menuItems
+                'menuItems' => $this->menuItems,
+                'breadcrumbsCategories' => array_reverse($this->breadcrumbsCategories)
             )
         );
     }
@@ -666,5 +669,41 @@ class DefaultController extends Controller
             'paginator' => $paginator,
             'path' => $path,
         );
+    }
+
+    private function getBreadcrumbs($item, $type)
+    {
+        switch ($type) {
+            case 'product':
+                $itemParentCategory = $item->getCategory();
+                if ($itemParentCategory) {
+                    $this->breadcrumbsCategories[] = $itemParentCategory;
+                    if ($itemParentCategory->getParentId() != 0) {
+                        $this->getBreadcrumbs($itemParentCategory, 'exCategory');
+                    }
+                }
+                break;
+            case 'exCategory':
+                $em = $this->getDoctrine()->getManager();
+                $itemParentCategory = $em
+                    ->getRepository('AppBundle:ExternalCategory')
+                    ->findOneBy(array(
+                        'externalId' => $item->getParentId(),
+                        'isActive' => 1
+                    ));
+                if ($itemParentCategory) {
+                    $this->breadcrumbsCategories[] = $itemParentCategory;
+                    if ($itemParentCategory->getParentId() != 0) {
+                        $this->getBreadcrumbs($itemParentCategory, 'exCategory');
+                    } else {
+                        $internalParentCategory = $itemParentCategory->getInternalParentCategory();
+                        if ($internalParentCategory) {
+                            array_pop($this->breadcrumbsCategories);
+                            $this->breadcrumbsCategories[] = $internalParentCategory;
+                        }
+                    }
+                }
+                break;
+        }
     }
 }
