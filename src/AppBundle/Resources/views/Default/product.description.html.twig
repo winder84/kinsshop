@@ -14,8 +14,8 @@
 				{% endif %}
 			</div>
 		</div>
-		<div class="shopBlockDiv" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
-			<div class="shopUniBlock" style="margin: 0 0 0 50px; width: 620px;">
+		<div class="shopBlockDiv">
+			<div class="shopUniBlock" style="margin: 0 0 0 50px; width: 620px;" itemprop="offers" itemscope itemtype="http://schema.org/Offer">
 				<h2 class="itemName">Цена: <span itemprop="price">{{ product.price|raw }}</span> руб.</h2>
 				<span style="display: none;" itemprop="priceCurrency">RUB</span>
 				{% if product.isDelete %}
