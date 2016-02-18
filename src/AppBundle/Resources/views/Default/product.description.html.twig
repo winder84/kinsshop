@@ -1,12 +1,12 @@
 {% extends 'AppBundle:Default:layout.html.twig' %}
 
 {% block content %}
-	<div class="shopBlock">
+	<div class="shopBlock" itemscope itemtype="http://schema.org/Product">
 		<div class="shopBlockDiv">
 			<div class="shopUniBlock">
-				<h1 class="itemName">{% if product.vendor|raw is not empty %}{{ product.vendor.name|raw }} | {% endif %}{% if product.model is not empty %}{{ product.model|raw }}{% else %}{{ product.name|raw }}{% endif %}</h1>
+				<h1 itemprop="name" class="itemName">{% if product.vendor|raw is not empty %}{{ product.vendor.name|raw }} | {% endif %}{% if product.model is not empty %}{{ product.model|raw }}{% else %}{{ product.name|raw }}{% endif %}</h1>
 				{% if product.isDelete %}
-					<img src="{{ product.pictures.0 }}">
+					<img src="{{ product.pictures.0 }}" itemprop="image">
 				{% else %}
 					<noindex>
 						<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина" {% if (app.environment == 'prod') and ('.lan' not in app.request.host) %}onclick="yaCounter32562670.reachGoal('ON_DESCRIPTION_CLICK'); return true;"{% endif %}><img src="{{ product.pictures.0 }}"></a>
@@ -16,7 +16,8 @@
 		</div>
 		<div class="shopBlockDiv">
 			<div class="shopUniBlock" style="margin: 0 0 0 50px; width: 620px;">
-				<h2 class="itemName">Цена: {{ product.price|raw }} руб.</h2>
+				<h2 class="itemName">Цена: <span itemprop="price">{{ product.price|raw }}</span> руб.</h2>
+				<span style="display: none;" itemprop="priceCurrency">RUB</span>
 				{% if product.isDelete %}
 					<a class="productLink" rel="nofollow" title="{{ product.name|raw }} {{ product.model|raw }}">Нет в наличии</a>
 				{% else %}
@@ -30,7 +31,7 @@
 			{% if product.description|raw is not empty %}
 				<div class="shopDescBlock">
 					<h2 class="itemName">Описание:</h2>
-					<div class="itemDesription">{{ product.description|raw }}</div>
+					<div itemprop="description" class="itemDesription">{{ product.description|raw }}</div>
 				</div>
 			{#{% else %}#}
 				{#<div class="shopDescBlock">#}
