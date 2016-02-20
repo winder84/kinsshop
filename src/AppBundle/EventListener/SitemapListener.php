@@ -21,9 +21,6 @@ class SitemapListener implements SitemapListenerInterface
 
     public function populateSitemap(SitemapPopulateEvent $event)
     {
-        $newTimeDate = new \DateTime();
-        $newTimeDate = $newTimeDate->format(\DateTime::ATOM);
-        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
         $section = $event->getSection();
         if (is_null($section) || $section == 'default') {
             //get absolute homepage url
@@ -45,7 +42,6 @@ class SitemapListener implements SitemapListenerInterface
             $urls[] = $this->router->generate('vendor_route', array('alias' => $vendor->getAlias()), true);
         }
         $vendors= null;
-        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
 
         $exCategories = $this->em
             ->getRepository('AppBundle:ExternalCategory')
@@ -56,7 +52,6 @@ class SitemapListener implements SitemapListenerInterface
             $urls[] = $this->router->generate('ex_category_route', array('id' => $exCategory->getId()), true);
         }
         $exCategories = null;
-        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
 
         $categories = $this->em
             ->getRepository('AppBundle:Category')
@@ -90,7 +85,6 @@ class SitemapListener implements SitemapListenerInterface
             $exCategory = null;
             $i++;
         }
-        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
         $urls = array_merge($urls, array_values($filterPages));
         $products = null;
 
