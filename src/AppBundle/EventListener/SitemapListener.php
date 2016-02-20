@@ -21,6 +21,9 @@ class SitemapListener implements SitemapListenerInterface
 
     public function populateSitemap(SitemapPopulateEvent $event)
     {
+        $newTimeDate = new \DateTime();
+        $newTimeDate = $newTimeDate->format(\DateTime::ATOM);
+        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
         $section = $event->getSection();
         if (is_null($section) || $section == 'default') {
             //get absolute homepage url
@@ -33,19 +36,33 @@ class SitemapListener implements SitemapListenerInterface
         }
         $sites = null;
 
-        $vendors = $this->em->getRepository('AppBundle:Vendor')->findAll();
+        $vendors = $this->em
+            ->getRepository('AppBundle:Vendor')
+            ->findBy(array(
+                'isActive' => 1
+            ));
         foreach ($vendors as $vendor) {
             $urls[] = $this->router->generate('vendor_route', array('alias' => $vendor->getAlias()), true);
         }
         $vendors= null;
+        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
 
-        $exCategories = $this->em->getRepository('AppBundle:ExternalCategory')->findAll();
+        $exCategories = $this->em
+            ->getRepository('AppBundle:ExternalCategory')
+            ->findBy(array(
+                'isActive' => 1
+            ));
         foreach ($exCategories as $exCategory) {
             $urls[] = $this->router->generate('ex_category_route', array('id' => $exCategory->getId()), true);
         }
         $exCategories = null;
+        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
 
-        $categories = $this->em->getRepository('AppBundle:Category')->findAll();
+        $categories = $this->em
+            ->getRepository('AppBundle:Category')
+            ->findBy(array(
+                'isActive' => 1
+            ));
         foreach ($categories as $category) {
             $urls[] = $this->router->generate('category_route', array('alias' => $category->getAlias()), true);
         }
@@ -53,18 +70,27 @@ class SitemapListener implements SitemapListenerInterface
 
         $filterPages = array();
         $iterableResult = $this->em->createQuery("SELECT p FROM 'AppBundle\Entity\Product' p WHERE p.isDelete = 0")->iterate();
+        $i = 0;
         while ((list($product) = $iterableResult->next()) !== false) {
             $urls[] = $this->router->generate('product_detail_route', array('alias' => $product->getAlias()), true);
             $vendor = $product->getVendor();
             $exCategory = $product->getCategory();
-            if ($vendor && $exCategory) {
+            if ($vendor && $exCategory && $vendor->getIsActive() && $exCategory->getIsActive()) {
                 $path = $this->router->generate('filter_route', array(
                     'vendorAlias' => mb_strtolower($vendor->getAlias(), 'UTF-8'),
                     'categoryId' => $exCategory->getId(),
                 ), true);
                 $filterPages[$path] = $path;
             }
+            if ($i % 10000 == 0) {
+                $this->em->flush();
+                $this->em->clear('AppBundle\Entity\Product');
+            }
+            $vendor = null;
+            $exCategory = null;
+            $i++;
         }
+        echo $newTimeDate . " Memory usage: " . round(memory_get_usage() / (1024 * 1024)) . " MB \r\n";
         $urls = array_merge($urls, array_values($filterPages));
         $products = null;
 
