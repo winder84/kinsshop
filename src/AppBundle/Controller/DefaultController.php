@@ -13,7 +13,7 @@ class DefaultController extends Controller
     private $exCategoriesIds = array();
     private $menuItems = array();
     private $metaTags = array();
-    private $productsPerPage = 28;
+    private $productsPerPage = 20;
     private $breadcrumbsCategories = array();
 
     public function __construct()
@@ -38,13 +38,13 @@ class DefaultController extends Controller
                     'isDelete' => false
                 ),
                 array(),
-                12
+                10
             );
-        if (count($products) < 12) {
+        if (count($products) < 10) {
             foreach ($products as $product) {
                 $notNeedArray[] = $product->getId();
             }
-            $needCount = 12 - count($products);
+            $needCount = 10 - count($products);
             $qb->select('Product')
                 ->from('AppBundle:Product', 'Product')
                 ->where('Product.id NOT IN (:notNeedArray)')
@@ -322,12 +322,14 @@ class DefaultController extends Controller
         if ($parentCategory) {
             $internalParentCategory = $parentCategory->getInternalParentCategory();
         }
+        $childCategoriesIds = $this->getChildCategoriesIds($exCategory->getExternalId());
+        $childCategoriesIds[] = $exCategory->getId();
         $qb = $em->createQueryBuilder();
         $qb->select('Product')
             ->from('AppBundle:Product', 'Product')
-            ->where('Product.category = :category')
+            ->where('Product.category IN (:childCategoriesIds)')
             ->andWhere('Product.isDelete = 0')
-            ->setParameter('category', $exCategory);
+            ->setParameter('childCategoriesIds', $childCategoriesIds);
         $query = $qb->getQuery()
             ->setFirstResult($this->productsPerPage * ($page - 1))
             ->setMaxResults($this->productsPerPage);
@@ -420,7 +422,7 @@ class DefaultController extends Controller
             $productVendorName = $productVendor->getName();
         }
         foreach ($categoryProducts as $categoryProduct) {
-            if (count($likeProducts) < 4) {
+            if (count($likeProducts) < 5) {
                 if ($categoryProduct->getId() != $product->getId() && !$categoryProduct->getIsDelete()) {
                     $likeProducts[] = $categoryProduct;
                 }
@@ -575,11 +577,13 @@ class DefaultController extends Controller
     private function getChildCategoriesIds($parentCategoryId)
     {
         $resultCategoriesIds = array();
+        $parentCategoryIds = array();
         $em = $this->getDoctrine()->getManager();
         $qb = $em->createQueryBuilder();
         $qb->select('ExCategory.externalId')
             ->from('AppBundle:ExternalCategory', 'ExCategory')
             ->where('ExCategory.internalParentCategory = :parentCategoryId')
+            ->orWhere('ExCategory.parentId = :parentCategoryId')
             ->andWhere('ExCategory.isActive = 1')
             ->setParameter('parentCategoryId', $parentCategoryId);
         $query = $qb->getQuery();
@@ -591,11 +595,12 @@ class DefaultController extends Controller
         $qb->select('ExCat.id')
             ->from('AppBundle:ExternalCategory', 'ExCat')
             ->where('ExCat.parentId IN (:parentCategoryIds)')
+            ->orWhere('ExCat.externalId IN (:parentCategoryIds)')
             ->andWhere('ExCat.isActive = 1')
             ->setParameter('parentCategoryIds', $parentCategoryIds);
         $query = $qb->getQuery();
-        $exCategoriesIds = $query->getResult();
-        foreach ($exCategoriesIds as $exCategoriesId) {
+        $exCatIds = $query->getResult();
+        foreach ($exCatIds as $exCategoriesId) {
             $resultCategoriesIds[] = $exCategoriesId['id'];
         }
         return $resultCategoriesIds;
@@ -651,14 +656,14 @@ class DefaultController extends Controller
             $this->menuItems['vendors'][] = $resultVendor;
         }
         $this->menuItems['slideUrl'] = '/bundles/app/images/middleBlockPicture.png';
-        $this->menuItems['slideText'] = 'Всё что Вы искали для Вашего ребёнка!';
+        $this->menuItems['slideText'] = 'Современная одежда для Вашей семьи.';
     }
 
     private function getMetaItems()
     {
-        $this->metaTags['metaTitle'] = 'Купить детские товары с доставкой. Детские коляски, обучающие материалы, развивающие игры.';
-        $this->metaTags['metaDescription'] = 'У нас Вы найдете всё самое лучшее для Вашего ребенка!';
-        $this->metaTags['metaKeywords'] = 'ребенок, дети, детё, сын, дочь, игрушки, книжки, кроватки, детская еда';
+        $this->metaTags['metaTitle'] = 'Купить современную одежду с доставкой. Свитшоты, пуловеры, платья и шорты.';
+        $this->metaTags['metaDescription'] = 'У нас Вы найдете качественную современную одежду для всей семьи!';
+        $this->metaTags['metaKeywords'] = 'cвитшоты, пуловеры, платья, шорты, молодежная и детская одежда';
         $this->metaTags['metaRobots'] = 'all';
     }
 

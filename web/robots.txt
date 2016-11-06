@@ -3,4 +3,4 @@
 
 User-agent: *
 Allow: /
-Sitemap: http://kinsshop.ru/sitemap.xml
+Sitemap: http://raiment-shop.ru/sitemap.xml

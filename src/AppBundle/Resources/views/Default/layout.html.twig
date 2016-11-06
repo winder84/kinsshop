@@ -13,7 +13,7 @@
 			<div class="headerMenu">
 				<div class="headerLogoBlock">
 					<a href="/" class="headerLogo"></a>
-					<a href="/" class="headerLogoText">kinsshop.ru</a>
+					<a href="/" class="headerLogoText">raiment-shop.ru</a>
 				</div>
 				<div class="headerMenuDiv">
 					<ul class="dropdown">
@@ -86,7 +86,7 @@
 			<ul>
 				{% for breadcrumbsCategory in breadcrumbsCategories %}
 					<li>
-						{% if loop.first %}
+						{% if breadcrumbsCategory.alias is not empty %}
 							<a href="/category/{{ breadcrumbsCategory.alias }}">{{ breadcrumbsCategory.name }}</a> \
 						{% else %}
 							<a href="/exCategory/{{ breadcrumbsCategory.id }}">{{ breadcrumbsCategory.name }}</a> {% if not loop.last %}\{% endif %}

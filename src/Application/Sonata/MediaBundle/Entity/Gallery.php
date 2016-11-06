@@ -37,4 +37,27 @@ class Gallery extends BaseGallery
     {
         return $this->id;
     }
+
+    /**
+     * Add galleryHasMedias
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias
+     * @return Gallery
+     */
+    public function addGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias)
+    {
+        $this->galleryHasMedias[] = $galleryHasMedias;
+
+        return $this;
+    }
+
+    /**
+     * Remove galleryHasMedias
+     *
+     * @param \Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias
+     */
+    public function removeGalleryHasMedia(\Application\Sonata\MediaBundle\Entity\GalleryHasMedia $galleryHasMedias)
+    {
+        $this->galleryHasMedias->removeElement($galleryHasMedias);
+    }
 }

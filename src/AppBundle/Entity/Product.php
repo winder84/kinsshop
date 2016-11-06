@@ -157,6 +157,13 @@ class Product
     private $alias;
 
     /**
+     * @var json_encode
+     *
+     * @ORM\Column(name="params", type="json_array", nullable=true)
+     */
+    private $params;
+
+    /**
      *
      * @return string String Product
      */
@@ -634,5 +641,28 @@ class Product
     public function getAlias()
     {
         return $this->alias;
+    }
+
+    /**
+     * Set params
+     *
+     * @param array $params
+     * @return Product
+     */
+    public function setParams($params)
+    {
+        $this->params = $params;
+
+        return $this;
+    }
+
+    /**
+     * Get params
+     *
+     * @return array 
+     */
+    public function getParams()
+    {
+        return $this->params;
     }
 }

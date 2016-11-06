@@ -78,7 +78,7 @@ class Vendor
      *
      * @ORM\Column(name="isActive", type="boolean", nullable=true, options={"default" = true})
      */
-    private $isActive = false;
+    private $isActive = true;
 
     /**
      *

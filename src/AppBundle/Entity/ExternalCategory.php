@@ -78,7 +78,7 @@ class ExternalCategory
      *
      * @ORM\Column(name="isActive", type="boolean", nullable=true, options={"default" = true})
      */
-    private $isActive = false;
+    private $isActive = true;
 
     public function __construct() {
         $this->products = new \Doctrine\Common\Collections\ArrayCollection();

@@ -47,7 +47,7 @@ body {
 	line-height: 75px;
 	font-size: 28px;
 	vertical-align: top;
-	color: #366D88;
+	color: #3a3a3a;
 	font-weight: bold;
 	text-decoration: none;
 }
@@ -69,7 +69,7 @@ body {
 	padding: 0 10px;
 	cursor: pointer;
 	text-decoration: none;
-	color: #366D88;
+	color: #3a3a3a;
 }
 
 .headerMenuDiv a:hover {
@@ -101,12 +101,12 @@ body {
 
 .content h1 {
 	font-size: 1.4em;
-	color: #366D88;
+	color: #3a3a3a;
 }
 
 .content h3 {
 	font-size: 1.2em;
-	color: #366D88;
+	color: #3a3a3a;
 }
 
 .productListBlock h1 {
@@ -125,7 +125,7 @@ body {
 h2.categoryH2 {
 	text-align: center;
 	font-size: 1.2em;
-	color: #366D88;
+	color: #3a3a3a;
 	margin: 0;
 }
 
@@ -142,18 +142,19 @@ h2.categoryH2 {
 }
 
 .productListItem {
-	width: 260px;
+	width: 200px;
 	background-color: #fff;
 	text-align: center;
 	font-family: "Droid Sans", sans-serif;
 }
 
 .productListItem .itemName {
-	background-color: #366D88;
-	padding: 7px;
+	background-color: #3a3a3a;
+	padding: 1px 7px;
 	font-size: 12px;
 	color: #fff;
 	min-height: 28px;
+	vertical-align: middle;
 }
 
 .productLink {
@@ -171,25 +172,25 @@ h2.categoryH2 {
 .shopUniBlock div {
 	background-color: #fff;
 	padding: 7px;
-	color: #4083a3;
+	color: #3a3a3a;
 }
 
 .shopUniBlock a {
-	color: #4083a3;
+	color: #3a3a3a;
 }
 
 .shopUniBlock a.productLink {
-	color: #4083a3;
-	background-color: #7FFFD4;
+	color: #4d120d;
+	background-color: #649bac;
 }
 
 .shopUniBlock a:hover {
-	color: #234759;
+	color: #3a3a3a;
 }
 
 .shopDescBlock .itemDesription{
 	background-color: #fff;
-	color: #4083a3;
+	color: #3a3a3a;
 	padding: 5px 20px;
 }
 
@@ -208,7 +209,7 @@ h2.categoryH2 {
 }
 
 .shopUniBlock .itemName, .shopDescBlock .itemName {
-	background-color: #366D88;
+	background-color: #3a3a3a;
 	padding: 7px;
 	margin: 0;
 	font-size: 16px;
@@ -248,12 +249,12 @@ h2.categoryH2 {
 
 .productListItem .itemLink a {
 	font-size: 14px;
-	color: #366D88;
+	color: #3a3a3a;
 	text-decoration: none;
 }
 
 .productListItem .itemLink a:hover, .vendorBlockUl a:hover, .categoryBlockUl a:hover {
-	color: #234759;
+	color: #3a3a3a;
 }
 
 .footerBlock {
@@ -283,7 +284,7 @@ h2.categoryH2 {
 }
 
 .vendorBlockUl a {
-	color: #366D88;
+	color: #3a3a3a;
 }
 
 .vendorBlock {
@@ -307,7 +308,7 @@ h2.categoryH2 {
 
 .categoryBlockUl a {
 	font-size: 0.8em;
-	color: #366D88;
+	color: #3a3a3a;
 }
 
 .categoryDesc {
@@ -344,7 +345,7 @@ h1.shopTitle {
 }
 
 h2.shopTitle {
-	color: #366D88;
+	color: #3a3a3a;
 	font-size: 1.2em;
 	margin: 0;
 	width: 100%;
@@ -354,6 +355,7 @@ h2.shopTitle {
 
 h3.shopTitle {
 	text-align: center;
+	margin: 5px 0;
 }
 
 .paginator {
@@ -368,7 +370,7 @@ h3.shopTitle {
 
 .paginator ul li {
 	display: inline-block;
-	background-color: #366D88;
+	background-color: #3a3a3a;
 }
 
 .paginator ul li a {
@@ -380,13 +382,13 @@ h3.shopTitle {
 }
 
 .paginator ul li a:hover {
-	background-color: #234759;
-	color: #366D88;
+	background-color: #161616;
+	color: #FFF;
 }
 
 .paginator ul li a.active {
-	background-color: #234759;
-	color: #65B6DD;
+	background-color: #161616;
+	color: #FFF;
 }
 
 .e404Block {
@@ -396,7 +398,7 @@ h3.shopTitle {
 	margin: 0 auto;
 	padding: 0;
 	text-align: center;
-	color: #366D88;
+	color: #3a3a3a;
 	background: url("/bundles/app/images/404.png") no-repeat;
 }
 
@@ -465,11 +467,11 @@ ul.dropdown li.dropdown-top:hover .dropdown-inside {
 	left: -20px;
 }
 ul.dropdown .dropdown-inside {
-	background: #2e5d74;
+	background: #3a3a3a;
 }
 ul.dropdown .dropdown-inside a:hover {
-	background: #efefef;
-	color: #2e5d74;
+	background: #ababab;
+	color: #3a3a3a;
 }
 ul.dropdown { margin: 0; }
 /*--------  menu -----------------*/

@@ -32,6 +32,22 @@
 				<div class="shopDescBlock">
 					<h2 class="itemName">Описание:</h2>
 					<div itemprop="description" class="itemDesription">{{ product.description|raw }}</div>
+					{% if product.params is not empty %}
+						<h2 class="itemName">Характеристики:</h2>
+						<div itemprop="description" class="itemDesription">
+							{% for key, param in product.params %}
+								{% if key == 'size' %}
+									<li>Размеры: {{ param }}</li>
+								{% endif %}
+								{% if key == 'color' %}
+									<li>Цвет: {{ param }}</li>
+								{% endif %}
+								{% if key == 'discont' %}
+									<li>Скидка: {{ param }}</li>
+								{% endif %}
+							{% endfor %}
+						</div>
+					{% endif %}
 				</div>
 			{#{% else %}#}
 				{#<div class="shopDescBlock">#}

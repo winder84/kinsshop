@@ -76,7 +76,8 @@ class ParseCommand extends ContainerAwareCommand
             $newVersion = $site->getVersion() + 0.01;
             $site->setVersion($newVersion);
 
-            $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
+//            $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
+            $xmlContent = file_get_contents('test.xml', false, $this->ctx);
             print_r("\n");
 
             $crawler = new Crawler($xmlContent);
@@ -108,6 +109,12 @@ class ParseCommand extends ContainerAwareCommand
                     foreach ($children as $child) {
                         if ($child->nodeName == 'picture') {
                             $resultArray['pictures'][] = $child->nodeValue;
+                        } elseif ($child->getAttribute('name') == 'Размер') {
+                            $resultArray['params']['size'] = $child->nodeValue;
+                        } elseif ($child->getAttribute('name') == 'Цвет') {
+                            $resultArray['params']['color'] = $child->nodeValue;
+                        } elseif ($child->getAttribute('name') == 'Скидка') {
+                            $resultArray['params']['discont'] = $child->nodeValue;
                         } else {
                             $resultArray[$child->nodeName] = $child->nodeValue;
                         }
@@ -274,6 +281,9 @@ class ParseCommand extends ContainerAwareCommand
             } else {
                 $newProduct = $oldProduct;
                 $this->updatedProducts[] = $newProduct;
+            }
+            if (isset($product['params'])) {
+                $newProduct->setParams($product['params']);
             }
             $newProduct->setVersion($newVersion);
             $newProduct->setExternalId($product['externalId']);
