@@ -9,7 +9,17 @@
 					<img src="{{ product.pictures.0 }}" itemprop="image">
 				{% else %}
 					<noindex>
-						<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина" {% if (app.environment == 'prod') and ('.lan' not in app.request.host) %}onclick="yaCounter32562670.reachGoal('ON_DESCRIPTION_CLICK'); return true;"{% endif %}><img src="{{ product.pictures.0 }}"></a>
+						<div class="flexslider">
+							<ul class="slides">
+								{% for productPicture in product.pictures %}
+									<li>
+										<a href="{{ product.url|raw }}" title="{{ product.name|raw }} - {{ product.model|raw }} - сайт магазина" {% if (app.environment == 'prod') and ('.lan' not in app.request.host) %}onclick="yaCounter32562670.reachGoal('ON_DESCRIPTION_CLICK'); return true;"{% endif %}>
+											<img src="{{ productPicture }}" itemprop="image">
+										</a>
+									</li>
+								{% endfor %}
+							</ul>
+						</div>
 					</noindex>
 				{% endif %}
 			</div>
@@ -62,4 +72,12 @@
 			{{ include('AppBundle:Default:products.block.html.twig', { 'paginatorData': paginatorData, 'products': likeProducts }) }}
 		{% endif %}
 	</div>
+	<script>
+		$(document).ready(function () {
+			$('.flexslider').flexslider({
+				animation: "fade",
+				controlNav: "none"
+			});
+		});
+	</script>
 {% endblock %}

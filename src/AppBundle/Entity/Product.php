@@ -63,20 +63,6 @@ class Product
     /**
      * @var string
      *
-     * @ORM\Column(name="seoDescription", type="text", nullable=true)
-     */
-    private $seoDescription;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="seoKeywords", type="text", nullable=true)
-     */
-    private $seoKeywords;
-
-    /**
-     * @var string
-     *
      * @ORM\Column(name="model", type="string", length=255, nullable=true)
      */
     private $model;
@@ -250,52 +236,6 @@ class Product
     public function getDescription()
     {
         return $this->description;
-    }
-
-    /**
-     * Set seoDescription
-     *
-     * @param string $seoDescription
-     * @return Product
-     */
-    public function setSeoDescription($seoDescription)
-    {
-        $this->seoDescription = $seoDescription;
-
-        return $this;
-    }
-
-    /**
-     * Get seoDescription
-     *
-     * @return string
-     */
-    public function getSeoDescription()
-    {
-        return $this->seoDescription;
-    }
-
-    /**
-     * Set seoKeywords
-     *
-     * @param string $seoKeywords
-     * @return Product
-     */
-    public function setSeoKeywords($seoKeywords)
-    {
-        $this->seoKeywords = $seoKeywords;
-
-        return $this;
-    }
-
-    /**
-     * Get seoKeywords
-     *
-     * @return string
-     */
-    public function getSeoKeywords()
-    {
-        return $this->seoKeywords;
     }
 
     /**

@@ -68,18 +68,6 @@
 				<hr />
 			{% endif %}
 		{% endif %}
-		{% if exCategories is defined %}
-			<ul class="categoryBlockUl">
-				{% for exCategory in exCategories %}
-					{% if exCategory.products|length != 0 %}
-						<li>
-							<a href="/exCategory/{{ exCategory.id }}">{{ exCategory.name }}</a>
-						</li>
-					{% endif %}
-				{% endfor %}
-			</ul>
-			<hr/>
-		{% endif %}
 	</div>
 	<div class="breadcrumbs">
 		{% if breadcrumbsCategories is defined %}

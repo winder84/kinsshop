@@ -266,14 +266,6 @@ class DefaultController extends Controller
         } else {
             $paginatorData = $this->getPaginatorData($paginatorPagesCount, $page, 1, 5, $path);
         }
-        $qb->select('ExCategory')
-            ->from('AppBundle:ExternalCategory', 'ExCategory')
-            ->where('ExCategory.id IN (:exCategoriesIds)')
-            ->andWhere('ExCategory.isActive = 1')
-            ->setParameter('exCategoriesIds', $childCategoriesIds);
-        $query = $qb->getQuery()
-            ->setMaxResults(18);
-        $exCategories = $query->getResult();
 
         $this->getMenuItems();
         $media = $category->getMedia();
@@ -289,7 +281,6 @@ class DefaultController extends Controller
                 'products' => $products,
                 'paginatorData' => $paginatorData,
                 'category' => $category,
-                'exCategories' => $exCategories,
                 'metaTags' => $this->metaTags,
                 'menuItems' => $this->menuItems
             )

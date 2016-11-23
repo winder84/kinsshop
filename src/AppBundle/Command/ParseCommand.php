@@ -76,8 +76,8 @@ class ParseCommand extends ContainerAwareCommand
             $newVersion = $site->getVersion() + 0.01;
             $site->setVersion($newVersion);
 
-//            $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
-            $xmlContent = file_get_contents('test.xml', false, $this->ctx);
+            $xmlContent = file_get_contents($site->getXmlParseUrl(), false, $this->ctx);
+//            $xmlContent = file_get_contents('test.xml', false, $this->ctx);
             print_r("\n");
 
             $crawler = new Crawler($xmlContent);
